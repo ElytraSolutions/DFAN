@@ -1,0 +1,14 @@
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: radial-gradient(96.29% 96.29% at 50.00% 50.00%,
+            #65AB66B0 0%,
+            #63A964A9 50%,
+            #367C3624 100%);
+    overflow: scroll;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

@@ -1,0 +1,58 @@
+import express, { Express, Request, Response } from 'express';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+import cors from 'cors';
+
+import './config/dotenv';
+import config from './config/db';
+import LoginRoute from './routes/login';
+import RegisterRoute from './routes/register';
+import LogoutRoute from './routes/logout';
+import AdminsRoute from './routes/admins/index';
+import UserRoute from './routes/users/index';
+
+(async () => {
+    try {
+        await config();
+    } catch (error) {
+        console.log('Error in database configuration: ', error);
+    }
+})();
+
+const app: Express = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(session({
+    secret: 'keyboard cat',
+    cookie: {
+        maxAge: 1000 * 60 * 60,
+        sameSite: 'none',
+    },
+    resave: true,
+    // rolling: true,
+}));
+app.set('trust proxy', 1);
+app.use(cors({
+    origin: 'http://localhost:5173',
+}));
+
+app.all('*', function (req, res, next) {
+    // console.log(req.session);
+    // console.log(req.sessionID);
+    next();
+});
+
+app.get('/', (req: Request, res: Response) => {
+    res.json({ message: 'Hello World!' });
+});
+
+app.post('/login', LoginRoute);
+app.post('/register', RegisterRoute);
+app.post('/logout', LogoutRoute);
+app.use('/admins', AdminsRoute);
+app.use('/users', UserRoute);
+
+app.listen(process.env.PORT, async () => {
+    console.log('Server is running at http://localhost:8080');
+});
