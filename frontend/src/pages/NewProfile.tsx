@@ -1,35 +1,73 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { UseFormRegister, useForm } from 'react-hook-form';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import loginHelper from '~/helpers/login';
 
+interface FormInputs {
+    email: string;
+    code: string;
+    password: string;
+    name: string;
+    mobile: string;
+    permanentAddress: string;
+    currentAddress: string;
+    membershipFrom: string;
+    NFAMembershipNumber: string;
+    multipleErrorInput: string;
+
+    gender: string;
+    employmentStatus: string;
+    employmentType?: string;
+    isNFA: string;
+    isLifeMember?: string;
+    hasRenewed?: string;
+}
+
 const NewProfile = () => {
-    const [password, setPassword] = React.useState('');
-    const [name, setName] = React.useState('');
-    const [gender, setGender] = React.useState('');
-    const [mobile, setMobile] = React.useState('');
-    const [currentAddress, setCurrentAddress] = React.useState('');
-    const [permanentAddress, setPermanentAddress] = React.useState('');
-    const [membershipFrom, setMembershipFrom] = React.useState('');
-    const [employmentStatus, setEmploymentStatus] = React.useState('');
-    const [employmentType, setEmploymentType] = React.useState('');
-    const [isNFA, setIsNFA] = React.useState('No');
-    const [NFAMembershipNumber, setNFAMembershipNumber] = React.useState('');
-    const [isLifeMember, setIsLifeMember] = React.useState('');
-    const [hasRenewed, setHasRenewed] = React.useState('');
+    const [searchParams] = useSearchParams();
+    const [email] = useState(
+        searchParams.get('email') || sessionStorage.getItem('email')
+    );
+    const [code] = useState(
+        searchParams.get('code') || sessionStorage.getItem('code')
+    );
+
+    const { register, handleSubmit, watch, setValue } = useForm<FormInputs>({
+        criteriaMode: 'all',
+        defaultValues: {
+            email: email || 'undefined',
+            code: code || 'undefined',
+        },
+    });
+
+    const employmentStatus = watch('employmentStatus', 'Unemployed');
+    const employmentType = watch('employmentType');
+    const isNFA = watch('isNFA');
+    const NFAMembershipNumber = watch('NFAMembershipNumber');
+    const isLifeMember = watch('isLifeMember');
+    const hasRenewed = watch('hasRenewed');
+    if (employmentStatus === 'Unemployed' && employmentType) {
+        setValue('employmentType', undefined);
+    }
+    if (isNFA === 'No') {
+        if (NFAMembershipNumber) setValue('NFAMembershipNumber', '');
+        if (isLifeMember) setValue('isLifeMember', undefined);
+        if (hasRenewed) setValue('hasRenewed', undefined);
+    }
 
     const navigate = useNavigate();
-
-    const [email] = useState(sessionStorage.getItem('email'));
-    const [code] = useState(sessionStorage.getItem('code'));
 
     if (!email || !code) {
         navigate('/');
         return;
     }
 
-    const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
-        e.preventDefault();
+    const onError: Parameters<typeof handleSubmit>[1] = (error) => {
+        console.log(error);
+        toast.error('Please fill out all the fields.');
+    };
+    const onSubmit: Parameters<typeof handleSubmit>[0] = async (data) => {
         try {
             const resp = await fetch('/api/users/editProfile', {
                 method: 'POST',
@@ -37,31 +75,20 @@ const NewProfile = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    ...data,
                     email,
-                    password,
                     code,
-                    name,
-                    gender,
-                    mobile,
-                    currentAddress,
-                    permanentAddress,
-                    membershipFrom,
-                    employmentStatus,
-                    employmentType,
-                    NFAMembershipNumber,
-                    isLifeMember,
-                    hasRenewed,
                 }),
             });
-            const data = await resp.json();
+            const respData = await resp.json();
             if (!resp.ok) {
-                toast.error(data.message);
+                toast.error(respData.message);
                 return;
             }
 
             sessionStorage.removeItem('email');
             sessionStorage.removeItem('code');
-            const loginData = await loginHelper(email, password);
+            const loginData = await loginHelper(email, data.password);
             if (loginData) {
                 navigate('/profile');
             }
@@ -73,7 +100,7 @@ const NewProfile = () => {
     return (
         <div className='grid h-fit min-h-screen place-items-center my-12'>
             <form
-                onSubmit={onSubmit}
+                onSubmit={handleSubmit(onSubmit, onError)}
                 className='rounded-lg bg-[#55885126] w-10/12 md:w-5/12 min-w-fit min-h-fit'
             >
                 <div className='flex flex-col justify-center p-8'>
@@ -81,38 +108,39 @@ const NewProfile = () => {
                         <div className='flex flex-col justify-center w-7/12'>
                             <TextInput
                                 legend='Email:'
-                                value={email}
-                                setValue={() => {}}
+                                name='email'
+                                register={register}
                                 disabled={true}
                             />
                             <TextInput
                                 legend='Code:'
-                                value={code}
-                                setValue={() => {}}
+                                name='code'
+                                register={register}
                                 disabled={true}
                             />
                             <TextInput
                                 legend='Password:'
-                                value={password}
-                                setValue={setPassword}
+                                name='password'
+                                register={register}
+                                disabled={false}
                             />
                             <TextInput
                                 legend='Name:'
-                                value={name}
-                                setValue={setName}
+                                name='name'
+                                register={register}
+                                disabled={false}
                             />
-
                             <RadioOptions
                                 legend='Gender'
                                 values={['Male', 'Female', 'Other']}
-                                value={gender}
-                                setValue={setGender}
+                                name='gender'
+                                register={register}
                             />
-
                             <TextInput
                                 legend='Mobile Number:'
-                                value={mobile}
-                                setValue={setMobile}
+                                name='mobile'
+                                register={register}
+                                disabled={false}
                             />
                         </div>
                         {/* end of column */}
@@ -125,20 +153,23 @@ const NewProfile = () => {
                     <div className='flex flex-col justify-between border-b border-b-white mb-2 p-2'>
                         <TextInput
                             legend='Permanent Address:'
-                            value={permanentAddress}
-                            setValue={setPermanentAddress}
+                            name={'permanentAddress'}
+                            register={register}
+                            disabled={false}
                         />
 
                         <TextInput
                             legend='Current Address:'
-                            value={currentAddress}
-                            setValue={setCurrentAddress}
+                            name={'currentAddress'}
+                            register={register}
+                            disabled={false}
                         />
 
                         <TextInput
                             legend='DFAN Membership From:'
-                            value={membershipFrom}
-                            setValue={setMembershipFrom}
+                            name={'membershipFrom'}
+                            register={register}
+                            disabled={false}
                         />
                     </div>
                     {/* end of section */}
@@ -147,8 +178,8 @@ const NewProfile = () => {
                         <RadioOptions
                             legend='Employment Status'
                             values={['Employed', 'Unemployed']}
-                            value={employmentStatus}
-                            setValue={setEmploymentStatus}
+                            name='employmentStatus'
+                            register={register}
                         />
 
                         {employmentStatus === 'Employed' && (
@@ -158,8 +189,8 @@ const NewProfile = () => {
                                     'Government Job',
                                     'Non-Government Job',
                                 ]}
-                                value={employmentType}
-                                setValue={setEmploymentType}
+                                name='employmentType'
+                                register={register}
                             />
                         )}
                     </div>
@@ -169,29 +200,30 @@ const NewProfile = () => {
                         <RadioOptions
                             legend='Are you a member of Nepal Forest Association?'
                             values={['Yes', 'No']}
-                            value={isNFA}
-                            setValue={setIsNFA}
+                            name='isNFA'
+                            register={register}
                         />
                         {isNFA === 'Yes' && (
                             <>
                                 <TextInput
                                     legend='NFA Membership Number:'
-                                    value={NFAMembershipNumber}
-                                    setValue={setNFAMembershipNumber}
+                                    name='NFAMembershipNumber'
+                                    register={register}
+                                    disabled={false}
                                 />
 
                                 <RadioOptions
                                     legend='Are you a life member of NFA?'
                                     values={['Yes', 'No']}
-                                    value={isLifeMember}
-                                    setValue={setIsLifeMember}
+                                    name='isLifeMember'
+                                    register={register}
                                 />
 
                                 <RadioOptions
                                     legend='Have you renewed your membership this year?'
                                     values={['Yes', 'No']}
-                                    value={hasRenewed}
-                                    setValue={setHasRenewed}
+                                    name='hasRenewed'
+                                    register={register}
                                 />
                             </>
                         )}
@@ -213,11 +245,11 @@ const NewProfile = () => {
 
 type RadioOptionsProps = {
     legend: string;
+    name: keyof FormInputs;
     values: string[];
-    value: string;
-    setValue: React.Dispatch<React.SetStateAction<string>>;
+    register: UseFormRegister<FormInputs>;
 };
-function RadioOptions({ legend, values, value, setValue }: RadioOptionsProps) {
+function RadioOptions({ legend, name, values, register }: RadioOptionsProps) {
     return (
         <fieldset>
             <legend className='text-black flex flex-col mt-2'>{legend}</legend>
@@ -226,10 +258,14 @@ function RadioOptions({ legend, values, value, setValue }: RadioOptionsProps) {
                     <label key={v}>
                         <input
                             type='radio'
-                            value={v}
-                            checked={value === v}
-                            onChange={() => setValue(v)}
                             className='ml-2'
+                            value={v}
+                            {...register(name, {
+                                required: `${legend.replace(
+                                    ':',
+                                    ''
+                                )} field is required.`,
+                            })}
                         />
                         <span className='ml-1'>{v}</span>
                         <br />
@@ -240,26 +276,27 @@ function RadioOptions({ legend, values, value, setValue }: RadioOptionsProps) {
     );
 }
 
-type TextInputProps = {
+function TextInput({
+    legend,
+    name,
+    register,
+    disabled,
+}: {
     legend: string;
-    value: string;
-    setValue: React.Dispatch<React.SetStateAction<string>>;
-    disabled?: boolean;
-};
-function TextInput({ legend, value, setValue, disabled }: TextInputProps) {
+    name: keyof FormInputs;
+    register: UseFormRegister<FormInputs>;
+    disabled: boolean;
+}) {
     return (
         <>
-            <label htmlFor={legend.toLowerCase()} className='mt-2 text-black'>
-                {legend}
-            </label>
+            <label className='mt-2 text-black'>{legend}</label>
             <input
                 type='text'
                 className='border rounded-md bg-[#030c0370] outline-none text-white p-1'
-                id={legend.toLowerCase()}
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                required={true}
-                disabled={!!disabled}
+                {...register(name, {
+                    required: `${legend} field is required.`,
+                    disabled: !!disabled,
+                })}
             />
         </>
     );

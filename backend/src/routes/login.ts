@@ -13,7 +13,7 @@ export default async function login(req: Request, res: Response) {
     const user = await User.findOne({ where: { email } });
     if (user && user.password === password) {
         req.session.user = user;
-        return res.status(200).json({ message: 'Login successful' });
+        return res.status(200).json({ message: 'Login successful', data: user });
     }
     return res.status(401).json({ message: 'Invalid email or password.' });
 }

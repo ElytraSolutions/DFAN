@@ -26,25 +26,25 @@ app.use(bodyParser.json());
 app.use(session({
     secret: 'keyboard cat',
     cookie: {
-        maxAge: 1000 * 60 * 60,
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
         sameSite: 'none',
     },
-    resave: true,
-    // rolling: true,
+    resave: false,
+    saveUninitialized: true,
+    rolling: true,
 }));
 app.set('trust proxy', 1);
 app.use(cors({
     origin: 'http://localhost:5173',
 }));
 
+// use public directory to serve static files
+app.use(express.static('public'));
+
 app.all('*', function (req, res, next) {
     // console.log(req.session);
     // console.log(req.sessionID);
     next();
-});
-
-app.get('/', (req: Request, res: Response) => {
-    res.json({ message: 'Hello World!' });
 });
 
 app.post('/login', LoginRoute);
@@ -53,6 +53,7 @@ app.post('/logout', LogoutRoute);
 app.use('/admins', AdminsRoute);
 app.use('/users', UserRoute);
 
-app.listen(process.env.PORT, async () => {
-    console.log('Server is running at http://localhost:8080');
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, async () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
 });

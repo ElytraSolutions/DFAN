@@ -10,6 +10,8 @@ import Login from '~/pages/Login';
 import RegisterNew from '~/pages/RegisterNew';
 import Profile from '~/pages/Profile';
 import NewProfile from '~/pages/NewProfile';
+import Logout from './components/Logout';
+import CheckUser from './components/CheckUser';
 
 const router = createBrowserRouter([
     {
@@ -26,7 +28,15 @@ const router = createBrowserRouter([
     },
     {
         path: '/profile',
-        element: <Profile />,
+        element: (
+            <CheckUser>
+                <Profile />
+            </CheckUser>
+        ),
+    },
+    {
+        path: '/logout',
+        element: <Logout />,
     },
     {
         path: '/newProfile',
@@ -49,13 +59,16 @@ function App() {
                         ?.startsWith('application/json')
                 ) {
                     const data = await resp.json();
-                    setUserData(data);
+                    const state = resp.ok ? 'done' : 'error';
+                    setUserData({ ...data, state });
                 } else {
-                    console.log('Received non json data', await resp.text());
-                    console.log('Headers', resp.headers);
+                    console.error('Received non json data', await resp.text());
+                    console.error('Headers', resp.headers);
+                    setUserData({ state: 'error' })
                 }
             } catch (e) {
                 console.error('Error in request', e);
+                setUserData({ state: 'error' });
             }
         })();
     }, []);

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import { toast } from 'react-toastify';
@@ -12,13 +12,14 @@ const Login = () => {
     const [email, setEmail] = React.useState(oldEmail || '');
     const [password, setPassword] = React.useState('');
     const navigate = useNavigate();
-    const userContext = useContext(UserContext);
+    const { setUserData } = React.useContext(UserContext);
 
     const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         try {
             const data = await loginHelper(email, password);
             if (data) {
+                setUserData({ ...data.data, state: 'done' });
                 navigate('/profile');
             }
         } catch (err) {

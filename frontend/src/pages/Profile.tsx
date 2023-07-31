@@ -1,29 +1,8 @@
 import React from 'react';
 import UserContext from '~/context/User';
 
-/*
-NFAMembershipNumber: "345"
-admin: false
-createdAt: "2023-07-30T13:24:11.210Z"
-currentAddress: "curr"
-email: "newUser@a"
-employmentStatus: "Employed"
-employmentType: "Government Job"
-gender: "Male"
-hasInitailized: false
-hasRenewed: "Yes"
-id: "5b27b62a-c3a7-4c20-ad2b-713df635782c"
-isLifeMember: "Yes"
-membershipFrom: "Tokha"
-mobile: 123
-name: "User2"
-password: "password"
-permanentAddress: "perma"
-updatedAt: "2023-07-30T13:24:11.210Z"
-*/
 const Profile = () => {
     const { userData } = React.useContext(UserContext);
-    console.log(userData);
     return (
         <div>
             <div className='w-fit p-6 rounded-md bg-[#558851] mx-auto my-8 text-white'>
@@ -71,14 +50,30 @@ const Profile = () => {
                                 {userData.employmentStatus}
                             </span>
                         </p>
-                        (userData.employmentStatus === 'Employed' && (
-                        <p>
-                            <span>Employment Type:</span>
-                            <span className='ml-1'>
-                                {userData.employmentType}
-                            </span>
-                        </p>
-                        ))
+                        {userData.employmentStatus === 'Employed' && (
+                            <p>
+                                <span>Employment Type:</span>
+                                <span className='ml-1'>
+                                    {userData.employmentType}
+                                </span>
+                            </p>
+                        )}
+                        {userData.NFAMembershipNumber && (
+                            <>
+                                <p>
+                                    <span>NFA Membership Number:</span>
+                                    <span className='ml-1'>
+                                        {userData.NFAMembershipNumber}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span>Life Member:</span>
+                                    <span className='ml-1'>
+                                        {userData.isLifeMember ? 'Yes' : 'No'}
+                                    </span>
+                                </p>
+                            </>
+                        )}
                     </div>
                     <div className=''>Profile Picture</div>
                 </div>
