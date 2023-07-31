@@ -3,22 +3,10 @@ import User from '../../models/User';
 import RegistrationList from '../../models/RegistrationList';
 
 export default async function (req: Request, res: Response) {
-    const { email } = req.body;
-    if (!email) return res.status(400).json({ message: 'Email is required' });
-    if (!req.session.user) return res.status(401).json({ message: 'User should be logged in!' });
-    if (req.session.user.email !== email) return res.status(403).json({ message: 'User is not authorized to perform this action!' });
-    const user = await User.findOne({
-        where: {
-            email
-        }
-    });
-    if (!user) return res.status(404).json({ message: 'User not found!' });
-    const newUserData = {
-        ...user,
-        ...req.body,
-    }
     const {
+        email,
         password,
+        code,
         name,
         gender,
         mobile,
@@ -30,9 +18,18 @@ export default async function (req: Request, res: Response) {
         NFAMembershipNumber,
         isLifeMember,
         hasRenewed,
-    }: User = newUserData;
+    } = req.body;
     try {
-        const updatedUser = await User.update({
+        const userCode = await RegistrationList.findOne({
+            where: {
+                email
+            }
+        });
+        if (!userCode || userCode.code !== code) {
+            return res.status(400).json({ message: 'Invalid email or code!' });
+        }
+        const newUser = await User.create({
+            email,
             password,
             name,
             gender,
@@ -45,12 +42,15 @@ export default async function (req: Request, res: Response) {
             NFAMembershipNumber,
             isLifeMember,
             hasRenewed,
-        }, {
+        });
+        req.session.user = newUser;
+        RegistrationList.destroy({
             where: {
                 email
             }
         });
-        return res.status(200).json(updatedUser);
+        return res.status(200).json(newUser);
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Something went wrong' });

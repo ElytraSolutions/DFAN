@@ -12,6 +12,7 @@ import Profile from '~/pages/Profile';
 import NewProfile from '~/pages/NewProfile';
 import Logout from './components/Logout';
 import CheckUser from './components/CheckUser';
+import EditProfile from './pages/EditProfile';
 
 const router = createBrowserRouter([
     {
@@ -41,6 +42,14 @@ const router = createBrowserRouter([
     {
         path: '/newProfile',
         element: <NewProfile />,
+    },
+    {
+        path: '/editProfile',
+        element: (
+            <CheckUser>
+                <EditProfile />
+            </CheckUser>
+        ),
     },
 ]);
 

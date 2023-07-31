@@ -33,6 +33,9 @@ User.init({
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        validate: {
+            isEmail: true,
+        }
     },
     password: {
         type: DataTypes.STRING,
@@ -44,6 +47,10 @@ User.init({
     },
     name: {
         type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+            is: /^[\S]+/,
+        }
     },
     gender: {
         type: DataTypes.STRING,
