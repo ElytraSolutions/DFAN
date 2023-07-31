@@ -13,6 +13,7 @@ import NewProfile from '~/pages/NewProfile';
 import Logout from './components/Logout';
 import CheckUser from './components/CheckUser';
 import EditProfile from './pages/EditProfile';
+import AdminView from './pages/AdminView';
 
 const router = createBrowserRouter([
     {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
                 <EditProfile />
             </CheckUser>
         ),
+    },
+    {
+        path: '/admin',
+        element: <AdminView />,
     },
 ]);
 
