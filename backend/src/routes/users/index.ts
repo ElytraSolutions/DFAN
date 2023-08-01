@@ -1,15 +1,21 @@
 import { Router } from 'express';
-import me from './me';
-import getStatus from './status';
-import verifyCode from './verifyCode';
-import newProfile from './newProfile';
+import createProfile from './createProfile';
 import editProfile from './editProfile';
+import login from './login';
+import logout from './logout';
+import me from './me';
+import register from './register';
+import status from './status';
+import verifyCode from './verifyCode';
 
 const router = Router();
-router.get('/me', me);
-router.get('/status', getStatus);
-router.post('/verifyCode', verifyCode);
-router.post('/newProfile', newProfile);
+router.post('/createProfile', createProfile);
 router.post('/editProfile', editProfile);
+router.post('/login', login);
+router.post('/logout', logout);
+router.get('/me', me);
+router.post('/register', register);
+router.get('/status', status);
+router.post('/verifyCode', verifyCode);
 
 export default router;

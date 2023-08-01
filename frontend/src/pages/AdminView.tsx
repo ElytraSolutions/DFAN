@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import ExpandableSidebar from '~/components/AdminSidebarLayout';
+
+import ExpandableSidebar from '~/components/ExpandableSidebar';
 
 interface Data {
     make: string;
@@ -50,18 +50,29 @@ const AdminView = () => {
         floatingFilter: true,
     };
 
+    const sideBarLinks = [
+        'Pending Registration',
+        'Pending Verification',
+        'Registered Users',
+    ];
+
     return (
-        <ExpandableSidebar>
-            <div className='grid h-screen p-2 md:p-12'>
-                <div className='ag-theme-alpine-dark h-[70vh] w-[60vw]'>
-                    <AgGridReact
-                        rowData={rowData}
-                        columnDefs={columnDefs}
-                        defaultColDef={defaultColDef}
-                        sideBar={'filters'}
-                    ></AgGridReact>
-                </div>
-            </div>
+        <ExpandableSidebar links={sideBarLinks}>
+            {(currentView: string) => {
+                return (
+                    <div className='grow grid p-2 md:px-12 grid-rows-[min-content_1fr] gap-4'>
+                        <h1 className='text-2xl font-bold'>{currentView}</h1>
+                        <div className='ag-theme-alpine-dark'>
+                            <AgGridReact
+                                rowData={rowData}
+                                columnDefs={columnDefs}
+                                defaultColDef={defaultColDef}
+                                // sideBar={'filters'}
+                            ></AgGridReact>
+                        </div>
+                    </div>
+                );
+            }}
         </ExpandableSidebar>
     );
 };

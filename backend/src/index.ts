@@ -5,9 +5,9 @@ import cors from 'cors';
 
 import './config/dotenv';
 import config from './config/db';
-import LoginRoute from './routes/login';
-import RegisterRoute from './routes/register';
-import LogoutRoute from './routes/logout';
+import LoginRoute from './routes/users/login';
+import RegisterRoute from './routes/users/register';
+import LogoutRoute from './routes/users/logout';
 import AdminsRoute from './routes/admins/index';
 import UserRoute from './routes/users/index';
 
@@ -40,12 +40,6 @@ app.use(cors({
 
 // use public directory to serve static files
 app.use(express.static('public'));
-
-app.all('*', function (req, res, next) {
-    // console.log(req.session);
-    // console.log(req.sessionID);
-    next();
-});
 
 app.post('/login', LoginRoute);
 app.post('/register', RegisterRoute);

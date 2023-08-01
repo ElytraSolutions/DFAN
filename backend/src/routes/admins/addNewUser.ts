@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User from '../../models/User';
+import User from '../../models/Users';
 
 export default async function (req: Request, res: Response) {
     const email = req.body.email;

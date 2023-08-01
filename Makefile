@@ -13,6 +13,9 @@ clean:
 	rm -rf backend/dist
 	rm -rf frontend/dist
 
+clean_db:
+	rm -rf backend/*.sqlite
+
 build: clean
 	@echo "Building server for production"
 	cd backend && npm run build

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User from '../../models/User';
+import User from '../../models/Users';
 import RegistrationList from '../../models/RegistrationList';
 
 export default async function getStatus(req: Request, res: Response) {
@@ -20,8 +20,6 @@ export default async function getStatus(req: Request, res: Response) {
             message: 'User found',
             data: {
                 status: 'existingUser',
-                admin: user.admin,
-                hasInitailized: user.hasInitailized,
             }
         });
     }

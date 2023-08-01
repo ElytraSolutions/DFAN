@@ -34,7 +34,6 @@ const RegisterNew = () => {
             toast.error('Something went wrong');
             console.error(error);
         }
-        console.log(email);
     };
 
     return (
