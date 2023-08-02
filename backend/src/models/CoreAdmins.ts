@@ -1,10 +1,23 @@
-import { Association, CreationOptional, DataTypes, HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, InferAttributes, InferCreationAttributes, Model, NonAttribute } from 'sequelize';
+import {
+    Association,
+    CreationOptional,
+    DataTypes,
+    HasOneCreateAssociationMixin,
+    HasOneGetAssociationMixin,
+    HasOneSetAssociationMixin,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+    NonAttribute,
+} from 'sequelize';
 import sequelize from './config';
 import UserProfile from './UserProfile';
 import Users from './Users';
 
-
-class CoreAdmins extends Model<InferAttributes<CoreAdmins>, InferCreationAttributes<CoreAdmins>> {
+class CoreAdmins extends Model<
+    InferAttributes<CoreAdmins>,
+    InferCreationAttributes<CoreAdmins>
+> {
     declare id: CreationOptional<string>;
     declare email: string;
     declare password: string;
@@ -20,35 +33,38 @@ class CoreAdmins extends Model<InferAttributes<CoreAdmins>, InferCreationAttribu
     };
 }
 
-CoreAdmins.init({
-    id: {
-        type: DataTypes.UUIDV4,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-        allowNull: false,
-        unique: true,
+CoreAdmins.init(
+    {
+        id: {
+            type: DataTypes.UUIDV4,
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true,
+            allowNull: false,
+            unique: true,
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+                isEmail: true,
+            },
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        name: {
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: true,
+                is: /^[\S]+/,
+            },
+        },
     },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-            isEmail: true,
-        }
+    {
+        sequelize,
     },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    name: {
-        type: DataTypes.STRING,
-        validate: {
-            notEmpty: true,
-            is: /^[\S]+/,
-        }
-    },
-}, {
-    sequelize,
-});
+);
 
 export default CoreAdmins;

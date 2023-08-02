@@ -10,27 +10,29 @@ export default async function login(req: Request, res: Response) {
             return res.status(400).json({ message: 'Email cannot be empty' });
         }
         if (!password) {
-            return res.status(400).json({ message: 'Password cannot be empty' });
+            return res
+                .status(400)
+                .json({ message: 'Password cannot be empty' });
         }
         const coreAdmin = await CoreAdmins.findOne({ where: { email } });
         if (coreAdmin && coreAdmin.password === password) {
-            const { password, ...data } = coreAdmin.dataValues;
+            const { password: _, ...data } = coreAdmin.dataValues;
             req.session.adminUser = { ...data, type: 'central' };
             return res.status(200).json({ message: 'Login successful', data });
         }
 
-        const regionalAdmin = await RegionalAdmins.findOne({ where: { email } });
+        const regionalAdmin = await RegionalAdmins.findOne({
+            where: { email },
+        });
         if (regionalAdmin && regionalAdmin.password === password) {
-            const { password, ...data } = regionalAdmin.dataValues;
+            const { password: _, ...data } = regionalAdmin.dataValues;
             req.session.adminUser = { ...data, type: 'regional' };
             return res.status(200).json({ message: 'Login successful', data });
         }
 
         return res.status(401).json({ message: 'Invalid email or password.' });
-    }
-    catch (err) {
+    } catch (err) {
         console.log(err);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
-

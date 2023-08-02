@@ -3,7 +3,12 @@ import templates from './emailTemplates';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
 
-export async function sendMail(email: string, subject: string, text: string, html: string) {
+export async function sendMail(
+    email: string,
+    subject: string,
+    text: string,
+    html: string,
+) {
     if (!process.env.SENDGRID_API_KEY || !process.env.FROM_EMAIL) {
         throw new Error('Sendgrid API key or from email not set!');
     }
@@ -16,9 +21,13 @@ export async function sendMail(email: string, subject: string, text: string, htm
     });
     console.log(resp);
     return resp;
-};
+}
 
-export default async function sendEmail(email: string, template: string, ...args: any[]) {
+export default async function sendEmail(
+    email: string,
+    template: string,
+    ...args: any[]
+) {
     if (Object.keys(templates).indexOf(template) === -1) {
         throw new Error('Invalid template!');
     }

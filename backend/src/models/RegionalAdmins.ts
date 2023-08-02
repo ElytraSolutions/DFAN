@@ -1,10 +1,23 @@
-import { Association, CreationOptional, DataTypes, HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, InferAttributes, InferCreationAttributes, Model, NonAttribute } from 'sequelize';
+import {
+    Association,
+    CreationOptional,
+    DataTypes,
+    HasOneCreateAssociationMixin,
+    HasOneGetAssociationMixin,
+    HasOneSetAssociationMixin,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+    NonAttribute,
+} from 'sequelize';
 import sequelize from './config';
 import UserProfile from './UserProfile';
 import Users from './Users';
 
-
-class RegionalAdmins extends Model<InferAttributes<RegionalAdmins>, InferCreationAttributes<RegionalAdmins>> {
+class RegionalAdmins extends Model<
+    InferAttributes<RegionalAdmins>,
+    InferCreationAttributes<RegionalAdmins>
+> {
     declare id: CreationOptional<string>;
     declare email: string;
     declare password: string;
@@ -20,35 +33,38 @@ class RegionalAdmins extends Model<InferAttributes<RegionalAdmins>, InferCreatio
     };
 }
 
-RegionalAdmins.init({
-    id: {
-        type: DataTypes.UUIDV4,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-        allowNull: false,
-        unique: true,
+RegionalAdmins.init(
+    {
+        id: {
+            type: DataTypes.UUIDV4,
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true,
+            allowNull: false,
+            unique: true,
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+                isEmail: true,
+            },
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        name: {
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: true,
+                is: /^[\S]+/,
+            },
+        },
     },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-            isEmail: true,
-        }
+    {
+        sequelize,
     },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    name: {
-        type: DataTypes.STRING,
-        validate: {
-            notEmpty: true,
-            is: /^[\S]+/,
-        }
-    },
-}, {
-    sequelize,
-});
+);
 
 export default RegionalAdmins;

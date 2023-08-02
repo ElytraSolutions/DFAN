@@ -1,80 +1,159 @@
-import { useState } from 'react';
-import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
+import { useEffect, useState } from "react"
+import { AgGridReact } from "@ag-grid-community/react"
+import { ModuleRegistry } from "@ag-grid-community/core"
+import { ServerSideRowModelModule } from "@ag-grid-enterprise/server-side-row-model"
+import "@ag-grid-community/styles/ag-grid.css"
+import "@ag-grid-community/styles/ag-theme-alpine.css"
 
-import ExpandableSidebar from '~/components/ExpandableSidebar';
+import ExpandableSidebar from "~/components/ExpandableSidebar"
+
+ModuleRegistry.registerModules([ServerSideRowModelModule])
 
 interface Data {
-    make: string;
-    model: string;
-    price: number;
+  email: string
+  UserProfile: {
+    NFAMembershipNumber: string
+    name: string
+    gender: string
+    mobile: string
+    currentAddress: string
+    permanentAddress: string
+    employmentStatus: string
+    employmentType: string
+    membershipFrom: string
+    isLifeMember: boolean
+    hasRenewed: boolean
+  }
 }
 
 type ColumnDef = {
-    field: keyof Data;
-    filter: string;
-    sortable?: boolean;
-    resizable?: boolean;
-    floatingFilter?: boolean;
-}[];
+  field: unknown
+  headerName: string
+  filter: string
+  sortable?: boolean
+  resizable?: boolean
+  floatingFilter?: boolean
+}[]
 
 const AdminView = () => {
-    const [rowData] = useState<Data[]>([
-        { make: 'Toyota', model: 'Celica', price: 35000 },
-        { make: 'Ford', model: 'Mondeo', price: 32000 },
-        { make: 'Porsche', model: 'Boxster', price: 72000 },
-    ]);
+  const [sideBarLinks] = useState([
+    "Pending Registration",
+    "Pending Verification",
+    "Registered Users",
+  ])
+  return (
+    <ExpandableSidebar links={sideBarLinks}>
+      {(currentView: string) => {
+        return (
+          <div className="grow grid p-2 md:px-12 grid-rows-[min-content_1fr] gap-4">
+            <h1 className="text-2xl font-bold">{currentView}</h1>
+            <div className="ag-theme-alpine-dark">
+              {currentView === "Registered Users" ? (
+                <RegisteredUsersTable />
+              ) : null}
+            </div>
+          </div>
+        )
+      }}
+    </ExpandableSidebar>
+  )
+}
 
-    const [columnDefs] = useState<ColumnDef>([
-        {
-            field: 'make',
-            filter: 'agTextColumnFilter',
-        },
-        {
-            field: 'model',
-            filter: 'agTextColumnFilter',
-        },
-        {
-            field: 'price',
-            filter: 'agTextColumnFilter',
-        },
-    ]);
+const RegisteredUsersDataSource = {
+  getRows: (params) => {
+    console.log("Params from getRows", params)
+    params.success({
+      rowData: [],
+    })
+  },
+}
 
-    const defaultColDef = {
-        flex: 1,
-        minWidth: 100,
-        filter: true,
-        sortable: true,
-        resizable: true,
-        floatingFilter: true,
-    };
+const RegisteredUsersTable = () => {
+  const [rowData, setRowData] = useState<Data[]>([])
+  useEffect(() => {
+    fetch("/api/admins/getUsers")
+      .then((res) => res.json())
+      .then((data) => {
+        setRowData(data.data)
+      })
+  }, [])
 
-    const sideBarLinks = [
-        'Pending Registration',
-        'Pending Verification',
-        'Registered Users',
-    ];
+  const [columnDefs] = useState([
+    {
+      field: "UserProfile.NFAMembershipNumber",
+      headerName: "NFA Membership Number",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.name",
+      headerName: "Name",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.membershipFrom",
+      headerName: "Membership From",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.isLifeMember",
+      headerName: "Life Member",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.gender",
+      headerName: "Gender",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.mobile",
+      headerName: "Mobile Number",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.currentAddress",
+      headerName: "Current Address",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.permanentAddress",
+      headerName: "Permanent Address",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.employmentStatus",
+      headerName: "Employment Status",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.employmentType",
+      headerName: "Employment Type",
+      filter: "agTextColumnFilter",
+    },
+  ])
 
-    return (
-        <ExpandableSidebar links={sideBarLinks}>
-            {(currentView: string) => {
-                return (
-                    <div className='grow grid p-2 md:px-12 grid-rows-[min-content_1fr] gap-4'>
-                        <h1 className='text-2xl font-bold'>{currentView}</h1>
-                        <div className='ag-theme-alpine-dark'>
-                            <AgGridReact
-                                rowData={rowData}
-                                columnDefs={columnDefs}
-                                defaultColDef={defaultColDef}
-                                // sideBar={'filters'}
-                            ></AgGridReact>
-                        </div>
-                    </div>
-                );
-            }}
-        </ExpandableSidebar>
-    );
-};
+  const [defaultColDef] = useState({
+    flex: 1,
+    minWidth: 100,
+    filter: true,
+    sortable: true,
+    resizable: true,
+    floatingFilter: true,
+    suppressSizeToFit: true,
+  })
+  return (
+    <AgGridReact
+      rowModelType="serverSide"
+      serverSideDatasource={RegisteredUsersDataSource}
+      columnDefs={columnDefs}
+      defaultColDef={defaultColDef}
+      alwaysShowHorizontalScroll={true}
+    ></AgGridReact>
+  )
+}
 
-export default AdminView;
+export default AdminView

@@ -1,8 +1,8 @@
-declare module "express-session" {
+declare module 'express-session' {
     interface SessionData {
         user: any;
         adminUser: any;
     }
 }
 
-export { };
+export {};

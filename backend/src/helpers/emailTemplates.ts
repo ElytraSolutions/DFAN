@@ -1,5 +1,9 @@
-type Template = (...args: any[]) => { subject: string, text: string, html: string; };
-const templates: { [key: string]: Template; } = {
+type Template = (...args: any[]) => {
+    subject: string;
+    text: string;
+    html: string;
+};
+const templates: { [key: string]: Template } = {
     codeTemplate: (code: string, redirectURL: string) => {
         return {
             subject: 'Registration Code',
@@ -12,6 +16,6 @@ const templates: { [key: string]: Template; } = {
             `,
             text: `Your registration code is: ${code}. Please use this code to complete your registration or visit ${redirectURL}`,
         };
-    }
+    },
 };
 export default templates;

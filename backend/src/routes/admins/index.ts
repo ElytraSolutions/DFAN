@@ -3,7 +3,7 @@ import getUsers from './getUsers';
 import inviteUser from './inviteUser';
 import login from './login';
 import register from './register';
-import verifyUserProfile from './verifyUserProfile';
+import verifyUser from './verifyUser';
 
 const checkAdmin: RequestHandler = (req, res, next) => {
     if (!req.session.adminUser) {
@@ -18,6 +18,6 @@ router.get('/getUsers', checkAdmin, getUsers);
 router.post('/inviteUser', checkAdmin, inviteUser);
 router.post('/login', login);
 router.post('/register', register);
-router.post('/verifyUserProfile', checkAdmin, verifyUserProfile);
+router.post('/verifyUser', checkAdmin, verifyUser);
 
 export default router;

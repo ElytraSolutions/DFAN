@@ -1,133 +1,71 @@
+import Joi from 'joi';
 import Countries from '../data/Countries';
 import States from '../data/States';
-import UserProfile from '../models/UserProfile';
 
-function isBool(val: any) {
-    return (
-        ['true', 'false', true, false].indexOf((val + '').toLowerCase()) !== -1
-    );
+function toBool(val: any) {
+    if (val instanceof Boolean) {
+        return val;
+    }
+    if (typeof val !== 'string') return val;
+    if (['false', 'no'].indexOf(val.toLowerCase()) !== -1) {
+        return false;
+    }
+    if (['true', 'yes'].indexOf(val.toLowerCase()) !== -1) {
+        return true;
+    }
 }
 
-function isTruthy(val: string) {
-    return val && !!(val.trim()) && val.toLowerCase() === 'true';
-}
+export const UserProfileSchema = Joi.object({
+    name: Joi.string().required(),
+    gender: Joi.string().required(),
+    mobile: Joi.string().required().min(10).max(10).messages({
+        'string.min': 'Mobile number have 10 digits',
+        'string.max': 'Mobile number have 10 digits',
+    }),
+    permanentAddress: Joi.any()
+        .allow(...States)
+        .only()
+        .required(),
+    currentAddress: Joi.string()
+        .allow(...Countries)
+        .only()
+        .required(),
+    employmentStatus: Joi.string().required(),
+    employmentType: Joi.when('employmentStatus', {
+        is: 'Employed',
+        then: Joi.string()
+            .allow('Government Job', 'Non-Government Job')
+            .only()
+            .required(),
+        otherwise: Joi.string().strip(),
+    }),
+    NFAMembershipNumber: Joi.number().optional(),
+    membershipFrom: Joi.when('NFAMembershipNumber', {
+        is: Joi.exist(),
+        then: Joi.string()
+            .allow(...States)
+            .only()
+            .required(),
+        otherwise: Joi.string().strip(),
+    }),
+    isLifeMember: Joi.when('NFAMembershipNumber', {
+        is: Joi.exist(),
+        then: Joi.boolean().required(),
+        otherwise: Joi.string().strip(),
+    }),
+    hasRenewed: Joi.when('NFAMembershipNumber', {
+        is: Joi.exist(),
+        then: Joi.when('isLifeMember', {
+            is: Joi.boolean().falsy(),
+            then: Joi.boolean().required(),
+            otherwise: Joi.string().strip(),
+        }),
+        otherwise: Joi.string().strip(),
+    }),
+});
 
-function isFalsy(val: string) {
-    return !val || !(val.trim()) || val.toLowerCase() === 'false';
-}
-
-const validations = {
-    name: {
-        validation: (val: any) => !!(val?.trim()) && /^.+$/i.test(val),
-        message: 'Invalid value for name',
-        skipValidation: {},
-    },
-    gender: {
-        validation: (val: any) => !!(val?.trim()) && /^.+$/i.test(val),
-        message: 'Invalid value for gender',
-        skipValidation: {},
-    },
-    mobile: {
-        validation: (val: any) => !!(val?.trim()) && /^[\d+]+$/i.test(val),
-        message: 'Invalid value for mobile number',
-        skipValidation: {},
-    },
-    permanentAddress: {
-        validation: (val: any) => States.indexOf(val) !== -1,
-        message: 'Invalid value for permanent address',
-        skipValidation: {},
-    },
-    currentAddress: {
-        validation: (val: string) => Countries.indexOf(val) !== -1,
-        message: 'Invalid value for current address',
-        skipValidation: {},
-    },
-    employmentStatus: {
-        validation: (val: string) => !!(val?.trim()) && /^.+$/i.test(val),
-        message: 'Invalid value for employment status',
-        skipValidation: {},
-    },
-    employmentType: {
-        validation: (val: string) =>
-            ['Government Job', 'Non-Government Job'].indexOf(val) !== -1,
-        message: 'Invalid value for employment type',
-        skipValidation: {
-            employmentStatus: (val: any) =>
-                val !== 'Employed',
-        },
-    },
-    NFAMembershipNumber: {
-        validation: (val: string) => true,
-        message: 'Invalid value for NFA membership number',
-        skipValidation: {},
-    },
-    membershipFrom: {
-        validation: (val: any) => States.indexOf(val) !== -1,
-        message: 'Invalid value for membership from',
-        skipValidation: {
-            NFAMembershipNumber: (val: any) => isFalsy(val),
-        },
-    },
-    isLifeMember: {
-        validation: (val: any) => isBool(val),
-        message: 'Invalid value for life membership',
-        skipValidation: {
-            NFAMembershipNumber: (val: any) => isFalsy(val),
-        },
-    },
-    hasRenewed: {
-        validation: (val: string) => isBool(val),
-        message: 'Invalid value for renewal status',
-        skipValidation: {
-            NFAMembershipNumber: (val: any) => isFalsy(val),
-            isLifeMember: (val: any) => isTruthy(val),
-        },
-    },
-};
-
-type ObjectKeys = keyof typeof validations;
-
-export function sanitizer(obj: Record<ObjectKeys, any>) {
-    const sanitized: Partial<Record<ObjectKeys, string | null>> = {};
-    Object.entries(validations).forEach(
-        (entry) => {
-            const key = entry[0] as ObjectKeys;
-            const { skipValidation } = entry[1];
-            var shouldCheck = true;
-            Object.entries(skipValidation).forEach(entry => {
-                const skipKey = entry[0] as ObjectKeys;
-                const skipFunc = entry[1] as (val: string) => boolean;
-                if (skipFunc(obj[skipKey])) {
-                    shouldCheck = false;
-                }
-            });
-            if (shouldCheck) {
-                sanitized[key] = obj[key];
-            } else {
-                sanitized[key] = null;
-            }
-        });
-    return sanitized;
-}
-
-export default function (obj: Record<ObjectKeys, any>) {
-    const errors: Partial<Record<ObjectKeys, string>> = {};
-    Object.entries(validations).forEach(
-        (entry) => {
-            const key = entry[0] as ObjectKeys;
-            const { validation, message, skipValidation } = entry[1];
-            var shouldCheck = true;
-            Object.entries(skipValidation).forEach(entry => {
-                const skipKey = entry[0] as ObjectKeys;
-                const skipFunc = entry[1] as (val: string) => boolean;
-                if (skipFunc(obj[skipKey])) {
-                    shouldCheck = false;
-                }
-            });
-            if (shouldCheck && !validation(obj[key])) {
-                errors[key] = message;
-            }
-        }
-    );
-    return errors;
+export function sanitizer(obj: Record<string, any>) {
+    if ('isLifeMember' in obj) obj.isLifeMember = toBool(obj.isLifeMember);
+    if ('hasRenewed' in obj) obj.hasRenewed = toBool(obj.hasRenewed);
+    return obj;
 }

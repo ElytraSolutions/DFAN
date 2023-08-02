@@ -20,7 +20,7 @@ export default async function status(req: Request, res: Response) {
             message: 'User found',
             data: {
                 status: 'existingUser',
-            }
+            },
         });
     }
     const registered = await RegistrationList.findOne({
@@ -39,6 +39,6 @@ export default async function status(req: Request, res: Response) {
             status: 'newUser',
             admin: false,
             hasInitailized: false,
-        }
+        },
     });
 }

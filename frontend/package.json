@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ag-grid-community/react": "^30.0.6",
+    "@ag-grid-community/styles": "^30.0.6",
+    "@ag-grid-enterprise/server-side-row-model": "^30.0.6",
     "@types/node": "^20.4.5",
-    "ag-grid-react": "^30.0.6",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.27",
     "re-resizable": "^6.9.9",

@@ -1,20 +1,27 @@
 import { Request, Response } from 'express';
+import Joi from 'joi';
 import Users from '../../models/Users';
 import RegistrationList from '../../models/RegistrationList';
 
+interface RequestBody {
+    email: string;
+    password: string;
+    code: string;
+}
+const schema = Joi.object<RequestBody>({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+    code: Joi.string().required(),
+});
+
 export default async function register(req: Request, res: Response) {
-    const email: string | undefined = req.body.email?.trim();
-    const password: string | undefined = req.body.password;
-    const code: string | undefined = req.body.code;
-    if (!email) {
-        return res.status(400).json({ message: 'Email cannot be empty' });
+    const { value, error } = schema.validate(req.body);
+    if (error) {
+        return res
+            .status(400)
+            .json({ message: 'Invalid parameters', errors: error.details });
     }
-    if (!password) {
-        return res.status(400).json({ message: 'Password cannot be empty' });
-    }
-    if (!code) {
-        return res.status(400).json({ message: 'Code cannot be empty' });
-    }
+    const { email, password, code } = value;
 
     const pendingUser = await RegistrationList.findOne({ where: { email } });
     if (!pendingUser || pendingUser.code !== code) {
@@ -22,8 +29,12 @@ export default async function register(req: Request, res: Response) {
     }
     const user = await Users.findOne({ where: { email } });
     if (user) {
-        return res.status(400).json({ message: 'Email address already exists', data: user });
+        return res
+            .status(400)
+            .json({ message: 'Email address already exists', data: user });
     }
     const newUser = await Users.create({ email, password });
-    return res.status(200).json({ message: 'Registration successful', data: newUser });
+    return res
+        .status(200)
+        .json({ message: 'Registration successful', data: newUser });
 }

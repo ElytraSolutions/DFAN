@@ -12,7 +12,9 @@ export default async function verifyCode(req: Request, res: Response) {
     }
     const user = await RegistrationList.findOne({ where: { email } });
     if (!user || user.code !== code) {
-        return res.status(400).json({ message: 'Email address or code is invalid' });
+        return res
+            .status(400)
+            .json({ message: 'Email address or code is invalid' });
     }
     return res.status(200).json({ message: 'Verification successful' });
 }

@@ -7,10 +7,14 @@ import VerificationList from '../models/VerificationList';
 
 export default async function config() {
     Users.hasOne(UserProfile);
+    UserProfile.belongsTo(Users);
     CoreAdmins.hasOne(UserProfile);
+    UserProfile.belongsTo(CoreAdmins);
     RegionalAdmins.hasOne(UserProfile);
+    UserProfile.belongsTo(RegionalAdmins);
 
     UserProfile.hasOne(VerificationList);
+    VerificationList.belongsTo(UserProfile);
 
     const alter = false;
     const force = false;
@@ -22,6 +26,7 @@ export default async function config() {
     await Users.sync({ alter, force });
     await VerificationList.sync({ alter, force });
 
+    // TODO: Remove this
     if (process.env.NODE_ENV !== 'production') {
         await CoreAdmins.findOrCreate({
             where: {
@@ -78,11 +83,11 @@ export default async function config() {
         const [user1, created1] = await Users.findOrCreate({
             where: {
                 email: 'user1@localhost.com',
-                password: 'user1',
+                password: 'password',
             },
         });
         if (created1) {
-            await user1.createUserProfile({
+            const user1Profile = await user1.createUserProfile({
                 name: 'User 1',
                 gender: 'Male',
                 mobile: '11111',
@@ -95,15 +100,16 @@ export default async function config() {
                 isLifeMember: false,
                 hasRenewed: false,
             });
+            await user1Profile.createVerificationList({});
         }
         const [user2, created2] = await Users.findOrCreate({
             where: {
                 email: 'user2@localhost.com',
-                password: 'user2',
+                password: 'password',
             },
         });
         if (created2) {
-            await user2.createUserProfile({
+            const user2Profile = await user2.createUserProfile({
                 name: 'User 2',
                 gender: 'Female',
                 mobile: '22222',
@@ -116,15 +122,16 @@ export default async function config() {
                 isLifeMember: undefined,
                 hasRenewed: undefined,
             });
+            await user2Profile.createVerificationList({});
         }
         const [user3, created3] = await Users.findOrCreate({
             where: {
                 email: 'user3@localhost.com',
-                password: 'user3',
+                password: 'password',
             },
         });
         if (created3) {
-            await user3.createUserProfile({
+            const user3Profile = await user3.createUserProfile({
                 name: 'User 3',
                 gender: 'LGBTQ+',
                 mobile: '33333',
@@ -137,15 +144,16 @@ export default async function config() {
                 isLifeMember: false,
                 hasRenewed: false,
             });
+            await user3Profile.createVerificationList({});
         }
         const [user4, created4] = await Users.findOrCreate({
             where: {
                 email: 'user4@localhost.com',
-                password: 'user4',
+                password: 'password',
             },
         });
         if (created4) {
-            await user4.createUserProfile({
+            const user4Profile = await user4.createUserProfile({
                 name: 'User 4',
                 gender: 'LGBTQ+',
                 mobile: '44444',
@@ -158,7 +166,7 @@ export default async function config() {
                 isLifeMember: false,
                 hasRenewed: false,
             });
+            await user4Profile.createVerificationList({});
         }
     }
-
 }

@@ -31,7 +31,9 @@ export default async function register(req: Request, res: Response) {
         }
         const newAdmin = await CoreAdmins.create({ email, password, name });
         const { password: _, ...data } = newAdmin.dataValues;
-        return res.status(200).json({ message: 'Admin created successfully', data });
+        return res
+            .status(200)
+            .json({ message: 'Admin created successfully', data });
     } else if (type === 'regional') {
         const currAdmin = req.session.adminUser;
         if (!currAdmin) {
@@ -43,8 +45,9 @@ export default async function register(req: Request, res: Response) {
         }
         const newAdmin = await RegionalAdmins.create({ email, password, name });
         const { password: _, ...data } = newAdmin.dataValues;
-        return res.status(200).json({ message: 'Admin created successfully', data });
+        return res
+            .status(200)
+            .json({ message: 'Admin created successfully', data });
     }
     return res.status(400).json({ message: 'Invalid type' });
 }
-
