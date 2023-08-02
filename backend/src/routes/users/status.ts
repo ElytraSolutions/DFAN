@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import User from '../../models/Users';
 import RegistrationList from '../../models/RegistrationList';
 
-export default async function getStatus(req: Request, res: Response) {
+export default async function status(req: Request, res: Response) {
     const email = req.query.email as string;
     if (!email) {
         return res.status(400).json({

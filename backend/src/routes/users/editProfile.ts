@@ -3,7 +3,7 @@ import Users from '../../models/Users';
 import ValidateUserProfile, { sanitizer } from '../../validations/ValidateUserProfile';
 import UserProfile from '../../models/UserProfile';
 
-export default async function (req: Request, res: Response) {
+export default async function editProfile(req: Request, res: Response) {
     if (!req.session.user || !req.session.user.email) return res.status(401).json({ message: 'User should be logged in!' });
     const email = req.session.user.email;
     const user = await Users.findOne({
@@ -18,12 +18,12 @@ export default async function (req: Request, res: Response) {
         ],
     });
     if (!user) return res.status(404).json({ message: 'User not found' });
-    if (!user.userProfile) {
+    if (!user.UserProfile) {
         return res.status(400).json({ user, message: 'User does not have a profile' });
     }
     try {
-        const newProfile: any = user.userProfile.dataValues;
-        for (const key in user.userProfile.dataValues) {
+        const newProfile: any = user.UserProfile.dataValues;
+        for (const key in user.UserProfile.dataValues) {
             if (key in req.body) {
                 newProfile[key] = req.body[key];
             }

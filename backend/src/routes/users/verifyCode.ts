@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import RegistrationList from '../../models/RegistrationList';
 
-export default async function (req: Request, res: Response) {
+export default async function verifyCode(req: Request, res: Response) {
     const email: string | undefined = req.body.email?.trim();
     const code: string | undefined = req.body.code;
     if (!email) {

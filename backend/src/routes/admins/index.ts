@@ -1,16 +1,23 @@
-import { Request, Response, Router } from 'express';
-import allowRegistration from './allowRegistration';
+import { RequestHandler, Router } from 'express';
+import getUsers from './getUsers';
+import inviteUser from './inviteUser';
+import login from './login';
+import register from './register';
+import verifyUserProfile from './verifyUserProfile';
+
+const checkAdmin: RequestHandler = (req, res, next) => {
+    if (!req.session.adminUser) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    return next();
+};
 
 const router = Router();
-// router.use((req, res, next) => {
-//     if (!req.session.user) {
-//         return res.status(401).json({ message: 'Unauthorized' });
-//     }
-//     if (req.session.user.role !== 'admin') {
-//         return res.status(403).json({ message: 'Forbidden' });
-//     }
-//     return next();
-// });
-router.post('/allowRegistration', allowRegistration);
+
+router.get('/getUsers', checkAdmin, getUsers);
+router.post('/inviteUser', checkAdmin, inviteUser);
+router.post('/login', login);
+router.post('/register', register);
+router.post('/verifyUserProfile', checkAdmin, verifyUserProfile);
 
 export default router;

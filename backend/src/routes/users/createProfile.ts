@@ -2,9 +2,10 @@ import { Request, Response } from 'express';
 import RegistrationList from '../../models/RegistrationList';
 import Users from '../../models/Users';
 import ValidateUserProfile, { sanitizer } from '../../validations/ValidateUserProfile';
-import UserProfile from '../../models/UserProfile';
+import VerificationList from '../../models/VerificationList';
 
-export default async function (req: Request, res: Response) {
+export default async function createProfile(req: Request, res: Response) {
+    // TODO: Assign new membership ID if there is no membership ID
     const {
         name,
         gender,
@@ -60,6 +61,7 @@ export default async function (req: Request, res: Response) {
                 email: user.email
             }
         });
+        (await VerificationList.create({})).setUserProfile(profile);
         return res.status(200).json(profile);
     } catch (error) {
         console.error(error);
