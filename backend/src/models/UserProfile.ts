@@ -1,6 +1,7 @@
-import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model, Optional } from 'sequelize';
+import { Association, CreationOptional, DataTypes, ForeignKey, HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, InferAttributes, InferCreationAttributes, Model, NonAttribute, Optional } from 'sequelize';
 import sequelize from './config';
 import Users from './Users';
+import VerificationList from './VerificationList';
 
 
 class UserProfile extends Model<InferAttributes<UserProfile>, InferCreationAttributes<UserProfile>> {
@@ -17,7 +18,16 @@ class UserProfile extends Model<InferAttributes<UserProfile>, InferCreationAttri
     declare isLifeMember: CreationOptional<boolean>;
     declare hasRenewed: CreationOptional<boolean>;
 
-    declare userId: ForeignKey<Users['id']>;
+    declare VerificationList?: NonAttribute<VerificationList>;
+    declare getVerificationList: HasOneGetAssociationMixin<VerificationList>;
+    declare setVerificationList: HasOneSetAssociationMixin<VerificationList, string>;
+    declare createVerficationList: HasOneCreateAssociationMixin<VerificationList>;
+
+    declare static associations: {
+        VerificationList: Association<UserProfile, VerificationList>;
+    };
+
+
 }
 
 UserProfile.init({

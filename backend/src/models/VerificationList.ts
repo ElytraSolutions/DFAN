@@ -1,13 +1,23 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
+import { Association, CreationOptional, DataTypes, HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, InferAttributes, InferCreationAttributes, Model, NonAttribute } from 'sequelize';
 import sequelize from './config';
+import UserProfile from './UserProfile';
 
 
-class Users extends Model<InferAttributes<Users>, InferCreationAttributes<Users>> {
+class VerificationList extends Model<InferAttributes<VerificationList>, InferCreationAttributes<VerificationList>> {
     declare id: CreationOptional<string>;
-    declare email: string;
+    declare status: CreationOptional<"pending" | "approved" | "rejected">;
+
+    declare UserProfile?: NonAttribute<UserProfile>;
+    declare getUserProfile: HasOneGetAssociationMixin<UserProfile>;
+    declare setUserProfile: HasOneSetAssociationMixin<UserProfile, string>;
+    declare createUserProfile: HasOneCreateAssociationMixin<UserProfile>;
+
+    declare static associations: {
+        userProfile: Association<VerificationList, UserProfile>;
+    };
 }
 
-Users.init({
+VerificationList.init({
     id: {
         type: DataTypes.UUIDV4,
         defaultValue: DataTypes.UUIDV4,
@@ -15,16 +25,14 @@ Users.init({
         allowNull: false,
         unique: true,
     },
-    email: {
-        type: DataTypes.STRING,
+    status: {
+        type: DataTypes.ENUM("pending", "approved", "rejected"),
         allowNull: false,
-        unique: true,
-        validate: {
-            isEmail: true,
-        }
+        defaultValue: "pending",
     },
 }, {
     sequelize,
 });
 
-export default Users;
+
+export default VerificationList;

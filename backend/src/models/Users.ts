@@ -2,12 +2,12 @@ import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, 
 import sequelize from './config';
 import UserProfile from './UserProfile';
 
-class Users extends Model<InferAttributes<Users, { omit: 'userProfile'; }>, InferCreationAttributes<Users, { omit: 'userProfile'; }>> {
+class Users extends Model<InferAttributes<Users, { omit: 'UserProfile'; }>, InferCreationAttributes<Users, { omit: 'UserProfile'; }>> {
     declare id: CreationOptional<string>;
     declare email: string;
     declare password: string;
 
-    declare userProfile?: NonAttribute<UserProfile>;
+    declare UserProfile?: NonAttribute<UserProfile>;
     declare getUserProfile: HasOneGetAssociationMixin<UserProfile>;
     declare setUserProfile: HasOneSetAssociationMixin<UserProfile, string>;
     declare createUserProfile: HasOneCreateAssociationMixin<UserProfile>;

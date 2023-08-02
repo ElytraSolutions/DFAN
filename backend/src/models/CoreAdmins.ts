@@ -1,5 +1,7 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
+import { Association, CreationOptional, DataTypes, HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, InferAttributes, InferCreationAttributes, Model, NonAttribute } from 'sequelize';
 import sequelize from './config';
+import UserProfile from './UserProfile';
+import Users from './Users';
 
 
 class CoreAdmins extends Model<InferAttributes<CoreAdmins>, InferCreationAttributes<CoreAdmins>> {
@@ -7,6 +9,15 @@ class CoreAdmins extends Model<InferAttributes<CoreAdmins>, InferCreationAttribu
     declare email: string;
     declare password: string;
     declare name: CreationOptional<string>;
+
+    declare UserProfile?: NonAttribute<UserProfile>;
+    declare getUserProfile: HasOneGetAssociationMixin<UserProfile>;
+    declare setUserProfile: HasOneSetAssociationMixin<UserProfile, string>;
+    declare createUserProfile: HasOneCreateAssociationMixin<UserProfile>;
+
+    declare static associations: {
+        UserProfile: Association<Users, UserProfile>;
+    };
 }
 
 CoreAdmins.init({

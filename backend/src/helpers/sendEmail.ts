@@ -18,7 +18,7 @@ export async function sendMail(email: string, subject: string, text: string, htm
     return resp;
 };
 
-export default async function (email: string, template: string, ...args: any[]) {
+export default async function sendEmail(email: string, template: string, ...args: any[]) {
     if (Object.keys(templates).indexOf(template) === -1) {
         throw new Error('Invalid template!');
     }

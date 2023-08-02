@@ -4,19 +4,25 @@ import sendEmail from '../../helpers/sendEmail';
 import RegistrationList from '../../models/RegistrationList';
 import { URLSearchParams } from 'url';
 
-export default async function allowRegistration(req: Request, res: Response) {
+export default async function inviteUser(req: Request, res: Response) {
     const email = req.body.email;
     if (!email) {
         return res.status(400).json({ message: 'Email cannot be empty' });
     }
-    const code = crypto.randomBytes(4).toString('hex');
+    // TODO: change this.
+    let code = crypto.randomBytes(4).toString('hex');
+    if (process.env.NODE_ENV !== 'production') {
+        code = '1234';
+    }
     const queryParams = new URLSearchParams({
         email: email,
         code: code,
     });
     const host = process.env.NODE_ENV === 'production' ? req.get('host') : 'localhost:5173';
     const redirect = `${req.protocol}\://${host}/newProfile?${queryParams.toString()}`;
-    // await sendEmail(email, 'codeTemplate', code, redirect);
+    if (process.env.NODE_ENV === 'production') {
+        await sendEmail(email, 'codeTemplate', code, redirect);
+    }
     await RegistrationList.upsert({
         email: email,
         code: code,
