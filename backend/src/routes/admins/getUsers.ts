@@ -61,7 +61,7 @@ export default async function getUsers(req: Request, res: Response) {
             verifiedFilter.status = verified;
         }
 
-        const data = await Users.findAll({
+        const { rows, count } = await Users.findAndCountAll({
             limit,
             offset,
             where: usersFilter,
@@ -78,7 +78,7 @@ export default async function getUsers(req: Request, res: Response) {
                 },
             ],
         });
-        return res.json({ data });
+        return res.json({ data: rows, count });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Something went wrong' });

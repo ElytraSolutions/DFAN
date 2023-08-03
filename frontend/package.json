@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ag-grid-community/infinite-row-model": "^30.0.6",
     "@ag-grid-community/react": "^30.0.6",
     "@ag-grid-community/styles": "^30.0.6",
     "@ag-grid-enterprise/server-side-row-model": "^30.0.6",

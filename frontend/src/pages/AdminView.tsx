@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react"
 import { AgGridReact } from "@ag-grid-community/react"
-import { ModuleRegistry } from "@ag-grid-community/core"
-import { ServerSideRowModelModule } from "@ag-grid-enterprise/server-side-row-model"
+import { IGetRowsParams } from "@ag-grid-community/core"
 import "@ag-grid-community/styles/ag-grid.css"
 import "@ag-grid-community/styles/ag-theme-alpine.css"
 
 import ExpandableSidebar from "~/components/ExpandableSidebar"
 
-ModuleRegistry.registerModules([ServerSideRowModelModule])
+import { ModuleRegistry } from "@ag-grid-community/core"
+import { InfiniteRowModelModule } from "@ag-grid-community/infinite-row-model"
+
+ModuleRegistry.registerModules([InfiniteRowModelModule])
 
 interface Data {
   email: string
@@ -51,6 +53,9 @@ const AdminView = () => {
               {currentView === "Registered Users" ? (
                 <RegisteredUsersTable />
               ) : null}
+              {currentView === "Pending Verification" ? (
+                <PendingVerificationUsersTable />
+              ) : null}
             </div>
           </div>
         )
@@ -60,24 +65,47 @@ const AdminView = () => {
 }
 
 const RegisteredUsersDataSource = {
-  getRows: (params) => {
-    console.log("Params from getRows", params)
-    params.success({
-      rowData: [],
+  getRows: (params: IGetRowsParams) => {
+    const offset = params.startRow
+    const limit = params.endRow - params.startRow
+    const queryParams = new URLSearchParams({
+      offset: offset.toString(),
+      limit: limit.toString(),
     })
+    fetch(`/api/admins/getUsers?${queryParams.toString()}`)
+      .then((res) => res.json())
+      .then((data) => {
+        params.successCallback(data.data, data.count)
+      })
+      .catch((err) => {
+        console.error(err)
+        params.failCallback()
+      })
+  },
+}
+
+const PendingVerificationDataSource = {
+  getRows: (params: IGetRowsParams) => {
+    const offset = params.startRow
+    const limit = params.endRow - params.startRow
+    const queryParams = new URLSearchParams({
+      offset: offset.toString(),
+      limit: limit.toString(),
+      verified: "pending",
+    })
+    fetch(`/api/admins/getUsers?${queryParams.toString()}`)
+      .then((res) => res.json())
+      .then((data) => {
+        params.successCallback(data.data, data.count)
+      })
+      .catch((err) => {
+        console.error(err)
+        params.failCallback()
+      })
   },
 }
 
 const RegisteredUsersTable = () => {
-  const [rowData, setRowData] = useState<Data[]>([])
-  useEffect(() => {
-    fetch("/api/admins/getUsers")
-      .then((res) => res.json())
-      .then((data) => {
-        setRowData(data.data)
-      })
-  }, [])
-
   const [columnDefs] = useState([
     {
       field: "UserProfile.NFAMembershipNumber",
@@ -147,8 +175,87 @@ const RegisteredUsersTable = () => {
   })
   return (
     <AgGridReact
-      rowModelType="serverSide"
-      serverSideDatasource={RegisteredUsersDataSource}
+      rowModelType="infinite"
+      datasource={RegisteredUsersDataSource}
+      columnDefs={columnDefs}
+      defaultColDef={defaultColDef}
+      alwaysShowHorizontalScroll={true}
+    ></AgGridReact>
+  )
+}
+
+const PendingVerificationUsersTable = () => {
+  const [columnDefs] = useState([
+    {
+      field: "UserProfile.NFAMembershipNumber",
+      headerName: "NFA Membership Number",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.name",
+      headerName: "Name",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.membershipFrom",
+      headerName: "Membership From",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.isLifeMember",
+      headerName: "Life Member",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.gender",
+      headerName: "Gender",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.mobile",
+      headerName: "Mobile Number",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.currentAddress",
+      headerName: "Current Address",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.permanentAddress",
+      headerName: "Permanent Address",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.employmentStatus",
+      headerName: "Employment Status",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "UserProfile.employmentType",
+      headerName: "Employment Type",
+      filter: "agTextColumnFilter",
+    },
+  ])
+
+  const [defaultColDef] = useState({
+    flex: 1,
+    minWidth: 100,
+    filter: true,
+    sortable: true,
+    resizable: true,
+    floatingFilter: true,
+    suppressSizeToFit: true,
+  })
+  return (
+    <AgGridReact
+      rowModelType="infinite"
+      datasource={PendingVerificationDataSource}
       columnDefs={columnDefs}
       defaultColDef={defaultColDef}
       alwaysShowHorizontalScroll={true}
