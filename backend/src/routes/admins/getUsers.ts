@@ -19,7 +19,7 @@ export default async function getUsers(req: Request, res: Response) {
         const filtersQuery = req.query.filters as string;
         const filters = filtersQuery ? JSON.parse(filtersQuery) : {};
 
-        const isRegionalAdmin = req.session?.user?.role === 'Central Admin';
+        const isRegionalAdmin = req.session?.user?.role === 'Regional Admin';
         if (isRegionalAdmin) {
             const regionalUserData = await Users.findOne({
                 where: {
