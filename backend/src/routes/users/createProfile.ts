@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import sequelize from '../../models/config';
 import RegistrationList from '../../models/RegistrationList';
 import Users from '../../models/Users';
 import {
@@ -10,19 +11,14 @@ import UserProfile from '../../models/UserProfile';
 export default async function createProfile(req: Request, res: Response) {
     // TODO: Assign new membership ID if there is no membership ID
     try {
-        const loggedInUser = req.session.user;
-        if (!loggedInUser) {
-            return res
-                .status(401)
-                .json({ message: 'User should be logged in!' });
-        }
+        const loggedInUser = req.session.user!;
         const user = await Users.findOne({
             where: {
                 email: loggedInUser.email,
             },
         });
         if (!user) {
-            req.session.user = null;
+            req.session.user = undefined;
             return res.status(404).json({ message: 'User not found!' });
         }
         const currentProfile = await user.getUserProfile();
@@ -40,16 +36,24 @@ export default async function createProfile(req: Request, res: Response) {
                 .json({ message: 'Invalid parameters', errors: error.details });
         }
 
-        const profile = await user.createUserProfile(
-            sanitizer(value) as unknown as UserProfile,
-        );
-        RegistrationList.destroy({
-            where: {
-                email: user.email,
-            },
-        });
-        await profile.createVerificationList({
-            status: 'pending',
+        const profile = await sequelize.transaction(async (t) => {
+            const profile = await user.createUserProfile(
+                sanitizer(value) as unknown as UserProfile,
+                { transaction: t },
+            );
+            RegistrationList.destroy({
+                where: {
+                    email: user.email,
+                },
+                transaction: t,
+            });
+            await profile.createVerificationList(
+                {
+                    status: 'pending',
+                },
+                { transaction: t },
+            );
+            return profile;
         });
         return res.status(200).json(profile);
     } catch (error) {

@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import Countries from '../data/Countries';
-import States from '../data/States';
+import Countries from '../../public/data/Countries.json';
+import States from '../../public/data/States.json';
 
 function toBool(val: any) {
     if (val instanceof Boolean) {
@@ -62,6 +62,7 @@ export const UserProfileSchema = Joi.object({
         }),
         otherwise: Joi.string().strip(),
     }),
+    avatar: Joi.any().optional(),
 });
 
 export function sanitizer(obj: Record<string, any>) {

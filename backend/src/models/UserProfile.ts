@@ -30,6 +30,7 @@ class UserProfile extends Model<
     declare membershipFrom: CreationOptional<string>;
     declare isLifeMember: CreationOptional<boolean>;
     declare hasRenewed: CreationOptional<boolean>;
+    declare avatar: CreationOptional<string>;
 
     declare UserId: ForeignKey<string>;
 
@@ -97,6 +98,10 @@ UserProfile.init(
         },
         hasRenewed: {
             type: DataTypes.BOOLEAN,
+            defaultValue: null,
+        },
+        avatar: {
+            type: DataTypes.STRING,
             defaultValue: null,
         },
     },

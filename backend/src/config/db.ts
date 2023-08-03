@@ -1,17 +1,11 @@
-import CoreAdmins from '../models/CoreAdmins';
-import RegionalAdmins from '../models/RegionalAdmins';
+import RegistrationList from '../models/RegistrationList';
 import UserProfile from '../models/UserProfile';
 import Users from '../models/Users';
-import RegistrationList from '../models/RegistrationList';
 import VerificationList from '../models/VerificationList';
 
 export default async function config() {
     Users.hasOne(UserProfile);
     UserProfile.belongsTo(Users);
-    CoreAdmins.hasOne(UserProfile);
-    UserProfile.belongsTo(CoreAdmins);
-    RegionalAdmins.hasOne(UserProfile);
-    UserProfile.belongsTo(RegionalAdmins);
 
     UserProfile.hasOne(VerificationList);
     VerificationList.belongsTo(UserProfile);
@@ -19,8 +13,6 @@ export default async function config() {
     const alter = false;
     const force = false;
 
-    await CoreAdmins.sync({ alter, force });
-    await RegionalAdmins.sync({ alter, force });
     await RegistrationList.sync({ alter, force });
     await UserProfile.sync({ alter, force });
     await Users.sync({ alter, force });
@@ -28,22 +20,22 @@ export default async function config() {
 
     // TODO: Remove this
     if (process.env.NODE_ENV !== 'production') {
-        await CoreAdmins.findOrCreate({
+        await Users.findOrCreate({
             where: {
-                email: 'admin@localhost.com',
-                password: 'admin',
-                name: 'Main Admin',
+                email: 'admin@gmail.com',
+                password: 'password',
+                role: 'Central Admin',
             },
         });
-        const [regionalAdmin1, rcreated1] = await RegionalAdmins.findOrCreate({
+        const [regionalAdmin1, rcreated1] = await Users.findOrCreate({
             where: {
-                email: 'rAdmin1@localhost.com',
+                email: 'rAdmin1@gmail.com',
                 password: 'password',
-                name: 'Regional Admin 1',
+                role: 'Regional Admin',
             },
         });
         if (rcreated1) {
-            await regionalAdmin1.createUserProfile({
+            const profile = await regionalAdmin1.createUserProfile({
                 name: 'Regional Admin 1',
                 gender: 'Male',
                 mobile: '11111',
@@ -56,16 +48,17 @@ export default async function config() {
                 isLifeMember: false,
                 hasRenewed: false,
             });
+            await profile.createVerificationList({});
         }
-        const [regionalAdmin2, rcreated2] = await RegionalAdmins.findOrCreate({
+        const [regionalAdmin2, rcreated2] = await Users.findOrCreate({
             where: {
-                email: 'rAdmin2@localhost.com',
+                email: 'rAdmin2@gmail.com',
                 password: 'password',
-                name: 'Regional Admin 2',
+                role: 'Regional Admin',
             },
         });
         if (rcreated2) {
-            await regionalAdmin2.createUserProfile({
+            const profile = await regionalAdmin2.createUserProfile({
                 name: 'Regional Admin 2',
                 gender: 'Male',
                 mobile: '11111',
@@ -78,11 +71,12 @@ export default async function config() {
                 isLifeMember: false,
                 hasRenewed: false,
             });
+            await profile.createVerificationList({});
         }
 
         const [user1, created1] = await Users.findOrCreate({
             where: {
-                email: 'user1@localhost.com',
+                email: 'user1@gmail.com',
                 password: 'password',
             },
         });
@@ -104,7 +98,7 @@ export default async function config() {
         }
         const [user2, created2] = await Users.findOrCreate({
             where: {
-                email: 'user2@localhost.com',
+                email: 'user2@gmail.com',
                 password: 'password',
             },
         });
@@ -126,7 +120,7 @@ export default async function config() {
         }
         const [user3, created3] = await Users.findOrCreate({
             where: {
-                email: 'user3@localhost.com',
+                email: 'user3@gmail.com',
                 password: 'password',
             },
         });
@@ -148,7 +142,7 @@ export default async function config() {
         }
         const [user4, created4] = await Users.findOrCreate({
             where: {
-                email: 'user4@localhost.com',
+                email: 'user4@gmail.com',
                 password: 'password',
             },
         });

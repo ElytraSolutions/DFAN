@@ -1,7 +1,10 @@
 declare module 'express-session' {
     interface SessionData {
-        user: any;
-        adminUser: any;
+        user: {
+            id: string;
+            email: string;
+            role: 'User' | 'Central Admin' | 'Regional Admin';
+        };
     }
 }
 

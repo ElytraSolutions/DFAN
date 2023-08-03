@@ -20,6 +20,7 @@ class Users extends Model<
     declare id: CreationOptional<string>;
     declare email: string;
     declare password: string;
+    declare role: CreationOptional<'User' | 'Central Admin' | 'Regional Admin'>;
 
     declare UserProfile?: NonAttribute<UserProfile>;
     declare getUserProfile: HasOneGetAssociationMixin<UserProfile>;
@@ -51,6 +52,11 @@ Users.init(
         password: {
             type: DataTypes.STRING,
             allowNull: false,
+        },
+        role: {
+            type: DataTypes.ENUM('User', 'Central Admin', 'Regional Admin'),
+            allowNull: false,
+            defaultValue: 'User',
         },
     },
     {

@@ -7,7 +7,7 @@ import './config/dotenv';
 import config from './config/db';
 import LoginRoute from './routes/login';
 import RegisterRoute from './routes/users/register';
-import LogoutRoute from './routes/users/logout';
+import LogoutRoute from './routes/logout';
 import AdminsRoute from './routes/admins/index';
 import UserRoute from './routes/users/index';
 

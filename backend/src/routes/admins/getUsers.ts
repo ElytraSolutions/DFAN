@@ -3,7 +3,6 @@ import Users from '../../models/Users';
 import { Op } from 'sequelize';
 import UserProfile from '../../models/UserProfile';
 import VerificationList from '../../models/VerificationList';
-import RegionalAdmins from '../../models/RegionalAdmins';
 
 export default async function getUsers(req: Request, res: Response) {
     try {
@@ -20,12 +19,11 @@ export default async function getUsers(req: Request, res: Response) {
         const filtersQuery = req.query.filters as string;
         const filters = filtersQuery ? JSON.parse(filtersQuery) : {};
 
-        const regionFilter: any = {};
-        const isRegionalAdmin = req.session.adminUser.type !== 'central';
+        const isRegionalAdmin = req.session?.user?.role === 'Central Admin';
         if (isRegionalAdmin) {
-            const regionalUserData = await RegionalAdmins.findOne({
+            const regionalUserData = await Users.findOne({
                 where: {
-                    id: req.session.adminUser.id,
+                    id: req.session?.user?.id,
                 },
                 include: UserProfile,
             });
@@ -37,7 +35,7 @@ export default async function getUsers(req: Request, res: Response) {
                     .status(400)
                     .json({ message: 'User profile is not initialized' });
             }
-            regionFilter.membershipFrom =
+            filters.membershipFrom =
                 regionalUserData.UserProfile.membershipFrom;
         }
 
@@ -46,6 +44,11 @@ export default async function getUsers(req: Request, res: Response) {
             usersFilter.email = {
                 [Op.like]: `%${filters.email}%`,
             };
+            delete filters.email;
+        }
+        if (filters.id) {
+            usersFilter.id = filters.id;
+            delete filters.id;
         }
 
         const verified = req.query.verified as string;
@@ -61,7 +64,7 @@ export default async function getUsers(req: Request, res: Response) {
         const data = await Users.findAll({
             limit,
             offset,
-            where: filters,
+            where: usersFilter,
             include: [
                 {
                     model: UserProfile,
@@ -71,7 +74,7 @@ export default async function getUsers(req: Request, res: Response) {
                             where: verifiedFilter,
                         },
                     ],
-                    where: regionFilter,
+                    where: filters,
                 },
             ],
         });

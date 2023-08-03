@@ -7,9 +7,7 @@ import {
 import UserProfile from '../../models/UserProfile';
 
 export default async function editProfile(req: Request, res: Response) {
-    if (!req.session.user || !req.session.user.email)
-        return res.status(401).json({ message: 'User should be logged in!' });
-    const email = req.session.user.email;
+    const email = req.session.user!.email;
     const user = await Users.findOne({
         where: {
             email,
@@ -32,9 +30,7 @@ export default async function editProfile(req: Request, res: Response) {
         delete newProfile.createdAt;
         delete newProfile.updatedAt;
         delete newProfile.UserId;
-        delete newProfile.CoreAdminId;
-        delete newProfile.RegionalAdminId;
-        for (const key in user.UserProfile.dataValues) {
+        for (const key in newProfile) {
             if (key in req.body) {
                 newProfile[key] = req.body[key];
             }
@@ -60,7 +56,7 @@ export default async function editProfile(req: Request, res: Response) {
 
         return res
             .status(200)
-            .json({ data, message: 'Profile updated successfully' });
+            .json({ message: 'Profile updated successfully', data });
     } catch (error) {
         console.error(error);
         return res

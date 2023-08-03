@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
 import Users from '../models/Users';
-import CoreAdmins from '../models/CoreAdmins';
-import RegionalAdmins from '../models/RegionalAdmins';
 import Joi from 'joi';
 
 interface RequestBody {
@@ -21,22 +19,6 @@ export default async function login(req: Request, res: Response) {
             .json({ message: 'Invalid parameters', errors: error.details });
     }
     const { email, password } = value;
-
-    const coreAdmin = await CoreAdmins.findOne({ where: { email } });
-    if (coreAdmin && coreAdmin.password === password) {
-        const { password: _, ...data } = coreAdmin.dataValues;
-        req.session.adminUser = { ...data, type: 'central' };
-        req.session.user = data;
-        return res.status(200).json({ message: 'Login successful', data });
-    }
-
-    const regionalAdmin = await RegionalAdmins.findOne({ where: { email } });
-    if (regionalAdmin && regionalAdmin.password === password) {
-        const { password: _, ...data } = regionalAdmin.dataValues;
-        req.session.adminUser = { ...data, type: 'regional' };
-        req.session.user = data;
-        return res.status(200).json({ message: 'Login successful', data });
-    }
 
     const user = await Users.findOne({ where: { email } });
     if (user && user.password === password) {
