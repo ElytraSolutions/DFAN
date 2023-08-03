@@ -71,6 +71,7 @@ const RegisteredUsersDataSource = {
     const queryParams = new URLSearchParams({
       offset: offset.toString(),
       limit: limit.toString(),
+      verified: "approved",
     })
     fetch(`/api/admins/getUsers?${queryParams.toString()}`)
       .then((res) => res.json())
