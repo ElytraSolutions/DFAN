@@ -74,93 +74,64 @@ export default async function config() {
             await profile.createVerificationList({});
         }
 
-        const [user1, created1] = await Users.findOrCreate({
-            where: {
-                email: 'user1@gmail.com',
-                password: 'password',
-            },
+        await bulkCreate(100);
+    }
+}
+
+async function bulkCreate(num: number) {
+    const existingUsers = await Users.findOne({
+        where: {
+            role: 'User',
+        },
+    });
+    if (existingUsers) {
+        return;
+    }
+    const users = [];
+    for (let i = 0; i < num; i++) {
+        users.push({
+            email: `user${i}.gmail.com`,
+            password: 'password',
         });
-        if (created1) {
-            const user1Profile = await user1.createUserProfile({
-                name: 'User 1',
-                gender: 'Male',
-                mobile: '11111',
-                currentAddress: 'Bagmati Pradesh',
-                permanentAddress: 'Nepal',
-                membershipFrom: 'Bagmati Pradesh',
-                employmentStatus: 'Unemployed',
-                employmentType: undefined,
-                NFAMembershipNumber: '111',
-                isLifeMember: false,
-                hasRenewed: false,
-            });
-            await user1Profile.createVerificationList({});
-        }
-        const [user2, created2] = await Users.findOrCreate({
-            where: {
-                email: 'user2@gmail.com',
-                password: 'password',
-            },
+    }
+    const usersCreated = await Users.bulkCreate(users);
+    const profiles = [];
+    const genders = ['Male', 'Female', 'Others'];
+    const states = ['Bagmati Pradesh', 'Koshi Pradesh'];
+    for (let i = 0; i < num; i++) {
+        profiles.push({
+            name: `User ${i}`,
+            gender: genders[i % 3],
+            mobile: '1111111111',
+            currentAddress: states[i % 2],
+            permanentAddress: 'Nepal',
+            membershipFrom: states[(i + 1) % 2],
+            employmentStatus: 'Employed',
+            employmentType: 'Government Job',
+            NFAMembershipNumber: (i + 1).toString(),
+            isLifeMember: true,
+            UserId: usersCreated[i].id,
         });
-        if (created2) {
-            const user2Profile = await user2.createUserProfile({
-                name: 'User 2',
-                gender: 'Female',
-                mobile: '22222',
-                currentAddress: 'Bagmati Pradesh',
-                permanentAddress: 'Nepal',
-                membershipFrom: 'Bagmati Pradesh',
-                employmentStatus: 'Employed',
-                employmentType: 'Non-Government Job',
-                NFAMembershipNumber: undefined,
-                isLifeMember: undefined,
-                hasRenewed: undefined,
+    }
+    const createdProfiles = await UserProfile.bulkCreate(profiles);
+    const verificationLists = [];
+    const statuses: Array<'approved' | 'pending' | 'rejected'> = [
+        'approved',
+        'pending',
+        'rejected',
+    ];
+    for (let i = 0; i < num; i++) {
+        if (i % 4 == 0 || i % 4 == 1) {
+            verificationLists.push({
+                UserProfileId: createdProfiles[i].id,
+                status: statuses[0],
             });
-            await user2Profile.createVerificationList({});
-        }
-        const [user3, created3] = await Users.findOrCreate({
-            where: {
-                email: 'user3@gmail.com',
-                password: 'password',
-            },
-        });
-        if (created3) {
-            const user3Profile = await user3.createUserProfile({
-                name: 'User 3',
-                gender: 'LGBTQ+',
-                mobile: '33333',
-                currentAddress: 'Koshi Pradesh',
-                permanentAddress: 'Nepal',
-                membershipFrom: 'Koshi Pradesh',
-                employmentStatus: 'Employed',
-                employmentType: 'Government Job',
-                NFAMembershipNumber: '333',
-                isLifeMember: false,
-                hasRenewed: false,
+        } else {
+            verificationLists.push({
+                UserProfileId: createdProfiles[i].id,
+                status: statuses[1],
             });
-            await user3Profile.createVerificationList({});
-        }
-        const [user4, created4] = await Users.findOrCreate({
-            where: {
-                email: 'user4@gmail.com',
-                password: 'password',
-            },
-        });
-        if (created4) {
-            const user4Profile = await user4.createUserProfile({
-                name: 'User 4',
-                gender: 'LGBTQ+',
-                mobile: '44444',
-                currentAddress: 'Koshi Pradesh',
-                permanentAddress: 'Nepal',
-                membershipFrom: 'Koshi Pradesh',
-                employmentStatus: 'Employed',
-                employmentType: 'Government Job',
-                NFAMembershipNumber: '444',
-                isLifeMember: false,
-                hasRenewed: false,
-            });
-            await user4Profile.createVerificationList({});
         }
     }
+    await VerificationList.bulkCreate(verificationLists);
 }
