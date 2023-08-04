@@ -6,16 +6,24 @@ import VerificationList from '../../models/VerificationList';
 
 export default async function getUsers(req: Request, res: Response) {
     try {
-        let limit = 10;
-        const limitQuery = parseInt(req.query.limit as string);
+        let limit = null;
+        const limitQuery = parseInt(req.query.limit as string, 10);
         if (!isNaN(limitQuery)) {
-            limit = Math.max(1, Math.min(100, limitQuery));
+            limit = Math.max(1, limitQuery);
         }
-        let offset = 0;
-        const offsetQuery = parseInt(req.query.offset as string);
+        let offset = null;
+        const offsetQuery = parseInt(req.query.offset as string, 10);
         if (!isNaN(offsetQuery)) {
             offset = Math.max(0, offsetQuery);
         }
+        const limitOffset: { limit?: number; offset?: number } = {};
+        if (limit) {
+            limitOffset['limit'] = limit;
+        }
+        if (offset) {
+            limitOffset['offset'] = offset;
+        }
+
         const filtersQuery = req.query.filters as string;
         const filters = filtersQuery ? JSON.parse(filtersQuery) : {};
 
@@ -62,8 +70,7 @@ export default async function getUsers(req: Request, res: Response) {
         }
 
         const { rows, count } = await Users.findAndCountAll({
-            limit,
-            offset,
+            ...limitOffset,
             where: usersFilter,
             include: [
                 {
