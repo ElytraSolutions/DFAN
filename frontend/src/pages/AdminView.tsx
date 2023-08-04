@@ -1,41 +1,18 @@
-import { useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import { AgGridReact } from "@ag-grid-community/react"
 import { IGetRowsParams } from "@ag-grid-community/core"
 import "@ag-grid-community/styles/ag-grid.css"
 import "@ag-grid-community/styles/ag-theme-alpine.css"
 
 import ExpandableSidebar from "~/components/ExpandableSidebar"
+import UserContext from "~/context/User"
 
 import { ModuleRegistry } from "@ag-grid-community/core"
 import { InfiniteRowModelModule } from "@ag-grid-community/infinite-row-model"
+import { Navigate, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 ModuleRegistry.registerModules([InfiniteRowModelModule])
-
-interface Data {
-  email: string
-  UserProfile: {
-    NFAMembershipNumber: string
-    name: string
-    gender: string
-    mobile: string
-    currentAddress: string
-    permanentAddress: string
-    employmentStatus: string
-    employmentType: string
-    membershipFrom: string
-    isLifeMember: boolean
-    hasRenewed: boolean
-  }
-}
-
-type ColumnDef = {
-  field: unknown
-  headerName: string
-  filter: string
-  sortable?: boolean
-  resizable?: boolean
-  floatingFilter?: boolean
-}[]
 
 const AdminView = () => {
   const [sideBarLinks] = useState([
@@ -43,6 +20,16 @@ const AdminView = () => {
     "Pending Verification",
     "Registered Users",
   ])
+  const { userData } = useContext(UserContext)
+
+  if (
+    userData?.role !== "Central Admin" &&
+    userData?.role !== "Regional Admin"
+  ) {
+    toast.error("You are not authorized to view this page")
+    return <Navigate to="/profile" />
+  }
+
   return (
     <ExpandableSidebar links={sideBarLinks}>
       {(currentView: string) => {

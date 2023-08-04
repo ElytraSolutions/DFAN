@@ -19,6 +19,7 @@ const checkAdmin: RequestHandler = (req, res, next) => {
 
 const router = Router();
 
+// TODO: Add route to add admins
 router.get('/getUsers', checkAdmin, getUsers);
 router.post('/inviteUser', checkAdmin, inviteUser);
 router.post('/register', checkAdmin, register);

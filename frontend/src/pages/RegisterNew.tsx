@@ -10,17 +10,18 @@ const RegisterNew = () => {
 
   const [email, setEmail] = React.useState(oldEmail || "")
   const [code, setCode] = useState("")
+  const [password, setPassword] = useState("")
   const navigate = useNavigate()
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
     try {
-      const resp = await fetch("/api/users/verifyCode", {
+      const resp = await fetch("/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, code }),
+        body: JSON.stringify({ email, password, code }),
       })
       const data = await resp.json()
       if (!resp.ok) {
@@ -55,6 +56,14 @@ const RegisterNew = () => {
             className="border border-gray-300 rounded-md p-2 m-2"
             value={code}
             onChange={(e) => setCode(e.target.value)}
+            required={true}
+          />
+          <input
+            type="password"
+            placeholder="Enter your password"
+            className="border border-gray-300 rounded-md p-2 m-2"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required={true}
           />
 

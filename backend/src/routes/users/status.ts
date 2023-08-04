@@ -1,25 +1,32 @@
 import { Request, Response } from 'express';
 import User from '../../models/Users';
 import RegistrationList from '../../models/RegistrationList';
+import Joi from 'joi';
+
+const schema = Joi.object({
+    email: Joi.string().email().required(),
+});
 
 export default async function status(req: Request, res: Response) {
-    const email = req.query.email as string;
-    if (!email) {
-        return res.status(400).json({
-            message: 'Email not provided',
-        });
+    const { value, error } = schema.validate(req.query);
+    if (error) {
+        return res
+            .status(400)
+            .json({ message: 'Invalid parameters', errors: error.details });
     }
+    const { email } = value;
+
     const user = await User.findOne({
         where: {
             email,
         },
-        attributes: ['admin', 'hasInitailized'],
     });
     if (user) {
         return res.status(200).json({
-            message: 'User found',
+            message: 'User has already registered',
             data: {
-                status: 'existingUser',
+                invited: false,
+                registered: true,
             },
         });
     }
@@ -30,15 +37,18 @@ export default async function status(req: Request, res: Response) {
     });
     if (!registered) {
         return res.status(404).json({
-            message: 'User not found',
+            message: 'User has not been invited',
+            data: {
+                invited: false,
+                registered: false,
+            },
         });
     }
     return res.status(200).json({
-        message: 'User found',
+        message: 'User has been invited',
         data: {
-            status: 'newUser',
-            admin: false,
-            hasInitailized: false,
+            invited: true,
+            registered: false,
         },
     });
 }

@@ -5,13 +5,16 @@ export interface UserData {
     [key: string]: any;
 }
 
-export interface UserContext {
+export interface IUserContext {
     userData: UserData;
     setUserData: Dispatch<React.SetStateAction<UserData>>;
+    refreshUserData: () => void;
 }
-export default createContext<UserContext>({
+const UserContext  = createContext<IUserContext>({
     userData: {
         state: 'loading',
     },
     setUserData: () => { },
+    refreshUserData: () => { },
 });
+export default UserContext;

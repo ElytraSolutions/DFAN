@@ -21,7 +21,7 @@ router.post('/createProfile', userIsLoggedIn, createProfile);
 router.post('/editProfile', userIsLoggedIn, editProfile);
 router.get('/me', userIsLoggedIn, me);
 router.post('/register', register);
-router.get('/status', userIsLoggedIn, status);
+router.get('/status', status);
 router.post(
     '/updatePicture',
     userIsLoggedIn,

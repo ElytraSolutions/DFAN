@@ -15,52 +15,89 @@ function toBool(val: any) {
     }
 }
 
+const requiredStringMessages = {
+    'string.empty': 'This field is required',
+    'string.base': 'This field is required',
+};
+const selectMessages = {
+    ...requiredStringMessages,
+    'boolean.base': 'This field is required',
+    'any.required': 'This field is required',
+    'any.only': 'Select an option from the list',
+};
 export const UserProfileSchema = Joi.object({
-    name: Joi.string().required(),
-    gender: Joi.string().required(),
-    mobile: Joi.string().required().min(10).max(10).messages({
-        'string.min': 'Mobile number have 10 digits',
-        'string.max': 'Mobile number have 10 digits',
-    }),
+    name: Joi.string()
+        .required()
+        .messages({
+            ...requiredStringMessages,
+        }),
+    gender: Joi.string()
+        .required()
+        .messages({
+            ...requiredStringMessages,
+        }),
+    mobile: Joi.string()
+        .required()
+        .min(10)
+        .max(10)
+        .messages({
+            ...requiredStringMessages,
+            'string.min': 'Mobile number have 10 digits',
+            'string.max': 'Mobile number have 10 digits',
+        }),
     permanentAddress: Joi.any()
         .allow(...States)
         .only()
-        .required(),
+        .required()
+        .messages({
+            ...selectMessages,
+        }),
     currentAddress: Joi.string()
         .allow(...Countries)
         .only()
-        .required(),
-    employmentStatus: Joi.string().required(),
+        .required()
+        .messages({
+            ...selectMessages,
+        }),
+    employmentStatus: Joi.any()
+        .valid('Employed', 'Unemployed')
+        .required()
+        .messages({
+            ...selectMessages,
+        }),
     employmentType: Joi.when('employmentStatus', {
         is: 'Employed',
         then: Joi.string()
             .allow('Government Job', 'Non-Government Job')
             .only()
-            .required(),
-        otherwise: Joi.string().strip(),
+            .required()
+            .messages({
+                ...selectMessages,
+            }),
+        otherwise: null,
     }),
-    NFAMembershipNumber: Joi.number().optional(),
+    NFAMembershipNumber: Joi.string().allow(null).optional(),
     membershipFrom: Joi.when('NFAMembershipNumber', {
-        is: Joi.exist(),
+        is: Joi.exist().disallow(null),
         then: Joi.string()
             .allow(...States)
             .only()
             .required(),
-        otherwise: Joi.string().strip(),
+        otherwise: Joi.any().optional().strip(),
     }),
     isLifeMember: Joi.when('NFAMembershipNumber', {
-        is: Joi.exist(),
+        is: Joi.exist().disallow(null),
         then: Joi.boolean().required(),
-        otherwise: Joi.string().strip(),
+        otherwise: null,
     }),
     hasRenewed: Joi.when('NFAMembershipNumber', {
-        is: Joi.exist(),
+        is: Joi.exist().disallow(null),
         then: Joi.when('isLifeMember', {
-            is: Joi.boolean().falsy(),
+            is: false,
             then: Joi.boolean().required(),
-            otherwise: Joi.string().strip(),
+            otherwise: null,
         }),
-        otherwise: Joi.string().strip(),
+        otherwise: null,
     }),
     avatar: Joi.any().optional(),
 });
