@@ -9,17 +9,18 @@ import { joiResolver } from "@hookform/resolvers/joi"
 import { EditableUserData } from "~/types/ProfileData"
 import UserContext from "~/context/User"
 import { UserProfileSchema } from "~/helpers/validateProfileData"
+import useStates from "~/hooks/useStates"
+import useCountries from "~/hooks/useCountries"
 
 interface EditProfileProps {
   submitHandler: Parameters<UseFormHandleSubmit<EditableUserData, undefined>>[0]
 }
 const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
   const { userData } = useContext(UserContext)
-  const [states, setStates] = useState(["Bagmati Pradesh", "Koshi Pradesh"])
-  const [countries, setCountries] = useState(["Nepal", "India", "China"])
+  const states = useStates()
+  const countries = useCountries()
   const oldProfile = userData.UserProfile ?? {}
 
-  console.log(oldProfile)
   const {
     register,
     handleSubmit,
@@ -72,8 +73,6 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
     setValue("hasRenewed", null)
   }
 
-  console.log("Errors", errors)
-  console.log("Values", getValues())
   return (
     <div className="grid h-fit min-h-screen place-items-center my-12">
       <form

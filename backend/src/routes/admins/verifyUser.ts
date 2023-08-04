@@ -37,7 +37,6 @@ export default async function verifyUser(req: Request, res: Response) {
     }
     const status = verifyRecord.UserProfile?.VerificationList?.status;
     if (status === 'approved') {
-        console.log(verifyRecord);
         return res.status(400).json({ message: 'Profile already approved' });
     }
     await VerificationList.update(

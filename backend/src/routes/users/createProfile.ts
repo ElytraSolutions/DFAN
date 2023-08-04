@@ -10,6 +10,7 @@ import UserProfile from '../../models/UserProfile';
 
 export default async function createProfile(req: Request, res: Response) {
     // TODO: Assign new membership ID if there is no membership ID
+    // TODO: Hash passwords
     try {
         const loggedInUser = req.session.user!;
         const user = await Users.findOne({

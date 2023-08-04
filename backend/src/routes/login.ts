@@ -36,6 +36,5 @@ export default async function login(req: Request, res: Response) {
         req.session.user = data;
         return res.status(200).json({ message: 'Login successful', data });
     }
-    console.log(user, password, '\n\n\n');
     return res.status(400).json({ message: 'Invalid email or password.' });
 }
