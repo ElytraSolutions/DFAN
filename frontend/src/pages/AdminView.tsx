@@ -36,7 +36,7 @@ const AdminView = () => {
                 return (
                     <div className="grow grid p-2 md:px-12 grid-rows-[min-content_1fr] gap-4">
                         <h1 className="text-2xl font-bold">{currentView}</h1>
-                        <div className="ag-theme-alpine-dark">
+                        <div className="ag-theme-alpine-dark text-base">
                             {currentView === 'Registered Users' ? (
                                 <RegisteredUsersTable />
                             ) : null}
@@ -300,6 +300,7 @@ const PendingRegistrationTab = () => {
     return (
         <>
             <form
+                className="m-4 text-md"
                 onSubmit={(e) => {
                     e.preventDefault();
                     fetch(`/api/admins/inviteUser`, {
@@ -319,10 +320,21 @@ const PendingRegistrationTab = () => {
                         });
                 }}
             >
+                <label htmlFor="email" className="">
+                    Email
+                </label>
                 <input
                     type="email"
+                    className="mx-2 border-2 border-gray-300 rounded-md p-1"
+                    id="email"
+                    name="email"
                     value={userEmail}
                     onChange={(e) => setUserEmail(e.target.value)}
+                />
+                <input
+                    type="submit"
+                    value="Invite"
+                    className="bg-blue-500 text-white rounded-md mx-2 p-2"
                 />
             </form>
             <AgGridReact
