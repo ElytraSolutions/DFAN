@@ -18,13 +18,6 @@ export default async function updatePicture(req: Request, res: Response) {
             .status(400)
             .json({ message: 'Please create a profile first' });
     }
-    if (currentProfile.avatar) {
-        unlink(`public/avatars/${currentProfile.avatar}`, (error) => {
-            if (error && error.code !== 'ENOENT') {
-                console.log('Error in deleting file: ', error);
-            }
-        });
-    }
     await UserProfile.update(
         {
             avatar: filename,
