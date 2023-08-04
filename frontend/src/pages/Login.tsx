@@ -46,7 +46,7 @@ const Login = () => {
                         required={true}
                     />
                     <input
-                        type="text"
+                        type="password"
                         placeholder={`Enter your password`}
                         className="border border-gray-300 rounded-md p-2 m-2"
                         value={password}
