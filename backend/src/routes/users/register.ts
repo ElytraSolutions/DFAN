@@ -40,11 +40,12 @@ export default async function register(req: Request, res: Response) {
                 data: user,
             });
         }
-        const newUser = sequelize.transaction(async (t) => {
+        const newUser = await sequelize.transaction(async (t) => {
             const newUser = await Users.create(
                 { email, password },
                 { transaction: t },
             );
+            req.session.user = newUser;
             await pendingUser.destroy({ transaction: t });
             return newUser;
         });
