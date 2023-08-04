@@ -5,18 +5,18 @@ export interface UserData {
     mobile: string;
     permanentAddress: string;
     currentAddress: string;
-    membershipFrom: string;
-    NFAMembershipNumber: string;
+    membershipFrom: string | null;
+    NFAMembershipNumber: string | null;
 
     gender: string;
     employmentStatus: string;
-    employmentType?: string;
+    employmentType?: string | null;
     isNFA: string;
-    isLifeMember?: string;
-    hasRenewed?: string;
+    isLifeMember?: string | null;
+    hasRenewed?: string | null;
 }
 
-export type EditableUserData = Omit<UserData, 'email'>;
+export type EditableUserData = Omit<UserData, 'email'> & { avatar: any };
 export type NewUserData = UserData & {
     code: string;
 };

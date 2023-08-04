@@ -5,6 +5,7 @@ import {
     UseFormRegister,
     useForm,
 } from 'react-hook-form';
+import { BsCloudUploadFill } from 'react-icons/bs';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { EditableUserData } from '~/types/ProfileData';
 import UserContext from '~/context/User';
@@ -27,7 +28,6 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
         register,
         handleSubmit,
         watch,
-        getValues,
         setValue,
         formState: { errors },
     } = useForm<EditableUserData>({
@@ -49,6 +49,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
             NFAMembershipNumber: oldProfile?.NFAMembershipNumber || undefined,
             isLifeMember: oldProfile?.isLifeMember ? 'Yes' : 'No',
             hasRenewed: oldProfile?.hasRenewed ? 'Yes' : 'No',
+            avatar: null,
         };
         for (const [key, value] of Object.entries(oldProfileData)) {
             setValue(key as keyof EditableUserData, value);
@@ -61,6 +62,15 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
     const NFAMembershipNumber = watch('NFAMembershipNumber');
     const isLifeMember = watch('isLifeMember');
     const hasRenewed = watch('hasRenewed');
+    const avatar = watch('avatar');
+
+    let avatarURL: string = oldProfile?.avatar
+        ? `/api/avatars/${oldProfile.avatar}`
+        : '';
+    if (avatar) {
+        avatarURL = URL.createObjectURL(avatar[0]);
+    }
+    console.log(oldProfile);
 
     if (employmentStatus === 'Unemployed' && employmentType) {
         setValue('employmentType', null);
@@ -110,7 +120,10 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
                         </div>
                         {/* end of column */}
                         <div className="flex flex-col justify-center items-center grow">
-                            <div className="bg-white rounded-full w-12 h-12"></div>
+                            <ImageInput
+                                avatar={avatarURL}
+                                register={register}
+                            />
                         </div>
                     </div>
                     {/* end of section */}
@@ -219,6 +232,37 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
         </div>
     );
 };
+
+export function ImageInput({ avatar, register }) {
+    return (
+        <div className="flex items-center justify-center">
+            <label className="relative cursor-pointer">
+                <input
+                    type="file"
+                    className="sr-only"
+                    accept="image/*"
+                    {...register('avatar')}
+                />
+                <div className="w-36 h-36 rounded-full overflow-hidden border-2 border-gray-300">
+                    {avatar ? (
+                        <img
+                            src={avatar}
+                            alt="Profile"
+                            className="object-cover w-full h-full"
+                        />
+                    ) : (
+                        <div className="flex flex-col items-center justify-center w-full h-full bg-gray-200">
+                            <span className="text-4xl">
+                                <BsCloudUploadFill />
+                            </span>
+                            <span className="text-gray-400">Upload</span>
+                        </div>
+                    )}
+                </div>
+            </label>
+        </div>
+    );
+}
 
 export function TextInput({
     legend,
