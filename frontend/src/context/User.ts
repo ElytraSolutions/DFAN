@@ -10,11 +10,11 @@ export interface IUserContext {
     setUserData: Dispatch<React.SetStateAction<UserData>>;
     refreshUserData: () => void;
 }
-const UserContext  = createContext<IUserContext>({
+const UserContext = createContext<IUserContext>({
     userData: {
         state: 'loading',
     },
-    setUserData: () => { },
-    refreshUserData: () => { },
+    setUserData: () => {},
+    refreshUserData: () => {},
 });
 export default UserContext;
