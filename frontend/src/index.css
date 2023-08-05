@@ -9,7 +9,7 @@ body {
             #65AB66B0 0%,
             #63A964A9 50%,
             #367C3624 100%);
-    overflow: scroll;
+    /* overflow: scroll; */
 }
 
 @tailwind base;
