@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import { toast } from 'react-toastify';
 
-const Home = () => {
+const Lobby = () => {
     const [email, setEmail] = React.useState('');
     const navigate = useNavigate();
 
@@ -72,4 +72,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Lobby;

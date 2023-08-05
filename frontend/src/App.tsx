@@ -5,17 +5,22 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import './App.css';
 import UserContext, { UserData } from '~/context/User';
-import Home from '~/pages/index';
+import AdminView from './pages/AdminView';
+import EditProfile from './pages/EditProfile';
+import Home from './pages/Home';
+import Lobby from '~/pages/Lobby';
 import Login from '~/pages/Login';
-import RegisterNew from '~/pages/RegisterNew';
-import Profile from '~/pages/Profile';
 import NewProfile from '~/pages/NewProfile';
+import Profile from '~/pages/Profile';
+import RegisterNew from '~/pages/RegisterNew';
 import Logout from './components/Logout';
 import CheckUser from './components/CheckUser';
-import EditProfile from './pages/EditProfile';
-import AdminView from './pages/AdminView';
 
 const router = createBrowserRouter([
+    {
+        path: '/lobby',
+        element: <Lobby />,
+    },
     {
         path: '/',
         element: <Home />,

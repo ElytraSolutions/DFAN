@@ -3,5 +3,6 @@
     "[typescript]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
-    "eslint.lintTask.enable": true
+    "eslint.lintTask.enable": true,
+    "liveServer.settings.multiRootWorkspaceName": "DFAN"
 }
