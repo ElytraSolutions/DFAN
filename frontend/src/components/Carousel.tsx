@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const Carousel = ({ images }) => {
     const [slideIndex, setSlideIndex] = React.useState(0);
     const nextIndex = (cur) => (cur + 1) % images.length;
     const prevIndex = (cur) => (cur - 1 + images.length) % images.length;
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setSlideIndex(nextIndex);
+        }, 2000);
+        return () => clearInterval(interval);
+    }, [nextIndex]);
     return (
         <>
             <div className="relative w-[80%] mx-auto">
