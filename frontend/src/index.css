@@ -1,3 +1,4 @@
+
 body {
     background-color: black;
 }
@@ -5,10 +6,12 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background: radial-gradient(96.29% 96.29% at 50.00% 50.00%,
-            #65AB66B0 0%,
-            #63A964A9 50%,
-            #367C3624 100%);
+    background-image: radial-gradient(
+    112.79% 112.79% at 50% 29.39%,
+    #448A45 0%,
+    rgba(99, 169, 100, 0.664527) 0%,
+    rgba(54, 124, 54, 0.14) 100%
+  );
     /* overflow: scroll; */
 }
 

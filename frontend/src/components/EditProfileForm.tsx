@@ -12,6 +12,7 @@ import UserContext from '~/context/User';
 import { UserProfileSchema } from '~/helpers/validateProfileData';
 import useStates from '~/hooks/useStates';
 import useCountries from '~/hooks/useCountries';
+import Logo from '../assets/logo.png';
 
 interface EditProfileProps {
     submitHandler: Parameters<
@@ -86,14 +87,32 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
     }
 
     return (
-        <div className="grid h-fit min-h-screen place-items-center my-12">
+        
+        <div className="flex-row justify-center items-center h-fit min-h-screen my-2">
+            <div className="flex-row md:flex w-full flex-wrap items-center justify-center md:mt-5 px-3 font-semibold ">
+                <div className="flex justify-center ml-2">
+                    <img
+                        src={Logo}
+                        className="h-24 mt-3 mb-3 md:mr-7 md:mb-0 list-image-none "
+                        alt="DFAN"
+                    />
+                </div>
+                <div className=" text-center ml-2">
+                    <a
+                        className="text-lg md:text-3xl lg:text-4xl text-[#C8DADF] dark:text-neutral-200"
+                        href="#"
+                    >
+                        Democratic Foresters Association Nepal <br /> (DFAN) 
+                    </a>
+                </div>
+            </div>
             <form
                 onSubmit={handleSubmit(submitHandler)}
-                className="rounded-lg bg-[#335533] w-10/12 md:w-5/12 min-w-fit min-h-fit"
+                className="w-[90%] sm:w-[80%] md:w-[90%] lg:w-[90%] xl:w-[75%] 2xl:w-[65%] p-8 rounded-[24px] bg-black-rgba mx-auto my-8 text-white"
             >
                 <div className="flex flex-col justify-center p-8">
                     <div className="flex flex-row justify-between border-b border-b-white mb-2 p-2">
-                        <div className="flex flex-col justify-center w-7/12">
+                        <div className="flex flex-col justify-center md:w-7/12 font-medium text-md">
                             <TextInput
                                 legend="Name:"
                                 name="name"

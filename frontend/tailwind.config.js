@@ -5,7 +5,12 @@ export default {
     "./index.html",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'black-rgba': 'rgba(0,0,0, 0.30)',
+        'field': '#80B380',
+      },
+    },
   },
   plugins: [],
 }

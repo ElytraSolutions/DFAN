@@ -36,7 +36,7 @@ const AdminView = () => {
                 return (
                     <div className="grow grid p-2 md:px-12 grid-rows-[min-content_1fr] gap-4">
                         <h1 className="text-2xl font-bold">{currentView}</h1>
-                        <div className="ag-theme-alpine-dark text-base">
+                        <div className="ag-theme-alpine text-base">
                             {currentView === 'Registered Users' ? (
                                 <RegisteredUsersTable />
                             ) : null}

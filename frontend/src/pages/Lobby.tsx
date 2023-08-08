@@ -52,17 +52,20 @@ const Lobby = () => {
             <div className="flex flex-col items-center w-10/12 md:w-4/12">
                 <img src={logo} alt="logo" className="w-7/12 m-4" />
                 <form onSubmit={onSubmit} className="flex flex-col w-full">
+                    <label htmlFor="email" className="text-white font-sans font-bold text-xl  ml-2">
+                    Email
+                    </label>
                     <input
                         type="email"
                         placeholder="Enter your email"
-                        className="border border-gray-300 rounded-md p-2 m-2"
+                        className="border border-gray-300 rounded-xl p-4 m-2 bg-[#C8DADF] h-16 text-xl"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required={true}
                     />
                     <button
                         type="submit"
-                        className="bg-blue-500 text-white rounded-md p-2 w-1/3 mx-auto my-2"
+                        className="bg-[#C8DADF] text-[#2B4B2A] text-xl font-bold rounded-[50px] p-2 w-1/3 md:w-1/4 mx-auto my-2 hover:bg-[#2B4B2A] hover:text-[#C8DADF] transition-colors duration-300 hover:shadow-md"
                     >
                         Submit
                     </button>
