@@ -34,6 +34,10 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
     } = useForm<EditableUserData>({
         criteriaMode: 'all',
         resolver: joiResolver(UserProfileSchema(states, countries)),
+        defaultValues: {
+            permanentAddress: states[0],
+            currentAddress: countries[0],
+        },
     });
 
     useEffect(() => {
@@ -387,9 +391,9 @@ export function SelectOptions({
                     required: `This field is required.`,
                 })}
             >
-                {values.map((v) => {
+                {values.map((v, i) => {
                     return (
-                        <option key={v} value={v}>
+                        <option key={v} value={v} selected={i == 0}>
                             {v}
                         </option>
                     );
