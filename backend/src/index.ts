@@ -2,6 +2,8 @@ import express, { Express } from 'express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import cors from 'cors';
+import sqliteStoreFactory from 'express-session-sqlite';
+import * as sqlite3 from 'sqlite3';
 
 import './config/dotenv';
 import config from './config/db';
@@ -19,12 +21,18 @@ import UserRoute from './routes/users/index';
     }
 })();
 
+const SqliteStore = sqliteStoreFactory(session);
 const app: Express = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(
     session({
+        store: new SqliteStore({
+            driver: sqlite3.Database,
+            path: 'sessions.db',
+            ttl: 1000 * 60 * 60 * 24 * 7, // 1 week
+        }),
         secret: 'keyboard cat',
         cookie: {
             maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
