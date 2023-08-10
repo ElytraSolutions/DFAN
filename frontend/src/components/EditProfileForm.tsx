@@ -88,7 +88,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
 
     return (
         
-        <div className="flex-row justify-center items-center h-fit min-h-screen my-2">
+        <div className="flex-row text-white justify-center items-center h-fit min-h-screen my-2">
             <div className="flex-row md:flex w-full flex-wrap items-center justify-center md:mt-5 px-3 font-semibold ">
                 <div className="flex justify-center ml-2">
                     <img
@@ -108,11 +108,18 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
             </div>
             <form
                 onSubmit={handleSubmit(submitHandler)}
-                className="w-[90%] sm:w-[80%] md:w-[90%] lg:w-[90%] xl:w-[75%] 2xl:w-[65%] p-8 rounded-[24px] bg-black-rgba mx-auto my-8 text-white"
+                className="w-[90%] sm:w-[80%] md:w-[90%] lg:w-[90%] xl:w-[75%] 2xl:w-[65%] p-8 rounded-[30px] bg-black-rgba mx-auto my-8 text-white"
             >
                 <div className="flex flex-col justify-center p-8">
-                    <div className="flex flex-row justify-between border-b border-b-white mb-2 p-2">
-                        <div className="flex flex-col justify-center md:w-7/12 font-medium text-md">
+                    <div className="flex flex-col md:flex-row-reverse justify-between border-b border-b-white mb-2 p-2">
+                        <div className="flex flex-col justify-center items-center grow">
+                            <ImageInput
+                                avatar={avatarURL}
+                                register={register}
+                            />
+                        </div>
+                        
+                        <div className="flex flex-col justify-center md:w-7/12 font-medium  text-md py-5">
                             <TextInput
                                 legend="Name:"
                                 name="name"
@@ -138,16 +145,11 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
                             />
                         </div>
                         {/* end of column */}
-                        <div className="flex flex-col justify-center items-center grow">
-                            <ImageInput
-                                avatar={avatarURL}
-                                register={register}
-                            />
-                        </div>
+                        
                     </div>
                     {/* end of section */}
 
-                    <div className="flex flex-col justify-between border-b border-b-white mb-2 p-2">
+                    <div className="flex flex-col justify-between border-b border-b-white mb-2 p-2 pb-8">
                         <SelectOptions
                             legend="Permanent Address:"
                             name="permanentAddress"
@@ -166,7 +168,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
                     </div>
                     {/* end of section */}
 
-                    <div className="flex flex-col justify-between border-b border-b-white mb-2 p-2">
+                    <div className="flex flex-col justify-between border-b border-b-white mb-2 p-2 pt-4 pb-8">
                         <RadioOptions
                             legend="Employment Status"
                             values={['Employed', 'Unemployed']}
@@ -242,7 +244,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
                 <div className="flex flex-col justify-center ">
                     <button
                         type="submit"
-                        className="p-2 mx-auto text-lg rounded-md bg-[#C8DADF] mb-4"
+                        className="p-2 px-5 mx-auto text-lg rounded-[25px] bg-[#C8DADF] mb-4 text-black hover:bg-[#2A4A29] hover:text-gray-300 hover:outline"
                     >
                         Submit
                     </button>
@@ -300,10 +302,10 @@ export function TextInput({
 }) {
     return (
         <>
-            <label className="mt-2 text-black">{legend}</label>
+            <label className="mt-2 text-white text-xl mb-1">{legend}</label>
             <input
                 type={type}
-                className="border rounded-md bg-[#030c0370] outline-none text-white p-1"
+                className="border rounded-md bg-[#030c0370] outline-none text-white p-1 mb-2"
                 {...register(name, {
                     required: `This field is required.`,
                     disabled: !!disabled,
@@ -334,19 +336,19 @@ export function RadioOptions({
 }: RadioOptionsProps) {
     return (
         <fieldset>
-            <legend className="text-black flex flex-col mt-2">{legend}</legend>
+            <legend className="text-white flex flex-col mt-2 mb-1 text-xl">{legend}</legend>
             {values.map((v) => {
                 return (
                     <label key={v}>
                         <input
                             type="radio"
-                            className="ml-2"
+                            className="ml-5 mb-2 "
                             value={v}
                             {...register(name, {
                                 required: `This field is required.`,
                             })}
                         />
-                        <span className="ml-1">{v}</span>
+                        <span className="ml-1 ">{v}</span>
                         <br />
                     </label>
                 );
@@ -375,10 +377,10 @@ export function SelectOptions({
     errors,
 }: SelectOptionsProps) {
     return (
-        <div className="flex flex-col">
-            <label className="mt-2 text-black">{legend}</label>
+        <div className="flex flex-col mb-2">
+            <label className="mt-2 text-white text-xl font-semibold mb-1">{legend}</label>
             <select
-                className="border rounded-md bg-[#030c0370] outline-none text-white p-1"
+                className="border  bg-[#030c0370] outline-none text-white p-1 w-full md:w-[40%]"
                 {...register(name, {
                     required: `This field is required.`,
                 })}

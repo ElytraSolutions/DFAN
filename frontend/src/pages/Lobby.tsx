@@ -56,6 +56,7 @@ const Lobby = () => {
                     Email
                     </label>
                     <input
+                        id="email"
                         type="email"
                         placeholder="Enter your email"
                         className="border border-gray-300 rounded-xl p-4 m-2 bg-[#C8DADF] h-16 text-xl"

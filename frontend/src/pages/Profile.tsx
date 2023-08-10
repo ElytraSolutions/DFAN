@@ -35,7 +35,7 @@ const Profile = () => {
                 </div>
             </div>
             
-            <div className="w-[90%] sm:w-[80%] md:w-[90%] lg:w-[90%] xl:w-[75%] 2xl:w-[65%] p-8 rounded-[24px] bg-black-rgba mx-auto my-8 text-white">
+            <div className="w-[90%] sm:w-[80%] md:w-[90%] lg:w-[90%] xl:w-[75%] 2xl:w-[65%] p-8 rounded-[24px] bg-black-rgba mx-auto my-8 text-white py-10">
                 <div className="flex flex-col   md:flex-row-reverse justify-center items-center  m-4 ">
                 <div className=" w-full md:w-[30%] mx-auto">
                         <div className='mx-auto'>
@@ -88,28 +88,28 @@ const Profile = () => {
                         </div>
                     </div>
                     <div className="text-[#C8DADF] flex flex-col gap-0.5 mx-auto">
-                        <p>
+                        <p className='flex flex-col text-center md:flex-row'>
                             <span className="font-medium text-md">
                                 Full Name:
                             </span>
                             <span className="text-xl font-medium ml-1 text-field">{userProfile.name}</span>
                         </p>
-                        <p>
+                        <p className='flex flex-col text-center md:flex-row'>
                             <span className="font-medium text-md">Gender:</span>
                             <span className="text-xl font-medium ml-1 text-field">{userProfile.gender}</span>
                         </p>
-                        <p>
+                        <p className='flex flex-col text-center md:flex-row'>
                             <span className="font-medium text-md">
                                 Mobile Number:
                             </span>
                             <span className="text-xl font-medium ml-1 text-field">{userProfile.mobile}</span>
                         </p>
-                        <p>
+                        <p className='flex flex-col text-center md:flex-row'>
                             <span className="font-medium text-md">Email:</span>
                             <span className="text-xl font-medium ml-1 text-field">{userData.email}</span>
                         </p>
                         <div className="h-4"></div>
-                        <p>
+                        <p className='flex flex-col text-center md:flex-row'>
                             <span className="font-medium text-md">
                                 Permanent Address:
                             </span>
@@ -117,7 +117,7 @@ const Profile = () => {
                                 {userProfile.permanentAddress}
                             </span>
                         </p>
-                        <p>
+                        <p className='flex flex-col text-center md:flex-row'>
                             <span className="font-medium text-md">
                                 Current Address:
                             </span>
@@ -130,7 +130,7 @@ const Profile = () => {
                         {userProfile.NFAMembershipNumber && (
                             <>
                                 
-                                <p>
+                                <p className='flex flex-col text-center md:flex-row'>
                                     <span className="font-medium text-md">
                                         DFAN Membership From:
                                     </span>
@@ -141,7 +141,7 @@ const Profile = () => {
                                 </p>
                             </>
                         )}
-                        <p>
+                        <p className='flex flex-col text-center md:flex-row'>
                             <span className="font-medium text-md">
                                 Employment Status:
                             </span>
@@ -150,7 +150,7 @@ const Profile = () => {
                             </span>
                         </p>
                         {userProfile.employmentStatus === 'Employed' && (
-                            <p>
+                            <p className='flex flex-col text-center md:flex-row'>
                                 <span className="font-medium text-md">
                                     Employment Type:
                                 </span>
@@ -163,22 +163,22 @@ const Profile = () => {
                     </div>
                     
                 </div>
-                <hr className='sm:mx-20' />
+                <hr className=' sm:mx-15' />
                 <div className="flex flex-col md:flex-row md:mx-20 justify-center md:justify-between items-center gap-4 pt-4 ">
                     <Link
                         to="/editProfile"
-                        className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-gray-300 text-[#2A4A29] font-medium mr-4"
+                        className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-gray-300 text-[#2A4A29] font-medium md:mr-4 hover:bg-[#2A4A29] hover:text-gray-300 hover:outline"
                     >
                         <LiaUserEditSolid className="inline-block mr-2 text-2xl" />
                         Edit Profile
                     </Link>
                     {!userProfile.isLifeMember && (
-                    <button className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-gray-300 text-[#2A4A29] font-medium mr-4">
+                    <button className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-gray-300 text-[#2A4A29] font-medium md:mr-4 hover:bg-[#2A4A29] hover:text-gray-300 hover:outline">
                                 <MdPayment className="inline-block mr-2 text-2xl" />
                                     Renew
                                 </button>
                     )}
-                    <button className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-gray-300 text-[#2A4A29] font-medium mr-4 float-right">
+                    <button className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-gray-300 text-[#2A4A29] font-medium md:mr-4 float-right hover:bg-[#2A4A29] hover:text-gray-300 hover:outline">
                         <BiSolidCloudDownload className="inline-block mr-2 text-2xl" />
                         Digital Card
                     </button>
