@@ -33,24 +33,30 @@ const Login = () => {
     };
 
     return (
-        <div className="grid h-screen place-items-center">
+        <div className="grid h-screen place-items-center green-bg">
             <div className="flex flex-col items-center w-10/12 md:w-4/12">
                 <img src={logo} alt="logo" className="w-7/12 m-4" />
                 <form onSubmit={onSubmit} className="flex flex-col w-full">
-                <label htmlFor="email" className="text-white font-sans font-bold text-xl  ml-2">
-                    Email
+                    <label
+                        htmlFor="email"
+                        className="text-white font-sans font-bold text-xl  ml-2"
+                    >
+                        Email
                     </label>
                     <input
                         type="email"
-                        id='email'
+                        id="email"
                         placeholder="Enter your email"
                         className="border border-gray-300 rounded-xl p-4 m-2 bg-[#C8DADF] md:h-16 text-xl"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required={true}
                     />
-                    <label htmlFor="password" className="text-white font-sans font-bold text-xl  ml-2">
-                    Password
+                    <label
+                        htmlFor="password"
+                        className="text-white font-sans font-bold text-xl  ml-2"
+                    >
+                        Password
                     </label>
                     <input
                         type="password"
