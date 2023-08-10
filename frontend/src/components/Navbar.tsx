@@ -27,8 +27,10 @@ const Navbar = ({ links }) => {
                         className="text-xl text-neutral-800 dark:text-neutral-200"
                         href="#"
                     >
-                        Democratic Foresters Association Nepal (DFAN) <br />{' '}
-                        प्रजातान्त्रिक वन प्राविधिक संघ, नेपाल{' '}
+                        Democratic Foresters Association Nepal (DFAN) <br />
+                        <span className="font-nirmala">
+                            प्रजातान्त्रिक वन प्राविधिक संघ, नेपाल
+                        </span>
                     </a>
                 </div>
 
