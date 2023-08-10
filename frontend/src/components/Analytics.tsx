@@ -3,16 +3,17 @@ import MembershipChart from './charts/MembershipChart';
 import EmploymentStatusChart from './charts/EmploymentStatusChart';
 import EmploymentTypeChart from './charts/EmploymentTypeChart';
 import LifeMemberChart from './charts/LifeMemberChart';
+import CreatedAtChart from './charts/CreatedAtChart';
 
 function Analytics() {
-    const chartWrapperClass = 'h-72 w-72';
-    const chartCaptionClass = 'text-center relative top-[19rem]';
+    const chartWrapperClass = 'h-80 w-80 mb-20';
+    const chartCaptionClass = 'text-center relative top-[21rem]';
     return (
         <div
             className="place-content-start"
             style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat( auto-fit, minmax(250px, 1fr)',
+                gridTemplateColumns: 'repeat( auto-fit, minmax(20rem, 1fr)',
                 placeContent: 'start',
             }}
         >
@@ -39,6 +40,11 @@ function Analytics() {
             <div className={chartWrapperClass}>
                 <LifeMemberChart />
                 <p className={chartCaptionClass}>Life Member</p>
+            </div>
+
+            <div className={chartWrapperClass}>
+                <CreatedAtChart />
+                <p className={chartCaptionClass}>Number of Members</p>
             </div>
         </div>
     );
