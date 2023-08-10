@@ -87,9 +87,8 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
     }
 
     return (
-        
-        <div className="flex-row text-white justify-center items-center h-fit min-h-screen my-2">
-            <div className="flex-row md:flex w-full flex-wrap items-center justify-center md:mt-5 px-3 font-semibold ">
+        <div className="flex-row text-white justify-center items-center h-fit min-h-screen pb-2 green-bg">
+            <div className="flex-row md:flex w-full flex-wrap items-center justify-center md:pt-5 px-3 font-semibold ">
                 <div className="flex justify-center ml-2">
                     <img
                         src={Logo}
@@ -102,7 +101,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
                         className="text-lg md:text-3xl lg:text-4xl text-[#C8DADF] dark:text-neutral-200"
                         href="#"
                     >
-                        Democratic Foresters Association Nepal <br /> (DFAN) 
+                        Democratic Foresters Association Nepal <br /> (DFAN)
                     </a>
                 </div>
             </div>
@@ -118,7 +117,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
                                 register={register}
                             />
                         </div>
-                        
+
                         <div className="flex flex-col justify-center md:w-7/12 font-medium  text-md py-5">
                             <TextInput
                                 legend="Name:"
@@ -145,7 +144,6 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
                             />
                         </div>
                         {/* end of column */}
-                        
                     </div>
                     {/* end of section */}
 
@@ -336,7 +334,9 @@ export function RadioOptions({
 }: RadioOptionsProps) {
     return (
         <fieldset>
-            <legend className="text-white flex flex-col mt-2 mb-1 text-xl">{legend}</legend>
+            <legend className="text-white flex flex-col mt-2 mb-1 text-xl">
+                {legend}
+            </legend>
             {values.map((v) => {
                 return (
                     <label key={v}>
@@ -378,7 +378,9 @@ export function SelectOptions({
 }: SelectOptionsProps) {
     return (
         <div className="flex flex-col mb-2">
-            <label className="mt-2 text-white text-xl font-semibold mb-1">{legend}</label>
+            <label className="mt-2 text-white text-xl font-semibold mb-1">
+                {legend}
+            </label>
             <select
                 className="border  bg-[#030c0370] outline-none text-white p-1 w-full md:w-[40%]"
                 {...register(name, {

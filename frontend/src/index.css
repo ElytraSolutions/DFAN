@@ -1,18 +1,20 @@
-
 body {
-    background-color: black;
+  /* background-color: black; */
 }
+
 #root {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-image: radial-gradient(
-    112.79% 112.79% at 50% 29.39%,
-    #448A45 0%,
-    rgba(99, 169, 100, 0.664527) 0%,
-    rgba(54, 124, 54, 0.14) 100%
-  );
-    /* overflow: scroll; */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.green-bg {
+  background-color: black;
+  background-image: radial-gradient(112.79% 112.79% at 50% 29.39%,
+      #448A45 0%,
+      rgba(99, 169, 100, 0.664527) 0%,
+      rgba(54, 124, 54, 0.14) 100%);
+
 }
 
 @tailwind base;
