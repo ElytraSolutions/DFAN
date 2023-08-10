@@ -4,6 +4,7 @@ import inviteUser from './inviteUser';
 import register from './register';
 import verifyUser from './verifyUser';
 import getInvitations from './getInvitations';
+import analytics from './analytics';
 
 const checkAdmin: RequestHandler = (req, res, next) => {
     const currentUser = req.session.user;
@@ -20,6 +21,7 @@ const checkAdmin: RequestHandler = (req, res, next) => {
 
 const router = Router();
 
+router.get('/analytics', checkAdmin, analytics);
 router.get('/getInvitations', checkAdmin, getInvitations);
 router.get('/getUsers', checkAdmin, getUsers);
 router.post('/inviteUser', checkAdmin, inviteUser);

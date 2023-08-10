@@ -8,7 +8,7 @@ const ExpandableSidebar = ({
     links: string[];
     children: (currView: string) => ReactNode;
 }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(true);
     const [currentView, setCurrentView] = useState(links[0]);
 
     const handleToggleSidebar = () => {

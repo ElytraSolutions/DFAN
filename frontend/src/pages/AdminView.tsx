@@ -11,6 +11,7 @@ import { ModuleRegistry } from '@ag-grid-community/core';
 import { InfiniteRowModelModule } from '@ag-grid-community/infinite-row-model';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Analytics from '~/components/Analytics';
 
 ModuleRegistry.registerModules([InfiniteRowModelModule]);
 
@@ -19,6 +20,7 @@ const AdminView = () => {
         'Pending Registration',
         'Pending Verification',
         'Registered Users',
+        'Analytics',
     ]);
     const { userData } = useContext(UserContext);
 
@@ -36,7 +38,7 @@ const AdminView = () => {
                 return (
                     <div className="grow grid p-2 md:px-12 grid-rows-[min-content_1fr] gap-4">
                         <h1 className="text-2xl font-bold">{currentView}</h1>
-                        <div className="ag-theme-alpine text-base">
+                        <div className="ag-theme-alpine text-base mt-6">
                             {currentView === 'Registered Users' ? (
                                 <RegisteredUsersTable />
                             ) : null}
@@ -46,6 +48,7 @@ const AdminView = () => {
                             {currentView === 'Pending Registration' ? (
                                 <PendingRegistrationTab />
                             ) : null}
+                            {currentView === 'Analytics' ? <Analytics /> : null}
                         </div>
                     </div>
                 );
