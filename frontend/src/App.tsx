@@ -15,6 +15,13 @@ import Profile from '~/pages/Profile';
 import RegisterNew from '~/pages/RegisterNew';
 import Logout from './components/Logout';
 import CheckUser from './components/CheckUser';
+import Invitations from './pages/admin/Invitations';
+import PendingVerification from './pages/admin/PendingVerification';
+import ShowProfile from './pages/admin/ShowProfile';
+import RegisteredUsers from './pages/admin/RegisteredUsers';
+import GenderChart from './pages/admin/charts/GenderChart';
+import MembershipRegionChart from './pages/admin/charts/MembershipRegionChart';
+import Dashboard from './pages/admin/Dashboard';
 
 const router = createBrowserRouter([
     {
@@ -63,6 +70,62 @@ const router = createBrowserRouter([
     },
     {
         path: '/admin',
+        element: (
+            <CheckUser>
+                <Dashboard />
+            </CheckUser>
+        ),
+    },
+    {
+        path: '/admin/invitations',
+        element: (
+            <CheckUser>
+                <Invitations />
+            </CheckUser>
+        ),
+    },
+    {
+        path: '/admin/pendingVerification',
+        element: (
+            <CheckUser>
+                <PendingVerification />
+            </CheckUser>
+        ),
+    },
+    {
+        path: '/admin/users',
+        element: (
+            <CheckUser>
+                <RegisteredUsers />
+            </CheckUser>
+        ),
+    },
+    {
+        path: '/admin/showProfile/:id',
+        element: (
+            <CheckUser>
+                <ShowProfile />
+            </CheckUser>
+        ),
+    },
+    {
+        path: '/admin/charts/gender',
+        element: (
+            <CheckUser>
+                <GenderChart />
+            </CheckUser>
+        ),
+    },
+    {
+        path: '/admin/charts/membershipRegion',
+        element: (
+            <CheckUser>
+                <MembershipRegionChart />
+            </CheckUser>
+        ),
+    },
+    {
+        path: '/adminOld',
         element: (
             <CheckUser>
                 <AdminView />

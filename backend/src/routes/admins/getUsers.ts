@@ -84,6 +84,7 @@ export default async function getUsers(req: Request, res: Response) {
                     where: filters,
                 },
             ],
+            attributes: ['id', 'email', 'role'],
         });
         return res.json({ data: rows, count });
     } catch (err) {

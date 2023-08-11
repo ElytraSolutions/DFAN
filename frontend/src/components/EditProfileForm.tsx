@@ -75,7 +75,6 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
     if (avatar) {
         avatarURL = URL.createObjectURL(avatar[0]);
     }
-    console.log(oldProfile);
 
     if (employmentStatus === 'Unemployed' && employmentType) {
         setValue('employmentType', null);

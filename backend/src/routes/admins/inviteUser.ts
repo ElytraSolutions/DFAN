@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import sendEmail from '../../helpers/sendEmail';
 import RegistrationList from '../../models/RegistrationList';
 import { URLSearchParams } from 'url';
+import Users from '../../models/Users';
 
 interface RequestBody {
     email: string;
@@ -20,6 +21,14 @@ export default async function inviteUser(req: Request, res: Response) {
             .json({ message: 'Invalid parameters', errors: error.details });
     }
     const email = value.email;
+    const existingUser = await Users.findOne({
+        where: {
+            email,
+        },
+    });
+    if (existingUser) {
+        return res.status(400).json({ message: 'User already exists' });
+    }
     // TODO: remove if condition
     let code = crypto.randomBytes(4).toString('hex');
     if (process.env.NODE_ENV !== 'production') {
