@@ -46,7 +46,7 @@ const ExpandableSidebar = ({
                 </ul>
             </aside>
 
-            <main className={`flex flex-1 mt-14 mb-4 mx-4`}>
+            <main className={`flex flex-1 mt-14 mb-4 mx-4 overflow-scroll`}>
                 <button
                     className="fixed top-4 left-4 w-9 h-9 bg-gray-800 p-2 rounded text-white"
                     onClick={handleToggleSidebar}

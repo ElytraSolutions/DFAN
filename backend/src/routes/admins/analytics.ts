@@ -11,31 +11,24 @@ function groupAndCount(category: any) {
     };
 }
 
-function groupAndSum(category: any) {
-    return async function () {
-        const [results] = await sequelize.query(
-            `SELECT \`${category}\`, COUNT(*) AS count, SUM(COUNT(*)) OVER (ORDER BY \`${category}\`) AS sum FROM UserProfiles GROUP BY \`${category}\` ORDER BY \`${category}\`;`,
-        );
-        console.log('RESULT', results);
-        return results;
-        return await UserProfile.findAll({
-            group: category,
-            attributes: [
-                category,
-                [sequelize.fn('COUNT', '*'), 'count'],
-                [sequelize.fn('SUM', sequelize.fn('COUNT', '*')), 'sum'],
-            ],
-            order: [sequelize.col(category)],
-        });
-    };
-}
 const filters = {
     gender: groupAndCount('gender'),
     membershipFrom: groupAndCount('membershipFrom'),
     employmentStatus: groupAndCount('employmentStatus'),
     employmentType: groupAndCount('employmentType'),
     isLifeMember: groupAndCount('isLifeMember'),
-    createdAt: groupAndSum('createdAt'),
+    totalUsers: async function () {
+        const [results] = await sequelize.query(
+            'SELECT strftime("%Y %m",createdAt) AS joinDate, SUM(COUNT(*)) OVER (ORDER BY strftime("%Y %m",createdAt)) AS sum FROM UserProfiles GROUP BY strftime("%Y %m",createdAt);',
+        );
+        return results;
+    },
+    newRegistrations: async function () {
+        const [results] = await sequelize.query(
+            'SELECT strftime("%Y %m",createdAt) AS joinDate, COUNT(*) AS count FROM UserProfiles GROUP BY strftime("%Y %m",createdAt);',
+        );
+        return results;
+    },
 };
 
 async function analytics(req: Request, res: Response) {
