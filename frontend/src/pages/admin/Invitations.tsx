@@ -42,9 +42,9 @@ const Invitations = () => {
     }
 
     return (
-        <div className="flex flex-row h-screen overflow-scroll">
+        <div className="flex flex-row h-screen">
             <CustomSidebar />
-            <div className="grow p-2 md:px-12 flex flex-col gap-4">
+            <div className="grow p-2 md:px-12 flex flex-col gap-4  overflow-scroll">
                 <h1 className="text-2xl font-bold">Invitations</h1>
                 <InviteUserForm callback={refresh} />
                 <PendingRegistrationTab rows={rows} refresh={refresh} />

@@ -26,9 +26,9 @@ const PendingVerification = () => {
     }
 
     return (
-        <div className="flex flex-row h-screen overflow-scroll">
+        <div className="flex flex-row h-screen">
             <CustomSidebar />
-            <div className="grow p-2 md:px-12 flex flex-col gap-4 pt-8">
+            <div className="grow p-2 md:px-12 flex flex-col gap-4 pt-8 overflow-scroll">
                 <h1 className="text-2xl font-bold">Pending Verifications</h1>
                 <PendingVerificationTable />
             </div>

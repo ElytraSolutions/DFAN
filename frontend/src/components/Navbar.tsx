@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Logo from '../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
+import NavbarUser from './NavbarUser';
 
 const Navbar = ({ links }) => {
     const navigate = useNavigate();
@@ -96,12 +97,7 @@ const Navbar = ({ links }) => {
                                 </li>
                             ))}
                             <li className="ml-2 mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-2 inline-flex lg:flex-row lg:items-center">
-                                <button
-                                    className="bg-[#fff] hover:bg-[#239923] text-[#233F23] hover:text-[#eee] font-bold py-2 px-8 rounded-full "
-                                    onClick={() => navigate('/lobby')}
-                                >
-                                    Login
-                                </button>
+                                <NavbarUser />
                             </li>
                         </ul>
                     </div>

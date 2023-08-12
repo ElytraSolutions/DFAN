@@ -66,6 +66,7 @@ const Login = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required={true}
+                        autoFocus
                     />
                     <button
                         type="submit"
