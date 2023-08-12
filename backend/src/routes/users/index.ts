@@ -7,6 +7,7 @@ import register from './register';
 import status from './status';
 import updatePicture from './updatePicture';
 import verifyCode from './verifyCode';
+import IsVerifiedUser from '../../middleware/IsVerifiedUser';
 
 const userIsLoggedIn: RequestHandler = (req, res, next) => {
     if (req.session.user) {
@@ -18,8 +19,8 @@ const userIsLoggedIn: RequestHandler = (req, res, next) => {
 
 const router = Router();
 router.post('/createProfile', userIsLoggedIn, createProfile);
-router.post('/editProfile', userIsLoggedIn, editProfile);
-router.get('/me', userIsLoggedIn, me);
+router.post('/editProfile', IsVerifiedUser, editProfile);
+router.get('/me', IsVerifiedUser, me);
 router.post('/register', register);
 router.get('/status', status);
 router.post(
