@@ -11,7 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import UserContext from '~/context/User';
 import CustomSidebar from '~/components/CustomSidebar';
 
-const RegisteredUsers = () => {
+const RejectedUsers = () => {
     const { userData } = useContext(UserContext);
 
     if (
@@ -74,28 +74,50 @@ const RegisteredUsersTable = () => {
             valueGetter: (params) => params.row.UserProfile.mobile || 'N/A',
         },
     ];
+    const refresh = async () => {
+        const queryParams = new URLSearchParams({
+            offset: '0',
+            limit: '100',
+            verified: 'rejected',
+        });
+        const resp = await fetch(
+            `/api/admins/getUsers?${queryParams.toString()}`,
+        );
+        if (!resp.ok) {
+            toast.error('Error fetching invitation data');
+            return;
+        }
+        const data = await resp.json();
+        setRows(data.data);
+    };
     useEffect(() => {
         (async () => {
-            const queryParams = new URLSearchParams({
-                offset: '0',
-                limit: '100',
-                verified: 'approved',
-            });
-            const resp = await fetch(
-                `/api/admins/getUsers?${queryParams.toString()}`,
-            );
-            if (!resp.ok) {
-                toast.error('Error fetching invitation data');
-                return;
-            }
-            const data = await resp.json();
-            setRows(data.data);
+            await refresh();
         })();
     }, []);
     const rowClickHandler: GridEventListener<'rowClick'> = (params) => {
         const AselectedRow = params.row;
         setSelectedRowData(AselectedRow);
         setOpenModal(true);
+    };
+    const approveUser = async () => {
+        const resp = await fetch('/api/admins/verifyRejectedUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: selectedRowData?.email,
+            }),
+        });
+        const data = await resp.json();
+        if (!resp.ok) {
+            toast.error(data.message || 'Error approving user');
+            return;
+        }
+        await refresh();
+        toast.success('User approved');
+        closeModal();
     };
     return (
         <Box sx={{ height: '90%', width: '100%' }}>
@@ -235,8 +257,11 @@ const RegisteredUsersTable = () => {
                     </>
                     <hr />
                     <div className="flex justify-center gap-[3vw] mx-auto my-5">
-                        <button className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#2A4A29] text-white font-medium md:mr-4 hover:bg-white hover:text-[#2A4A29] hover:font-bold hover:outline ">
-                            payment History
+                        <button
+                            onClick={async () => await approveUser()}
+                            className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#2A4A29] text-white font-medium md:mr-4 hover:bg-white hover:text-[#2A4A29] hover:font-bold hover:outline "
+                        >
+                            Approve
                         </button>
                     </div>
                 </DialogContent>
@@ -245,4 +270,4 @@ const RegisteredUsersTable = () => {
     );
 };
 
-export default RegisteredUsers;
+export default RejectedUsers;

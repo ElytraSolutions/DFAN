@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useContext, useState } from 'react';
 import UserContext from '~/context/User';
+import { BiUserX } from 'react-icons/bi';
 
 function CustomSidebar() {
     const { userData } = useContext(UserContext);
@@ -136,6 +137,15 @@ function CustomSidebar() {
                                     >
                                         <PiUsersThreeDuotone className="inline text-2xl mr-2" />
                                         <span>Users</span>
+                                    </MenuItem>
+                                    <MenuItem
+                                        component={
+                                            <Link to="/admin/rejections" />
+                                        }
+                                        active={activeTab === 'users'}
+                                    >
+                                        <BiUserX className="inline text-2xl mr-2" />
+                                        <span>Rejected Users</span>
                                     </MenuItem>
                                 </SubMenu>
 
