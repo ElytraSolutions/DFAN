@@ -18,7 +18,7 @@ const Profile = () => {
     const isAdmin =
         ['Central Admin', 'Regional Admin'].indexOf(userData.role) > -1;
     return (
-        <div className="green-bg h-screen overflow-scroll">
+        <div className="green-bg h-screen  overflow-y-scroll ">
             <div className="flex-row md:flex w-full flex-wrap items-center justify-center md:pt-5 px-3 font-semibold ">
                 <div className="flex justify-center ml-2">
                     <img

@@ -5,11 +5,38 @@ import { TiLocation } from 'react-icons/ti';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 
+import { useContext, useEffect, useState } from 'react';
+import UserContext from '~/context/User';
+
 function CustomSidebar() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+    const handleSidebarToggle = () => {
+        setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
+    };
+
     const activeTab = window.location.pathname.split('/')[2];
     return (
-        <div className="flex flex-col h-full p-8">
+        <>
+        {!isSidebarOpen && (
+            <>
+            <div className="flex flex-col h-full p-8 w-4 ">  
+            <button
+                className="top-0 right-0 mx-2 p-2 text-[24px] text-xl font-bold hover:text-[#00aa00] transition-colors"onClick={handleSidebarToggle}> ☰ 
+            </button>
+            </div>
+            
+            </>
+        )
+        }
+        {isSidebarOpen && (
+            <div className="flex flex-col h-full p-8">   
             <Sidebar>
+                    <button
+                        className="absolute top-0 right-0 mx-2 p-2 text-xl font-bold hover:text-[#00aa00] transition-colors"
+                        onClick={handleSidebarToggle}
+                    > &#10005; {/* Close button (X) */}
+                    </button>
                 <h1 className="text-2xl font-semibold">Admins</h1>
                 <Menu
                     menuItemStyles={{
@@ -72,6 +99,9 @@ function CustomSidebar() {
                 </Menu>
             </Sidebar>
         </div>
+        )}
+        
+        </>
     );
 }
 

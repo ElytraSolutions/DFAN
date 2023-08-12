@@ -24,7 +24,7 @@ const Navbar = ({ links }) => {
                 </div>
                 <div className=" text-center ml-2">
                     <a
-                        className="text-xl text-neutral-800 dark:text-neutral-200"
+                        className="text-xl text-[#e5e5e5] dark:text-neutral-200"
                         href="#"
                     >
                         Democratic Foresters Association Nepal (DFAN) <br />
@@ -86,7 +86,7 @@ const Navbar = ({ links }) => {
                                     <a
                                         className={`${
                                             active == link && 'active'
-                                        } p-0  text-neutral-500 transition duration-200 hover:text-neutral-700 hover:ease-in-out focus:text-neutral-700 disabled:text-black/30 motion-reduce:transition-none dark:text-neutral-200 dark:hover:text-neutral-400 dark:focus:text-neutral-400 lg:px-2 [&.active]:underline [&.active]:underline-offset-8 dark:[&.active]:text-neutral-400`}
+                                        } p-0   transition duration-200  hover:ease-in-out focus:text-neutral-700 disabled:text-black/30 motion-reduce:transition-none text-neutral-200 hover:text-neutral-400 focus:text-neutral-400 lg:px-2 [&.active]:underline [&.active]:underline-offset-8 [&.active]:text-neutral-400`}
                                         href={links[link]}
                                         data-te-nav-link-ref
                                     >
@@ -96,7 +96,7 @@ const Navbar = ({ links }) => {
                             ))}
                             <li className="ml-2 mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-2 inline-flex lg:flex-row lg:items-center">
                                 <button
-                                    className="bg-[#fff] hover:bg-[#ececec] text-[#233F23] font-bold py-2 px-8 rounded-full"
+                                    className="bg-[#fff] hover:bg-[#239923] text-[#233F23] hover:text-[#eee] font-bold py-2 px-8 rounded-full "
                                     onClick={() => navigate('/lobby')}
                                 >
                                     Login

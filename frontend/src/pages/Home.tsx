@@ -33,7 +33,7 @@ const Home = () => {
         'Contact Us': '/#contact',
     };
     return (
-        <div className="w-screen h-screen z-50 bg-[#ECECEC] overflow-scroll scroll-smooth">
+        <div className="w-screen h-screen z-50 bg-[#ECECEC] overflow-x-hidden overflow-scroll scroll-smooth">
             <Navbar links={links} />
             <div
                 id="hero"
