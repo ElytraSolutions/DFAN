@@ -122,7 +122,9 @@ export const UserProfileSchema = (States: string[], Countries: string[]) =>
             }),
             otherwise: null,
         }),
-        avatar: Joi.any().optional(),
+        avatar: Joi.any().required().messages({
+            ...requiredStringMessages,
+        }),
     });
 
 export function sanitizer(obj: Record<string, any>) {
