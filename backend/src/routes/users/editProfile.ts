@@ -47,7 +47,6 @@ export default async function editProfile(req: Request, res: Response) {
                 newProfile[key] = req.body[key];
             }
         }
-        console.log(newProfile);
         const { value, error } = UserProfileSchema.validate(newProfile, {
             abortEarly: false,
         });
