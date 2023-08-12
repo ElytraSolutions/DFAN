@@ -28,9 +28,9 @@ const Home = () => {
         [],
     );
     const links = {
-        Home: '#hero',
-        'About Us': '#about',
-        'Contact Us': '#contact',
+        Home: '/#hero',
+        'About Us': '/#about',
+        'Contact Us': '/#contact',
     };
     return (
         <div className="w-screen h-screen z-50 bg-[#ECECEC] overflow-scroll scroll-smooth">

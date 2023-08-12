@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import UserContext from '~/context/User';
 import Loading from './Loading';
 
-export default function CheckUser({ children }: { children: React.ReactNode }) {
+function CheckUser({ children }: { children: React.ReactNode }) {
     const { userData } = useContext(UserContext);
 
     if (userData.state === 'loading') {
@@ -14,3 +14,5 @@ export default function CheckUser({ children }: { children: React.ReactNode }) {
         return <Navigate to="/login" />;
     }
 }
+
+export default CheckUser;

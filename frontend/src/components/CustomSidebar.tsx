@@ -13,7 +13,7 @@ function CustomSidebar() {
                 <h1 className="text-2xl font-semibold">Admins</h1>
                 <Menu
                     menuItemStyles={{
-                        button: ({ level, active, disabled }) => {
+                        button: ({ active }) => {
                             if (active) {
                                 return {
                                     backgroundColor: '#F3F4F6',

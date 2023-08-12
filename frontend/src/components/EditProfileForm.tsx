@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import {
     FieldErrors,
     UseFormHandleSubmit,
@@ -23,7 +23,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
     const { userData } = useContext(UserContext);
     const states = useStates();
     const countries = useCountries();
-    const oldProfile = userData.UserProfile ?? {};
+    const oldProfile = useMemo(() => userData.UserProfile ?? {}, [userData]);
 
     const {
         register,
@@ -59,7 +59,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
         for (const [key, value] of Object.entries(oldProfileData)) {
             setValue(key as keyof EditableUserData, value);
         }
-    }, []);
+    }, [oldProfile, setValue]);
 
     const employmentStatus = watch('employmentStatus');
     const employmentType = watch('employmentType');

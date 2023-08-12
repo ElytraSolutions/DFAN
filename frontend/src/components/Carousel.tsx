@@ -1,9 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
-const Carousel = ({ images }) => {
+interface ICarouselProps {
+    images: Array<{
+        image: string;
+        caption: string;
+    }>;
+}
+function Carousel({ images }: ICarouselProps) {
     const [slideIndex, setSlideIndex] = React.useState(0);
-    const nextIndex = (cur) => (cur + 1) % images.length;
-    const prevIndex = (cur) => (cur - 1 + images.length) % images.length;
+    const nextIndex = useCallback(
+        (cur: number) => (cur + 1) % images.length,
+        [images],
+    );
+    const prevIndex = useCallback(
+        (cur: number) => (cur - 1 + images.length) % images.length,
+        [images],
+    );
     useEffect(() => {
         const interval = setInterval(() => {
             setSlideIndex(nextIndex);
@@ -66,6 +78,6 @@ const Carousel = ({ images }) => {
             </div>
         </>
     );
-};
+}
 
 export default Carousel;
