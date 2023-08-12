@@ -40,7 +40,6 @@ const PendingVerificationTable = () => {
     const [rows, setRows] = useState([]);
     const [openVerifyModal, setOpenVerifyModal] = useState(false);
     const [openRejectModal, setOpenRejectModal] = useState(false);
-    const [rejectionMessage, setRejectionMessage] = useState('');
     const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
 
     const refresh = async () => {
@@ -207,8 +206,6 @@ const PendingVerificationTable = () => {
                     setOpenRejectModal(false);
                     setSelectedRowData(null);
                 }}
-                message={rejectionMessage}
-                setMessage={setRejectionMessage}
                 selectedRowData={selectedRowData}
                 handleStatusChange={handleStatusChange}
             />
@@ -232,6 +229,7 @@ function VerifyModal({
     selectedRowData,
     handleStatusChange,
 }: IVerifyModalProps) {
+    const [message, setMessage] = useState('');
     return (
         <Dialog open={openModal} onClose={closeModal}>
             <DialogTitle className="flex justify-center p-[50px] bg-[#555] font-bold text-white">
@@ -346,26 +344,40 @@ function VerifyModal({
                     )}
                 </>
                 <hr />
+                <label className="font-semibold mt-4 pt-4">
+                        <span className="mt-2">Message:</span>
+                        <input
+                            className="w-full h-10 p-2 mb-4 border-2 border-[#005500] rounded-md"
+                            type="text"
+                            value={message}
+                            placeholder="Enter rejection message"
+                            onChange={(e) => setMessage(e.target.value)}
+                        />
+                </label>
                 <div className="flex justify-center gap-[3vw] mx-auto my-5">
                     <button
                         className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#2A4A29] text-white font-medium md:mr-4 hover:bg-white hover:text-[#2A4A29] hover:font-bold hover:outline"
-                        onClick={async () =>
+                        onClick={async () =>{
                             await handleStatusChange(
                                 selectedRowData?.email,
-                                'verify',
-                            )
-                        }
+                                'verify',undefined,
+                            );
+                            closeModal();
+                        }}
                     >
                         Verify
                     </button>
                     <button
                         className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#a22] text-white font-medium md:mr-4 hover:bg-white hover:text-[#a22] hover:font-bold hover:outline"
-                        onClick={async () =>
-                            await handleStatusChange(
-                                selectedRowData?.email,
-                                'reject',
-                            )
-                        }
+                        onClick={
+                            async () => {
+                                await handleStatusChange(
+                                    selectedRowData?.email,
+                                    'reject',message,
+                                );
+                                closeModal();
+                                setMessage('');
+                            }}
                     >
                         Reject
                     </button>
