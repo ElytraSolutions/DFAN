@@ -31,14 +31,7 @@ export default async function login(req: Request, res: Response) {
             },
         ],
     });
-    if (user?.role === 'User') {
-        if (user?.UserProfile?.VerificationList?.status === 'pending') {
-            return res.status(400).json({
-                message:
-                    'Your profile is currently being reviewed for verification',
-            });
-        }
-    }
+
     if (user && user.password === password) {
         const { password: _, ...data } = user.dataValues;
         req.session.user = data;
