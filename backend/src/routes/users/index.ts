@@ -19,7 +19,7 @@ const userIsLoggedIn: RequestHandler = (req, res, next) => {
 
 const router = Router();
 router.post('/createProfile', userIsLoggedIn, createProfile);
-router.post('/editProfile', IsVerifiedUser, editProfile);
+router.post('/editProfile', userIsLoggedIn, editProfile);
 router.get('/me', userIsLoggedIn, me);
 router.post('/register', register);
 router.get('/status', status);

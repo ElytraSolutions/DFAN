@@ -41,11 +41,13 @@ export default async function editProfile(req: Request, res: Response) {
         delete newProfile.createdAt;
         delete newProfile.updatedAt;
         delete newProfile.UserId;
+        delete newProfile.VerificationList;
         for (const key in newProfile) {
             if (key in req.body) {
                 newProfile[key] = req.body[key];
             }
         }
+        console.log(newProfile);
         const { value, error } = UserProfileSchema.validate(newProfile, {
             abortEarly: false,
         });
@@ -61,6 +63,16 @@ export default async function editProfile(req: Request, res: Response) {
             {
                 where: {
                     UserId: user.id,
+                },
+            },
+        );
+        await VerificationList.update(
+            {
+                status: 'pending',
+            },
+            {
+                where: {
+                    id: user.UserProfile.VerificationList?.id,
                 },
             },
         );
