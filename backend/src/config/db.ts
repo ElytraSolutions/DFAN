@@ -20,13 +20,29 @@ export default async function config() {
 
     // TODO: Remove this
     if (process.env.NODE_ENV !== 'production') {
-        await Users.findOrCreate({
+        const [admin, adminCreated] = await Users.findOrCreate({
             where: {
                 email: 'admin@gmail.com',
                 password: 'password',
                 role: 'Central Admin',
             },
         });
+        if (adminCreated) {
+            const profile = await admin.createUserProfile({
+                name: 'Central Admin 1',
+                gender: 'Male',
+                mobile: '1111111111',
+                currentAddress: 'Bagmati Pradesh',
+                permanentAddress: 'Nepal',
+                membershipFrom: 'Bagmati Pradesh',
+                employmentStatus: 'Unemployed',
+                employmentType: undefined,
+                NFAMembershipNumber: '111',
+                isLifeMember: false,
+                hasRenewed: false,
+            });
+            await profile.createVerificationList({ status: 'approved' });
+        }
         const [regionalAdmin1, rcreated1] = await Users.findOrCreate({
             where: {
                 email: 'rAdmin1@gmail.com',
@@ -90,7 +106,7 @@ async function bulkCreate(num: number) {
     const users = [];
     for (let i = 0; i < num; i++) {
         users.push({
-            email: `user${i}.gmail.com`,
+            email: `user${i}@gmail.com`,
             password: 'password',
         });
     }
