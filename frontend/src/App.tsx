@@ -5,7 +5,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import './App.css';
 import UserContext, { UserData } from '~/context/User';
-import AdminView from './pages/AdminView';
 import EditProfile from './pages/EditProfile';
 import Home from './pages/Home';
 import Lobby from '~/pages/Lobby';
@@ -121,14 +120,6 @@ const router = createBrowserRouter([
         element: (
             <CheckUser>
                 <MembershipRegionChart />
-            </CheckUser>
-        ),
-    },
-    {
-        path: '/adminOld',
-        element: (
-            <CheckUser>
-                <AdminView />
             </CheckUser>
         ),
     },
