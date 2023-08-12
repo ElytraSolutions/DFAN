@@ -55,10 +55,11 @@ const Lobby = () => {
     }
 
     return (
-        <>
+        <div className="flex flex-col h-screen green-bg overflow-scroll">
             <Navbar links={{ Home: '/' }} showUser={false} />
-            <div className="grid h-screen place-items-center green-bg overflow-hidden">
+            <div className="grid place-items-center grow">
                 <div className="flex flex-col items-center w-10/12 md:w-4/12">
+                    <img src={logo} alt="logo" className="w-7/12 mb-4" />
                     <form onSubmit={onSubmit} className="flex flex-col w-full">
                         <label
                             htmlFor="email"
@@ -84,7 +85,7 @@ const Lobby = () => {
                     </form>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
