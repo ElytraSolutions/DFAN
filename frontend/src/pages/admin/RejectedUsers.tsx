@@ -26,7 +26,7 @@ const RejectedUsers = () => {
         <div className="flex flex-row h-screen">
             <CustomSidebar />
             <div className="grow p-2 md:px-12 flex flex-col gap-4 pt-8 overflow-scroll">
-                <h1 className="text-2xl font-bold">Users</h1>
+                <h1 className="text-2xl font-bold">Rejected Users</h1>
                 <RegisteredUsersTable />
             </div>
         </div>
