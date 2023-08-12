@@ -111,7 +111,13 @@ export const UserProfileSchema = (States: string[], Countries: string[]) =>
             is: true,
             then: Joi.when('isLifeMember', {
                 is: false,
-                then: Joi.boolean().truthy('yes').falsy('no').required(),
+                then: Joi.boolean()
+                    .truthy('yes')
+                    .falsy('no')
+                    .required()
+                    .messages({
+                        ...selectMessages,
+                    }),
                 otherwise: null,
             }),
             otherwise: null,

@@ -4,12 +4,12 @@ import Joi from 'joi';
 import UserProfile from '../../models/UserProfile';
 import Users from '../../models/Users';
 
-const verifyUserSchema = Joi.object({
+const rejectUserSchema = Joi.object({
     email: Joi.string().required(),
 });
 
-export default async function verifyUser(req: Request, res: Response) {
-    const { value, error } = verifyUserSchema.validate(req.body);
+export default async function rejectUser(req: Request, res: Response) {
+    const { value, error } = rejectUserSchema.validate(req.body);
     if (error) {
         return res
             .status(400)
@@ -39,11 +39,11 @@ export default async function verifyUser(req: Request, res: Response) {
     if (status !== 'pending') {
         return res
             .status(400)
-            .json({ message: 'Profile is accepted or rejected' });
+            .json({ message: 'Profile is already accepted or rejected' });
     }
     await VerificationList.update(
         {
-            status: 'approved',
+            status: 'rejected',
         },
         {
             where: {
@@ -51,5 +51,5 @@ export default async function verifyUser(req: Request, res: Response) {
             },
         },
     );
-    return res.status(200).json({ message: 'User verified successfully' });
+    return res.status(200).json({ message: 'User has been rejected' });
 }

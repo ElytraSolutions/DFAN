@@ -7,6 +7,7 @@ import getInvitations from './getInvitations';
 import analytics from './analytics';
 import getUser from './getUser';
 import uninviteUser from './deleteInvitation';
+import rejectUser from './rejectUser';
 
 const checkAdmin: RequestHandler = (req, res, next) => {
     const currentUser = req.session.user;
@@ -30,6 +31,7 @@ router.get('/getUsers', checkAdmin, getUsers);
 router.post('/inviteUser', checkAdmin, inviteUser);
 router.post('/register', checkAdmin, register);
 router.delete('/inviteUser/:email', checkAdmin, uninviteUser);
+router.post('/rejectUser', checkAdmin, rejectUser);
 router.post('/verifyUser', checkAdmin, verifyUser);
 
 export default router;

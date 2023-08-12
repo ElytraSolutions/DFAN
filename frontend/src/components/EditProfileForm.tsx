@@ -30,14 +30,11 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
         handleSubmit,
         watch,
         setValue,
+        reset,
         formState: { errors },
     } = useForm<EditableUserData>({
         criteriaMode: 'all',
         resolver: joiResolver(UserProfileSchema(states, countries)),
-        defaultValues: {
-            permanentAddress: states[0],
-            currentAddress: countries[0],
-        },
     });
 
     useEffect(() => {
@@ -45,8 +42,8 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
             name: oldProfile?.name || '',
             gender: oldProfile?.gender || undefined,
             mobile: oldProfile?.mobile || '',
-            permanentAddress: oldProfile?.permanentAddress || undefined,
-            currentAddress: oldProfile?.currentAddress || undefined,
+            permanentAddress: oldProfile?.permanentAddress || states[0],
+            currentAddress: oldProfile?.currentAddress || countries[0],
             employmentStatus: oldProfile?.employmentStatus || undefined,
             employmentType: oldProfile?.employmentType || undefined,
             isNFA: oldProfile?.NFAMembershipNumber ? 'Yes' : 'No',
@@ -56,10 +53,11 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
             hasRenewed: oldProfile?.hasRenewed ? 'Yes' : 'No',
             avatar: null,
         };
-        for (const [key, value] of Object.entries(oldProfileData)) {
-            setValue(key as keyof EditableUserData, value);
-        }
-    }, [oldProfile, setValue]);
+        reset(oldProfileData);
+        // for (const [key, value] of Object.entries(oldProfileData)) {
+        //     setValue(key as keyof EditableUserData, value);
+        // }
+    }, [countries, oldProfile, setValue, states]);
 
     const employmentStatus = watch('employmentStatus');
     const employmentType = watch('employmentType');
@@ -392,7 +390,7 @@ export function SelectOptions({
             >
                 {values.map((v, i) => {
                     return (
-                        <option key={v} value={v} selected={i == 0}>
+                        <option key={v} value={v}>
                             {v}
                         </option>
                     );

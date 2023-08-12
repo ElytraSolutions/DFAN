@@ -81,6 +81,7 @@ const Navbar = ({ links }) => {
                                 <li
                                     className="mb-4 pl-2 lg:mb-0 lg:pl-2 lg:pr-2"
                                     onClick={() => setActive(link)}
+                                    key={link}
                                     data-te-nav-item-ref
                                 >
                                     <a
