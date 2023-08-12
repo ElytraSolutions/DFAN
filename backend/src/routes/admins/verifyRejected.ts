@@ -42,6 +42,7 @@ export default async function verifyRejectedUser(req: Request, res: Response) {
     await VerificationList.update(
         {
             status: 'approved',
+            message: null,
         },
         {
             where: {

@@ -20,7 +20,7 @@ class VerificationList extends Model<
 > {
     declare id: CreationOptional<string>;
     declare status: CreationOptional<'pending' | 'approved' | 'rejected'>;
-    declare message: CreationOptional<string>;
+    declare message: CreationOptional<string | null>;
 
     declare UserProfile?: NonAttribute<UserProfile>;
     declare getUserProfile: HasOneGetAssociationMixin<UserProfile>;
