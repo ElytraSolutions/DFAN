@@ -12,7 +12,9 @@ import UserContext from '~/context/User';
 import { UserProfileSchema } from '~/helpers/validateProfileData';
 import useStates from '~/hooks/useStates';
 import useCountries from '~/hooks/useCountries';
-import Logo from '../assets/logo.png';
+import Navbar from './Navbar';
+import { Link } from 'react-router-dom';
+import { BiArrowBack } from 'react-icons/bi';
 
 interface EditProfileProps {
     submitHandler: Parameters<
@@ -57,7 +59,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
         // for (const [key, value] of Object.entries(oldProfileData)) {
         //     setValue(key as keyof EditableUserData, value);
         // }
-    }, [countries, oldProfile, setValue, states]);
+    }, [countries, oldProfile, setValue, states, reset]);
 
     const employmentStatus = watch('employmentStatus');
     const employmentType = watch('employmentType');
@@ -89,28 +91,15 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
 
     return (
         <div className="flex-row text-white justify-center items-center h-fit min-h-screen pb-2 green-bg">
-            <div className="flex-row md:flex w-full flex-wrap items-center justify-center md:pt-5 px-3 font-semibold ">
-                <div className="flex justify-center ml-2">
-                    <img
-                        src={Logo}
-                        className="h-24 mt-3 mb-3 md:mr-7 md:mb-0 list-image-none "
-                        alt="DFAN"
-                    />
-                </div>
-                <div className=" text-center ml-2">
-                    <a
-                        className="text-lg md:text-3xl lg:text-4xl text-[#C8DADF] dark:text-neutral-200"
-                        href="#"
-                    >
-                        Democratic Foresters Association Nepal <br /> (DFAN)
-                    </a>
-                </div>
-            </div>
+            <Navbar links={{ Home: '/' }} />
             <form
                 onSubmit={handleSubmit(submitHandler)}
                 className="w-[90%] sm:w-[80%] md:w-[90%] lg:w-[90%] xl:w-[75%] 2xl:w-[65%] p-8 rounded-[30px] bg-black-rgba mx-auto my-8 text-white"
             >
                 <div className="flex flex-col justify-center p-8">
+                    <Link to="/profile">
+                        <BiArrowBack className="text-white text-3xl ml-2" />
+                    </Link>
                     <div className="flex flex-col md:flex-row-reverse justify-between border-b border-b-white mb-2 p-2">
                         <div className="flex flex-col justify-center items-center grow">
                             <ImageInput
@@ -118,7 +107,6 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
                                 register={register}
                             />
                         </div>
-
                         <div className="flex flex-col justify-center md:w-7/12 font-medium  text-md py-5">
                             <TextInput
                                 legend="Name:"
@@ -240,13 +228,19 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
                     </div>
                 </div>
                 {/* end of section */}
-                <div className="flex flex-col justify-center ">
+                <div className="flex flex-row justify-center items-center gap-8">
                     <button
                         type="submit"
-                        className="p-2 px-5 mx-auto text-lg rounded-[25px] bg-[#C8DADF] mb-4 text-black hover:bg-[#2A4A29] hover:text-gray-300 hover:outline"
+                        className="p-2 px-5 text-lg rounded-[25px] bg-[#C8DADF] mb-4 text-black hover:bg-[#2A4A29] hover:text-gray-300 hover:outline"
                     >
                         Submit
                     </button>
+                    <Link
+                        className="p-2 px-5 text-lg rounded-[25px] bg-[#C8DADF] mb-4 text-black hover:bg-[#2A4A29] hover:text-gray-300 hover:outline"
+                        to="/profile"
+                    >
+                        Cancel
+                    </Link>
                 </div>
             </form>
         </div>

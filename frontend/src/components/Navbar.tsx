@@ -1,37 +1,59 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Logo from '../assets/logo.png';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import NavbarUser from './NavbarUser';
+import { HashLink } from 'react-router-hash-link';
 
-const Navbar = ({ links }) => {
-    const navigate = useNavigate();
+interface INavbarProps {
+    activeLink?: string;
+    showUser?: boolean;
+    links: Record<string, string>;
+}
+const Navbar = ({ activeLink, links, showUser }: INavbarProps) => {
+    const location = useLocation();
     const [visible, setVisible] = useState(false);
-    const [active, setActive] = useState('Home');
+    const [active, setActive] = useState('');
     const toggleVisible = () => {
         setVisible((curValue) => !curValue);
     };
+    useEffect(() => {
+        if (activeLink) {
+            setActive(activeLink);
+        }
+    }, [activeLink]);
+    useEffect(() => {
+        if (!activeLink) {
+            const currentPath = location.pathname + location.hash;
+            const currentLink = Array.from(Object.keys(links)).find(
+                (link) => links[link] === currentPath,
+            );
+            setActive(currentLink || '');
+        }
+    }, [location.pathname, location.hash, links]);
     return (
         <nav
             className="sticky top-0 z-50 flex w-full flex-nowrap items-center justify-between bg-[#233F23] py-2 text-neutral-500 shadow-lg hover:text-neutral-700 focus:text-neutral-700  lg:flex-wrap lg:justify-start lg:py-4"
             data-te-navbar-ref
         >
             <div className="flex-row md:flex w-full flex-wrap items-center justify-between px-3">
-                <div className="flex justify-center ml-2">
-                    <img
-                        src={Logo}
-                        className="h-20 mb-3 md:mr-7 md:mb-0 list-image-none"
-                        alt="DFAN"
-                    />
-                </div>
                 <div className=" text-center ml-2">
                     <a
-                        className="text-xl text-[#e5e5e5] dark:text-neutral-200"
-                        href="#"
+                        className="text-xl text-[#e5e5e5] dark:text-neutral-200 flex flex-row items-center"
+                        href="/"
                     >
-                        Democratic Foresters Association Nepal (DFAN) <br />
-                        <span className="font-nirmala">
-                            प्रजातान्त्रिक वन प्राविधिक संघ, नेपाल
-                        </span>
+                        <div className="flex justify-center ml-2">
+                            <img
+                                src={Logo}
+                                className="h-20 mb-3 md:mr-7 md:mb-0 list-image-none"
+                                alt="DFAN"
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            Democratic Foresters Association Nepal (DFAN) <br />
+                            <span className="font-nirmala">
+                                प्रजातान्त्रिक वन प्राविधिक संघ, नेपाल
+                            </span>
+                        </div>
                     </a>
                 </div>
 
@@ -85,20 +107,22 @@ const Navbar = ({ links }) => {
                                     key={link}
                                     data-te-nav-item-ref
                                 >
-                                    <a
+                                    <HashLink
                                         className={`${
                                             active == link && 'active'
-                                        } p-0   transition duration-200  hover:ease-in-out focus:text-neutral-700 disabled:text-black/30 motion-reduce:transition-none text-neutral-200 hover:text-neutral-400 focus:text-neutral-400 lg:px-2 [&.active]:underline [&.active]:underline-offset-8 [&.active]:text-neutral-400`}
-                                        href={links[link]}
+                                        } p-0 transition duration-200  hover:ease-in-out disabled:text-black/30 motion-reduce:transition-none text-neutral-300 hover:text-white focus:text-neutral-400 lg:px-2 [&.active]:underline [&.active]:underline-offset-8 [&.active]:text-neutral-50`}
+                                        to={links[link]}
                                         data-te-nav-link-ref
                                     >
                                         {link}
-                                    </a>
+                                    </HashLink>
                                 </li>
                             ))}
-                            <li className="ml-2 mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-2 inline-flex lg:flex-row lg:items-center">
-                                <NavbarUser />
-                            </li>
+                            {showUser !== false && (
+                                <li className="ml-2 mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-2 inline-flex lg:flex-row lg:items-center">
+                                    <NavbarUser />
+                                </li>
+                            )}
                         </ul>
                     </div>
                 </div>

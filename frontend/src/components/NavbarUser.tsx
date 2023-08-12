@@ -24,7 +24,9 @@ function NavbarUser() {
                             userData?.UserProfile?.avatar || 'default.svg'
                         }`}
                         alt="Avatar"
-                        className="rounded-full w-12 h-12"
+                        className={`rounded-full w-12 h-12 ${
+                            !userData?.UserProfile?.avatar && 'invert-[0.8]'
+                        }`}
                     />
                 </Link>
                 <button

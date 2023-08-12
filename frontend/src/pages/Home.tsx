@@ -7,9 +7,11 @@ import Footer from '~/components/Footer';
 import carousel1 from '~/assets/carousel1.png';
 import carousel2 from '~/assets/carousel2.png';
 import carousel3 from '~/assets/carousel3.png';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const Home = () => {
+    const location = useLocation();
     const images = useMemo(
         () => [
             {
@@ -27,17 +29,56 @@ const Home = () => {
         ],
         [],
     );
-    const links = {
-        Home: '/#hero',
-        'About Us': '/#about',
-        'Contact Us': '/#contact',
-    };
+    const links = useMemo(() => {
+        return {
+            Home: '/#hero',
+            'About Us': '/#about',
+            'Contact Us': '/#contact',
+        };
+    }, []);
+
+    // Intersection observer to determine which link is active
+    const [active, setActive] = useState('');
+    const [intersections, setIntersections] = useState<Record<string, number>>(
+        {},
+    );
+    useEffect(() => {
+        const callback: IntersectionObserverCallback = (entries) => {
+            entries.forEach((entry) => {
+                const id = entry.target.id;
+                const value = entry.intersectionRatio;
+                setIntersections((prev) => ({
+                    ...prev,
+                    [id]: value,
+                }));
+            });
+        };
+        const observer = new IntersectionObserver(callback);
+        observer.observe(document.querySelector('#hero'));
+        observer.observe(document.querySelector('#about'));
+        observer.observe(document.querySelector('#contact'));
+    }, [links]);
+    useEffect(() => {
+        let max = 0;
+        let maxId = '';
+        Object.entries(intersections).forEach(([id, value]) => {
+            if (value > max) {
+                maxId = `/#${id}`;
+                max = value;
+            }
+        });
+        const newActive = Array.from(Object.keys(links)).find(
+            (link) => links[link] === maxId,
+        );
+        setActive(newActive || '');
+    }, [intersections, links]);
+
     return (
         <div className="w-screen h-screen z-50 bg-[#ECECEC] overflow-x-hidden overflow-scroll scroll-smooth">
-            <Navbar links={links} />
+            <Navbar links={links} activeLink={active} />
             <div
                 id="hero"
-                className="scroll-mt-[115px] relative h-[450px] w-full flex items-center text-center justify-center  "
+                className="scroll-mt-[115px] relative h-[500px] w-full flex items-center text-center justify-center  "
             >
                 <div className="relative flex-row w-full md:w-[55%] p-5">
                     <div className="text-base font-semibold">
