@@ -19,7 +19,7 @@ function CustomSidebar() {
         setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
     };
 
-    const activeTab = window.location.pathname.split('/')[2];
+    const activeTab = window.location.pathname.split('/').slice(-1)[0];
     const logoutHandler = () => {
         navigate('/logout');
     };
@@ -88,7 +88,7 @@ function CustomSidebar() {
                                     button: ({ active }) => {
                                         if (active) {
                                             return {
-                                                backgroundColor: '#F3F4F6',
+                                                backgroundColor: '#C1C4CA',
                                                 color: '#111827',
                                             };
                                         }
@@ -142,7 +142,7 @@ function CustomSidebar() {
                                         component={
                                             <Link to="/admin/rejections" />
                                         }
-                                        active={activeTab === 'users'}
+                                        active={activeTab === 'rejections'}
                                     >
                                         <BiUserX className="inline text-2xl mr-2" />
                                         <span>Rejected Users</span>
