@@ -8,10 +8,9 @@ import carousel1 from '~/assets/carousel1.png';
 import carousel2 from '~/assets/carousel2.png';
 import carousel3 from '~/assets/carousel3.png';
 import { useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import ScrollDownIcon from '~/components/ScrollDownIcon';
 
 const Home = () => {
-    const location = useLocation();
     const images = useMemo(
         () => [
             {
@@ -81,9 +80,9 @@ const Home = () => {
             <Navbar links={links} activeLink={active} />
             <div
                 id="hero"
-                className="scroll-mt-[90px] relative h-[900px] w-full flex items-center text-center justify-center  "
+                className="scroll-mt-[90px] relative h-[calc(100vh-100px)] w-full flex items-center text-center justify-center  "
             >
-                <div className="relative flex-row w-full md:w-[55%] p-5">
+                <div className="flex flex-col justify-center items-center w-full md:w-[55%] h-full p-5">
                     <div className="text-base font-semibold">
                         Welcome to the Democratic Foresters Association Nepal
                         (DFAN)
@@ -98,6 +97,9 @@ const Home = () => {
                     <button className="bg-[#63A964] hover:bg-[#233F23] text-white font-bold py-2 px-5 rounded-full opacity-80">
                         CONTACT US
                     </button>
+                </div>
+                <div className="absolute bottom-16">
+                    <ScrollDownIcon />
                 </div>
 
                 <img
