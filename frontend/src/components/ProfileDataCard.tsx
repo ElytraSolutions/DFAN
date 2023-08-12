@@ -58,10 +58,12 @@ function ProfileDataCard({ userData }) {
                 </div>
             </div>
             <div className="text-[#C8DADF] flex flex-col gap-0.5 mx-auto">
-                <p className="text-red-500 mb-6">
-                    Your profile has been rejected with message:
-                    {userProfile.VerificationList.message}
-                </p>
+                {userProfile.VerificationList.status === 'rejected' && (
+                    <p className="text-red-500 mb-6">
+                        Your profile has been rejected with message:
+                        {userProfile.VerificationList.message}
+                    </p>
+                )}
                 <p className="flex flex-col text-center md:flex-row">
                     <span className="font-medium text-md">Full Name:</span>
                     <span className="text-xl font-medium ml-1 text-field">

@@ -86,7 +86,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
         setValue('hasRenewed', null);
     }
     const isRejected =
-        userData.UserProfile.VerificationList.status === 'rejected';
+        userData.UserProfile?.VerificationList?.status === 'rejected';
     return (
         <div className="flex-row text-white justify-center items-center h-fit min-h-screen pb-2 green-bg">
             <Navbar links={{ Home: '/' }} />
