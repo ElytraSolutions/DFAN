@@ -53,7 +53,10 @@ const Home = () => {
                 }));
             });
         };
-        const observer = new IntersectionObserver(callback);
+        const observer = new IntersectionObserver(callback, {
+            rootMargin: '-80px 0px 0px 0px',
+            threshold: 0.25,
+        });
         observer.observe(document.querySelector('#hero'));
         observer.observe(document.querySelector('#about'));
         observer.observe(document.querySelector('#contact'));
@@ -78,7 +81,7 @@ const Home = () => {
             <Navbar links={links} activeLink={active} />
             <div
                 id="hero"
-                className="scroll-mt-[115px] relative h-[500px] w-full flex items-center text-center justify-center  "
+                className="scroll-mt-[90px] relative h-[900px] w-full flex items-center text-center justify-center  "
             >
                 <div className="relative flex-row w-full md:w-[55%] p-5">
                     <div className="text-base font-semibold">
@@ -107,7 +110,7 @@ const Home = () => {
                 />
             </div>
             {/* About us section */}
-            <div id="about" className="scroll-mt-[115px] bg-[#D5DFC8]">
+            <div id="about" className="scroll-mt-[90px] bg-[#D5DFC8]">
                 <div className="flex flex-col items-center justify-center">
                     <h1 className="text-4xl font-semibold text-center text-[#233F23] pt-12 pb-10 md:pt-20 md:pb-12 opacity-75">
                         ABOUT US
@@ -173,7 +176,10 @@ const Home = () => {
             <hr className="w-[80%] h-px mx-auto  bg-[#D5DFC8] border-0 rounded md:mt-10 md:mb-0 dark:bg-gray-700" />
 
             {/* Contact us section */}
-            <div className="relative flex-row items-center " id="contact">
+            <div
+                className="scroll-mt[90px] relative flex-row items-center "
+                id="contact"
+            >
                 <div className="flex flex-col items-center justify-center">
                     <h1 className="text-4xl font-semibold text-center text-[#233F23] pt-12 pb-10 md:pt-20 md:pb-12 opacity-75">
                         CONTACT US
