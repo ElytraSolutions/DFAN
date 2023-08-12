@@ -5,6 +5,7 @@ import {
     sanitizer,
 } from '../../validations/ValidateUserProfile';
 import UserProfile from '../../models/UserProfile';
+import VerificationList from '../../models/VerificationList';
 
 export default async function editProfile(req: Request, res: Response) {
     const email = req.session.user!.email;
@@ -15,6 +16,11 @@ export default async function editProfile(req: Request, res: Response) {
         include: [
             {
                 model: UserProfile,
+                include: [
+                    {
+                        model: VerificationList,
+                    },
+                ],
             },
         ],
     });
@@ -23,6 +29,11 @@ export default async function editProfile(req: Request, res: Response) {
         return res
             .status(400)
             .json({ user, message: 'User does not have a profile' });
+    }
+    if (user.UserProfile.VerificationList?.status !== 'approved') {
+        return res
+            .status(400)
+            .json({ message: 'User profile is not verified' });
     }
     try {
         const newProfile: any = { ...user.UserProfile.dataValues };

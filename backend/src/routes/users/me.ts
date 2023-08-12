@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Users from '../../models/Users';
 import UserProfile from '../../models/UserProfile';
+import VerificationList from '../../models/VerificationList';
 
 export default async function loggedInUserData(req: Request, res: Response) {
     const userData = await Users.findOne({
@@ -10,6 +11,7 @@ export default async function loggedInUserData(req: Request, res: Response) {
         include: [
             {
                 model: UserProfile,
+                include: [VerificationList],
             },
         ],
     });
