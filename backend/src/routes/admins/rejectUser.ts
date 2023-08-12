@@ -6,6 +6,7 @@ import Users from '../../models/Users';
 
 const rejectUserSchema = Joi.object({
     email: Joi.string().required(),
+    message: Joi.string().required(),
 });
 
 export default async function rejectUser(req: Request, res: Response) {
@@ -44,6 +45,7 @@ export default async function rejectUser(req: Request, res: Response) {
     await VerificationList.update(
         {
             status: 'rejected',
+            message: value.message,
         },
         {
             where: {

@@ -38,7 +38,9 @@ const PendingVerification = () => {
 
 const PendingVerificationTable = () => {
     const [rows, setRows] = useState([]);
-    const [openModal, setOpenModal] = useState(false);
+    const [openVerifyModal, setOpenVerifyModal] = useState(false);
+    const [openRejectModal, setOpenRejectModal] = useState(false);
+    const [rejectionMessage, setRejectionMessage] = useState('');
     const [selectedRowData, setSelectedRowData] = useState<any | null>(null);
 
     const refresh = async () => {
@@ -56,25 +58,27 @@ const PendingVerificationTable = () => {
         setRows(data.data);
     };
 
-    const closeModal = () => {
-        setOpenModal(false);
+    const closeVerifyModal = () => {
+        setOpenVerifyModal(false);
         setSelectedRowData(null);
     };
 
     const handleStatusChange = async (
         email: string,
         newStatus: 'verify' | 'reject',
+        message: string | undefined,
     ) => {
         const url =
             newStatus === 'verify'
                 ? '/api/admins/verifyUser'
                 : '/api/admins/rejectUser';
+        const body = newStatus === 'verify' ? { email } : { email, message };
         const resp = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email }),
+            body: JSON.stringify(body),
         });
         const data = await resp.json();
         if (!resp.ok) {
@@ -82,8 +86,13 @@ const PendingVerificationTable = () => {
         } else {
             toast.success(data.message);
         }
-        closeModal();
+        closeVerifyModal();
         await refresh();
+    };
+
+    const rejectButtonClickHandler = (rowData: any) => {
+        setOpenRejectModal(true);
+        setSelectedRowData(rowData);
     };
 
     const columns: GridColDef[] = [
@@ -130,6 +139,7 @@ const PendingVerificationTable = () => {
                                 await handleStatusChange(
                                     params.row.email,
                                     'verify',
+                                    undefined,
                                 );
                             }}
                             className="w-full flex justify-center"
@@ -143,10 +153,7 @@ const PendingVerificationTable = () => {
                         <button
                             onClick={async (e) => {
                                 e.stopPropagation();
-                                await handleStatusChange(
-                                    params.row.email,
-                                    'reject',
-                                );
+                                rejectButtonClickHandler(params.row);
                             }}
                             className="w-full flex justify-center"
                         >
@@ -168,7 +175,7 @@ const PendingVerificationTable = () => {
     const rowClickHandler: GridEventListener<'rowClick'> = (params) => {
         const AselectedRow = params.row;
         setSelectedRowData(AselectedRow);
-        setOpenModal(true);
+        setOpenVerifyModal(true);
     };
 
     return (
@@ -188,155 +195,243 @@ const PendingVerificationTable = () => {
                 checkboxSelection
                 disableRowSelectionOnClick
             />
-            <Dialog open={openModal} onClose={closeModal}>
-                <DialogTitle className="flex justify-center p-[50px] bg-[#555] font-bold text-white">
-                    Verify
-                </DialogTitle>
-                <DialogContent>
-                    <>
-                        {selectedRowData && (
-                            <div className="flex flex-col items-center p-3">
-                                {selectedRowData['UserProfile']['avatar'] !==
-                                    null && (
-                                    <>
-                                        <img
-                                            className="w-[10vw] rounded-[50px] pb-4"
-                                            src={`/api/avatars/${selectedRowData['UserProfile']['avatar']}`}
-                                            alt=""
-                                        />
-                                    </>
-                                )}
-                                {selectedRowData['UserProfile']['avatar'] ===
-                                    null && (
-                                    <>
-                                        <img
-                                            className="w-[10vw] pb-4"
-                                            src="https://static.vecteezy.com/system/resources/previews/002/318/271/non_2x/user-profile-icon-free-vector.jpg"
-                                            alt=""
-                                        />
-                                    </>
-                                )}
-                                <div className="w-[50vw]"></div>
-                                <p className="font-semibold ">
-                                    Name:{' '}
-                                    <span className="font-bold text-[#005500]">
-                                        {selectedRowData['UserProfile']['name']}
-                                    </span>
-                                </p>
-                                <p className="font-semibold ">
-                                    Life Member:{' '}
-                                    <span className="font-bold text-[#005500]">
-                                        {selectedRowData['UserProfile'][
-                                            'isLifeMember'
-                                        ]
-                                            ? 'Yes'
-                                            : 'No'}
-                                    </span>
-                                </p>
-                                <p className="font-semibold ">
-                                    NFA ID:{' '}
-                                    <span className="font-bold text-[#005500]">
-                                        {
-                                            selectedRowData['UserProfile'][
-                                                'NFAMembershipNumber'
-                                            ]
-                                        }
-                                    </span>
-                                </p>
-                                <p className="font-semibold ">
-                                    Email:{' '}
-                                    <span className="font-bold text-[#005500]">
-                                        {selectedRowData['email']}
-                                    </span>
-                                </p>
-                                <p className="font-semibold ">
-                                    Role:{' '}
-                                    <span className="font-bold text-[#005500]">
-                                        {selectedRowData['role']}
-                                    </span>
-                                </p>
-                                <p className="font-semibold ">
-                                    Membership From:{' '}
-                                    <span className="font-bold text-[#005500]">
-                                        {
-                                            selectedRowData['UserProfile'][
-                                                'membershipFrom'
-                                            ]
-                                        }
-                                    </span>
-                                </p>
-                                <p className="font-semibold ">
-                                    Gender:
-                                    <span className="font-bold text-[#005500]">
-                                        {
-                                            selectedRowData['UserProfile'][
-                                                'gender'
-                                            ]
-                                        }
-                                    </span>
-                                </p>
-                                <p className="font-semibold ">
-                                    Mobile Number:{' '}
-                                    <span className="font-bold text-[#005500]">
-                                        {
-                                            selectedRowData['UserProfile'][
-                                                'mobile'
-                                            ]
-                                        }
-                                    </span>
-                                </p>
-                                <p className="font-semibold ">
-                                    Current Address:{' '}
-                                    <span className="font-bold text-[#005500]">
-                                        {
-                                            selectedRowData['UserProfile'][
-                                                'currentAddress'
-                                            ]
-                                        }
-                                    </span>
-                                </p>
-                                <p className="font-semibold ">
-                                    Permanent Address:{' '}
-                                    <span className="font-bold text-[#005500]">
-                                        {
-                                            selectedRowData['UserProfile'][
-                                                'permanentAddress'
-                                            ]
-                                        }
-                                    </span>
-                                </p>
-                            </div>
-                        )}
-                    </>
-                    <hr />
-                    <div className="flex justify-center gap-[3vw] mx-auto my-5">
-                        <button
-                            className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#2A4A29] text-white font-medium md:mr-4 hover:bg-white hover:text-[#2A4A29] hover:font-bold hover:outline"
-                            onClick={async () =>
-                                await handleStatusChange(
-                                    selectedRowData?.email,
-                                    'verify',
-                                )
-                            }
-                        >
-                            Verify
-                        </button>
-                        <button
-                            className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#a22] text-white font-medium md:mr-4 hover:bg-white hover:text-[#a22] hover:font-bold hover:outline"
-                            onClick={async () =>
-                                await handleStatusChange(
-                                    selectedRowData?.email,
-                                    'reject',
-                                )
-                            }
-                        >
-                            Reject
-                        </button>
-                    </div>
-                </DialogContent>
-            </Dialog>
+            <VerifyModal
+                openModal={openVerifyModal}
+                closeModal={closeVerifyModal}
+                selectedRowData={selectedRowData}
+                handleStatusChange={handleStatusChange}
+            />
+            <RejectMessageModal
+                isOpen={openRejectModal}
+                onClose={() => {
+                    setOpenRejectModal(false);
+                    setSelectedRowData(null);
+                }}
+                message={rejectionMessage}
+                setMessage={setRejectionMessage}
+                selectedRowData={selectedRowData}
+                handleStatusChange={handleStatusChange}
+            />
         </Box>
     );
 };
+
+interface IVerifyModalProps {
+    openModal: boolean;
+    closeModal: () => void;
+    selectedRowData: any | null;
+    handleStatusChange: (
+        email: string,
+        newStatus: 'verify' | 'reject',
+        message: string | undefined,
+    ) => Promise<void>;
+}
+function VerifyModal({
+    openModal,
+    closeModal,
+    selectedRowData,
+    handleStatusChange,
+}: IVerifyModalProps) {
+    return (
+        <Dialog open={openModal} onClose={closeModal}>
+            <DialogTitle className="flex justify-center p-[50px] bg-[#555] font-bold text-white">
+                Verify
+            </DialogTitle>
+            <DialogContent>
+                <>
+                    {selectedRowData && (
+                        <div className="flex flex-col items-center p-3">
+                            {selectedRowData['UserProfile']['avatar'] !==
+                                null && (
+                                <>
+                                    <img
+                                        className="w-[10vw] rounded-[50px] pb-4"
+                                        src={`/api/avatars/${selectedRowData['UserProfile']['avatar']}`}
+                                        alt=""
+                                    />
+                                </>
+                            )}
+                            {selectedRowData['UserProfile']['avatar'] ===
+                                null && (
+                                <>
+                                    <img
+                                        className="w-[10vw] pb-4"
+                                        src="https://static.vecteezy.com/system/resources/previews/002/318/271/non_2x/user-profile-icon-free-vector.jpg"
+                                        alt=""
+                                    />
+                                </>
+                            )}
+                            <div className="w-[50vw]"></div>
+                            <p className="font-semibold ">
+                                Name:{' '}
+                                <span className="font-bold text-[#005500]">
+                                    {selectedRowData['UserProfile']['name']}
+                                </span>
+                            </p>
+                            <p className="font-semibold ">
+                                Life Member:{' '}
+                                <span className="font-bold text-[#005500]">
+                                    {selectedRowData['UserProfile'][
+                                        'isLifeMember'
+                                    ]
+                                        ? 'Yes'
+                                        : 'No'}
+                                </span>
+                            </p>
+                            <p className="font-semibold ">
+                                NFA ID:{' '}
+                                <span className="font-bold text-[#005500]">
+                                    {
+                                        selectedRowData['UserProfile'][
+                                            'NFAMembershipNumber'
+                                        ]
+                                    }
+                                </span>
+                            </p>
+                            <p className="font-semibold ">
+                                Email:{' '}
+                                <span className="font-bold text-[#005500]">
+                                    {selectedRowData['email']}
+                                </span>
+                            </p>
+                            <p className="font-semibold ">
+                                Role:{' '}
+                                <span className="font-bold text-[#005500]">
+                                    {selectedRowData['role']}
+                                </span>
+                            </p>
+                            <p className="font-semibold ">
+                                Membership From:{' '}
+                                <span className="font-bold text-[#005500]">
+                                    {
+                                        selectedRowData['UserProfile'][
+                                            'membershipFrom'
+                                        ]
+                                    }
+                                </span>
+                            </p>
+                            <p className="font-semibold ">
+                                Gender:
+                                <span className="font-bold text-[#005500]">
+                                    {selectedRowData['UserProfile']['gender']}
+                                </span>
+                            </p>
+                            <p className="font-semibold ">
+                                Mobile Number:{' '}
+                                <span className="font-bold text-[#005500]">
+                                    {selectedRowData['UserProfile']['mobile']}
+                                </span>
+                            </p>
+                            <p className="font-semibold ">
+                                Current Address:{' '}
+                                <span className="font-bold text-[#005500]">
+                                    {
+                                        selectedRowData['UserProfile'][
+                                            'currentAddress'
+                                        ]
+                                    }
+                                </span>
+                            </p>
+                            <p className="font-semibold ">
+                                Permanent Address:{' '}
+                                <span className="font-bold text-[#005500]">
+                                    {
+                                        selectedRowData['UserProfile'][
+                                            'permanentAddress'
+                                        ]
+                                    }
+                                </span>
+                            </p>
+                        </div>
+                    )}
+                </>
+                <hr />
+                <div className="flex justify-center gap-[3vw] mx-auto my-5">
+                    <button
+                        className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#2A4A29] text-white font-medium md:mr-4 hover:bg-white hover:text-[#2A4A29] hover:font-bold hover:outline"
+                        onClick={async () =>
+                            await handleStatusChange(
+                                selectedRowData?.email,
+                                'verify',
+                            )
+                        }
+                    >
+                        Verify
+                    </button>
+                    <button
+                        className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#a22] text-white font-medium md:mr-4 hover:bg-white hover:text-[#a22] hover:font-bold hover:outline"
+                        onClick={async () =>
+                            await handleStatusChange(
+                                selectedRowData?.email,
+                                'reject',
+                            )
+                        }
+                    >
+                        Reject
+                    </button>
+                </div>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
+interface IRejectMessageModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    selectedRowData: any | null;
+    handleStatusChange: (
+        email: string,
+        newStatus: 'verify' | 'reject',
+        message?: string | undefined,
+    ) => Promise<void>;
+}
+function RejectMessageModal({
+    isOpen,
+    onClose,
+    selectedRowData,
+    handleStatusChange,
+}: IRejectMessageModalProps) {
+    const [message, setMessage] = useState('');
+    return (
+        <Dialog open={isOpen} onClose={onClose}>
+            <DialogTitle className="flex justify-center p-[50px] bg-[#555] font-bold text-white">
+                Rejection Message
+            </DialogTitle>
+            <DialogContent className="mt-6">
+                <>
+                    <label className="font-semibold mt-4 pt-4">
+                        <span className="mt-2">Message:</span>
+                        <input
+                            className="w-full h-10 p-2 mb-4 border-2 border-[#005500] rounded-md"
+                            type="text"
+                            value={message}
+                            placeholder="Enter rejection message"
+                            onChange={(e) => setMessage(e.target.value)}
+                        />
+                    </label>
+                    <button
+                        className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#2A4A29] text-white font-medium md:mr-4 hover:bg-white hover:text-[#2A4A29] hover:font-bold hover:outline"
+                        onClick={async () => {
+                            await handleStatusChange(
+                                selectedRowData?.email,
+                                'reject',
+                                message,
+                            );
+                            onClose();
+                        }}
+                    >
+                        Reject User
+                    </button>
+                    <button
+                        className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#a22] text-white font-medium md:mr-4 hover:bg-white hover:text-[#a22] hover:font-bold hover:outline"
+                        onClick={onClose}
+                    >
+                        Cancel
+                    </button>
+                </>
+            </DialogContent>
+        </Dialog>
+    );
+}
 
 export default PendingVerification;

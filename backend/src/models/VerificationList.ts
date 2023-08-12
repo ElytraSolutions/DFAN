@@ -20,6 +20,7 @@ class VerificationList extends Model<
 > {
     declare id: CreationOptional<string>;
     declare status: CreationOptional<'pending' | 'approved' | 'rejected'>;
+    declare message: CreationOptional<string>;
 
     declare UserProfile?: NonAttribute<UserProfile>;
     declare getUserProfile: HasOneGetAssociationMixin<UserProfile>;
@@ -46,6 +47,11 @@ VerificationList.init(
             type: DataTypes.ENUM('pending', 'approved', 'rejected'),
             allowNull: false,
             defaultValue: 'pending',
+        },
+        message: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
         },
     },
     {

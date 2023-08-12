@@ -38,11 +38,6 @@ export default async function login(req: Request, res: Response) {
                     'Your profile is currently being reviewed for verification',
             });
         }
-        if (user?.UserProfile?.VerificationList?.status === 'rejected') {
-            return res
-                .status(400)
-                .json({ message: 'Your profile has been rejected' });
-        }
     }
     if (user && user.password === password) {
         const { password: _, ...data } = user.dataValues;

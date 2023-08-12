@@ -56,9 +56,6 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
             avatar: null,
         };
         reset(oldProfileData);
-        // for (const [key, value] of Object.entries(oldProfileData)) {
-        //     setValue(key as keyof EditableUserData, value);
-        // }
     }, [countries, oldProfile, setValue, states, reset]);
 
     const employmentStatus = watch('employmentStatus');
@@ -88,7 +85,8 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
     if (isNFA === 'Yes' && isLifeMember === 'Yes' && hasRenewed) {
         setValue('hasRenewed', null);
     }
-
+    const isRejected =
+        userData.UserProfile.VerificationList.status === 'rejected';
     return (
         <div className="flex-row text-white justify-center items-center h-fit min-h-screen pb-2 green-bg">
             <Navbar links={{ Home: '/' }} />
@@ -108,6 +106,15 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
                             />
                         </div>
                         <div className="flex flex-col justify-center md:w-7/12 font-medium  text-md py-5">
+                            {isRejected && (
+                                <p className="text-red-500">
+                                    Your profile has been rejected with message:{' '}
+                                    {
+                                        userData.UserProfile.VerificationList
+                                            .message
+                                    }
+                                </p>
+                            )}
                             <TextInput
                                 legend="Name:"
                                 name="name"

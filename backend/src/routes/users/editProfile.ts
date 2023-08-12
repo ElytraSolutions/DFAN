@@ -30,7 +30,7 @@ export default async function editProfile(req: Request, res: Response) {
             .status(400)
             .json({ user, message: 'User does not have a profile' });
     }
-    if (user.UserProfile.VerificationList?.status !== 'approved') {
+    if (user.UserProfile.VerificationList?.status === 'pending') {
         return res
             .status(400)
             .json({ message: 'User profile is not verified' });

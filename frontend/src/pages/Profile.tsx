@@ -21,8 +21,7 @@ const Profile = () => {
     }
     const isAdmin =
         ['Central Admin', 'Regional Admin'].indexOf(userData.role) > -1;
-    const isVerified = userProfile.VerificationList.status === 'approved';
-    console.log(isVerified);
+    const isPending = userProfile.VerificationList.status === 'pending';
     return (
         <div className="green-bg h-screen  overflow-y-scroll ">
             <Navbar links={{ Home: '/' }} />
@@ -34,7 +33,7 @@ const Profile = () => {
                     <Link
                         to="/editProfile"
                         className={`${
-                            !isVerified &&
+                            isPending &&
                             'opacity-50 cursor-not-allowed pointer-events-none'
                         } inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-gray-300 text-[#2A4A29] font-medium md:mr-4 hover:bg-[#2A4A29] hover:text-gray-300 hover:outline`}
                     >

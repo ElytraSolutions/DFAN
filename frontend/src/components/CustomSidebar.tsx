@@ -19,6 +19,9 @@ function CustomSidebar() {
     };
 
     const activeTab = window.location.pathname.split('/')[2];
+    const logoutHandler = () => {
+        navigate('/logout');
+    };
     return (
         <>
             {!isSidebarOpen && (
@@ -32,7 +35,7 @@ function CustomSidebar() {
                         </button>
                         <button
                             className="mx-2 p-2 text-[24px] text-xl font-bold hover:text-[#00aa00] transition-colors"
-                            onClick={() => navigate('/logout')}
+                            onClick={logoutHandler}
                         >
                             <RiLogoutBoxLine className="inline text-2xl mr-2" />
                         </button>
@@ -161,7 +164,7 @@ function CustomSidebar() {
                                 <div className="grow"></div>
                                 <div className="mb-8">
                                     <MenuItem>
-                                        <button className="">
+                                        <button onClick={logoutHandler}>
                                             <RiLogoutBoxLine className="inline text-2xl mr-2" />
                                             <span>Logout</span>
                                         </button>
