@@ -10,6 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import UserContext from '~/context/User';
 import CustomSidebar from '~/components/CustomSidebar';
+import { AiOutlineClose } from 'react-icons/ai';
 
 const RegisteredUsers = () => {
     const { userData } = useContext(UserContext);
@@ -116,6 +117,10 @@ const RegisteredUsersTable = () => {
             <Dialog open={openModal} onClose={closeModal}>
                 <DialogTitle className="flex justify-center p-[50px] bg-[#555] font-bold text-white">
                     Details
+                    <AiOutlineClose
+                        className="absolute right-3 top-5 cursor-pointer text-2xl"
+                        onClick={closeModal}
+                    />
                 </DialogTitle>
                 <DialogContent>
                     <>
