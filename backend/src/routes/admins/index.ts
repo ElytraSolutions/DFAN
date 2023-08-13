@@ -1,4 +1,5 @@
-import { RequestHandler, Router } from 'express';
+import { Router } from 'express';
+import addAdmin from './add';
 import getUsers from './getUsers';
 import inviteUser from './inviteUser';
 import register from './register';
@@ -9,22 +10,12 @@ import getUser from './getUser';
 import uninviteUser from './deleteInvitation';
 import rejectUser from './rejectUser';
 import verifyRejectedUser from './verifyRejected';
-
-const checkAdmin: RequestHandler = (req, res, next) => {
-    const currentUser = req.session.user;
-    if (!currentUser) {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
-    const isAdmin =
-        ['Central Admin', 'Regional Admin'].indexOf(currentUser.role) !== -1;
-    if (!isAdmin) {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
-    return next();
-};
+import { checkAdmin } from '../../middleware/checkAdmin';
+import checkCentralAdmin from '../../middleware/checkCentralAdmin';
 
 const router = Router();
 
+router.get('/add', checkCentralAdmin, addAdmin);
 router.get('/analytics', checkAdmin, analytics);
 router.get('/getInvitations', checkAdmin, getInvitations);
 router.get('/getUser/:id', checkAdmin, getUser);

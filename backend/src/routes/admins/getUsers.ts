@@ -27,6 +27,30 @@ export default async function getUsers(req: Request, res: Response) {
         const filtersQuery = req.query.filters as string;
         const filters = filtersQuery ? JSON.parse(filtersQuery) : {};
 
+        const usersFilter: any = {};
+        if (filters.id) {
+            usersFilter.id = filters.id;
+            delete filters.id;
+        }
+        if (filters.email) {
+            usersFilter.email = {
+                [Op.like]: `%${filters.email}%`,
+            };
+            delete filters.email;
+        }
+        if (filters.id) {
+            usersFilter.id = filters.id;
+            delete filters.id;
+        }
+        if (filters.role) {
+            usersFilter.role = filters.role;
+            delete filters.role;
+        }
+        if (filters.region) {
+            usersFilter.region = filters.region;
+            delete filters.region;
+        }
+
         const isRegionalAdmin = req.session?.user?.role === 'Regional Admin';
         if (isRegionalAdmin) {
             const regionalUserData = await Users.findOne({
@@ -43,20 +67,8 @@ export default async function getUsers(req: Request, res: Response) {
                     .status(400)
                     .json({ message: 'User profile is not initialized' });
             }
-            filters.membershipFrom =
-                regionalUserData.UserProfile.membershipFrom;
-        }
-
-        const usersFilter: any = {};
-        if (filters.email) {
-            usersFilter.email = {
-                [Op.like]: `%${filters.email}%`,
-            };
-            delete filters.email;
-        }
-        if (filters.id) {
-            usersFilter.id = filters.id;
-            delete filters.id;
+            filters.membershipFrom = regionalUserData.region;
+            usersFilter.region = [regionalUserData.region, null];
         }
 
         const verified = req.query.verified as string;
@@ -84,7 +96,9 @@ export default async function getUsers(req: Request, res: Response) {
                     where: filters,
                 },
             ],
-            attributes: ['id', 'email', 'role'],
+            attributes: {
+                exclude: ['password'],
+            },
         });
         return res.json({ data: rows, count });
     } catch (err) {
