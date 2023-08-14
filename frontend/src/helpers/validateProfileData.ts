@@ -122,9 +122,13 @@ export const UserProfileSchema = (States: string[], Countries: string[]) =>
             }),
             otherwise: null,
         }),
-        avatar: Joi.any().required().messages({
-            ...requiredStringMessages,
-        }),
+        avatar: Joi.any()
+            .required()
+            .invalid(null)
+            .messages({
+                ...requiredStringMessages,
+                'any.invalid': 'This field is required',
+            }),
     });
 
 export function sanitizer(obj: Record<string, any>) {

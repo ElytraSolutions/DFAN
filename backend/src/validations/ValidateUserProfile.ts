@@ -99,7 +99,6 @@ export const UserProfileSchema = Joi.object({
         }),
         otherwise: null,
     }),
-    avatar: Joi.any().optional(),
 });
 
 export function sanitizer(obj: Record<string, any>) {

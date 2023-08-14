@@ -69,7 +69,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
     let avatarURL: string = oldProfile?.avatar
         ? `/api/avatars/${oldProfile.avatar}`
         : '';
-    if (avatar) {
+    if (avatar && !avatarURL) {
         avatarURL = URL.createObjectURL(avatar[0]);
     }
 
@@ -103,6 +103,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
                             <ImageInput
                                 avatar={avatarURL}
                                 register={register}
+                                errors={errors}
                             />
                         </div>
                         <div className="flex flex-col justify-center md:w-7/12 font-medium  text-md py-5">
@@ -254,7 +255,7 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
     );
 };
 
-export function ImageInput({ avatar, register }) {
+export function ImageInput({ avatar, register, errors }) {
     return (
         <div className="flex items-center justify-center">
             <label className="relative cursor-pointer">
@@ -264,6 +265,7 @@ export function ImageInput({ avatar, register }) {
                     accept="image/*"
                     {...register('avatar')}
                 />
+
                 <div className="w-36 h-36 rounded-full overflow-hidden border-2 border-gray-300">
                     {avatar ? (
                         <img
@@ -280,6 +282,11 @@ export function ImageInput({ avatar, register }) {
                         </div>
                     )}
                 </div>
+                {errors.avatar && (
+                    <span className="text-red-400 text-sm">
+                        {errors.avatar?.message}
+                    </span>
+                )}
             </label>
         </div>
     );
