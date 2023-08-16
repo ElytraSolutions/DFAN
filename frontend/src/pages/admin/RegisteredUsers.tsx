@@ -121,16 +121,19 @@ const RegisteredUsersTable = () => {
             <UserDataDialog
                 selectedRowData={selectedRowData}
                 isOpen={isModalOpen}
-                onClose={closeModal}
+                closeModal={closeModal}
                 refresh={refresh}
             />
         </Box>
     );
 };
 
-function UserDataDialog({ selectedRowData, isOpen, onClose, refresh }) {
+function UserDataDialog({ selectedRowData, isOpen, closeModal, refresh }) {
     const [isEditing, setIsEditing] = useState(false);
-    console.log('srd', selectedRowData);
+    const onClose = () => {
+        setIsEditing(false);
+        closeModal();
+    };
     const onSubmit: Parameters<
         UseFormHandleSubmit<EditableUserData, undefined>
     >[0] = async (data) => {
@@ -166,7 +169,6 @@ function UserDataDialog({ selectedRowData, isOpen, onClose, refresh }) {
             }
             toast.success('Profile updated successfully');
             await refresh();
-            setIsEditing(false);
             onClose();
         } catch (err) {
             console.error(err);
@@ -199,7 +201,6 @@ function UserDataDialog({ selectedRowData, isOpen, onClose, refresh }) {
                             submitHandler={onSubmit}
                             includePicture={true}
                             onCancel={() => {
-                                setIsEditing(false);
                                 onClose();
                             }}
                         />

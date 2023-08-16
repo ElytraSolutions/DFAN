@@ -13,6 +13,9 @@ import CustomSidebar from '~/components/CustomSidebar';
 import { Tooltip } from '@mui/material';
 import { MdDeleteForever } from 'react-icons/md';
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
+import { UseFormHandleSubmit } from 'react-hook-form';
+import { EditableUserData } from '~/types/ProfileData';
+import EditProfileForm from '~/components/EditProfileForm';
 
 const PendingVerification = () => {
     const { userData } = useContext(UserContext);
@@ -199,6 +202,7 @@ const PendingVerificationTable = () => {
                 closeModal={closeVerifyModal}
                 selectedRowData={selectedRowData}
                 handleStatusChange={handleStatusChange}
+                refresh={refresh}
             />
             <RejectMessageModal
                 isOpen={openRejectModal}
@@ -222,175 +226,262 @@ interface IVerifyModalProps {
         newStatus: 'verify' | 'reject',
         message: string | undefined,
     ) => Promise<void>;
+    refresh: () => Promise<void>;
 }
 function VerifyModal({
     openModal,
     closeModal,
     selectedRowData,
     handleStatusChange,
+    refresh,
 }: IVerifyModalProps) {
     const [message, setMessage] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
+    const onClose = () => {
+        setMessage('');
+        setIsEditing(false);
+        closeModal();
+    };
+    const onSubmit: Parameters<
+        UseFormHandleSubmit<EditableUserData, undefined>
+    >[0] = async (data) => {
+        try {
+            const { avatar, ...rest } = data;
+            if (avatar) {
+                const formData = new FormData();
+                formData.append('picture', avatar[0]);
+                const response = await fetch('/api/users/updatePicture', {
+                    method: 'POST',
+                    body: formData,
+                });
+                const responseData = await response.json();
+                if (!response.ok) {
+                    toast.error(responseData.message);
+                    return;
+                }
+            }
+            const resp = await fetch(
+                '/api/admins/editUser/' + selectedRowData.id,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(rest),
+                },
+            );
+            const respData = await resp.json();
+            if (!resp.ok) {
+                toast.error(respData.message);
+                return;
+            }
+            toast.success('Profile updated successfully');
+            await refresh();
+            onClose();
+        } catch (err) {
+            console.error(err);
+            toast.error('Something went wrong');
+        }
+    };
     return (
-        <Dialog open={openModal} onClose={closeModal}>
+        <Dialog
+            className={`${isEditing && 'w-[95vw] md:w-[80vw]} mx-auto my-8'}`}
+            open={openModal}
+            onClose={onClose}
+            fullScreen={isEditing}
+        >
             <DialogTitle className="flex justify-center p-[50px] bg-[#555] font-bold text-white">
                 Verify
                 <AiOutlineClose
                     className="absolute right-3 top-5 cursor-pointer text-2xl"
-                    onClick={closeModal}
+                    onClick={onClose}
                 />
             </DialogTitle>
             <DialogContent>
                 <>
-                    {selectedRowData && (
+                    {isEditing && (
                         <div className="flex flex-col items-center p-3">
-                            {selectedRowData['UserProfile']['avatar'] !==
-                                null && (
-                                <>
-                                    <img
-                                        className="w-[10vw] rounded-[50px] pb-4"
-                                        src={`/api/avatars/${selectedRowData['UserProfile']['avatar']}`}
-                                        alt=""
-                                    />
-                                </>
-                            )}
-                            {selectedRowData['UserProfile']['avatar'] ===
-                                null && (
-                                <>
-                                    <img
-                                        className="w-[10vw] pb-4"
-                                        src="https://static.vecteezy.com/system/resources/previews/002/318/271/non_2x/user-profile-icon-free-vector.jpg"
-                                        alt=""
-                                    />
-                                </>
-                            )}
-                            <div className="w-[50vw]"></div>
-                            <p className="font-semibold ">
-                                Name:{' '}
-                                <span className="font-bold text-[#005500]">
-                                    {selectedRowData['UserProfile']['name']}
-                                </span>
-                            </p>
-                            <p className="font-semibold ">
-                                Life Member:{' '}
-                                <span className="font-bold text-[#005500]">
-                                    {selectedRowData['UserProfile'][
-                                        'isLifeMember'
-                                    ]
-                                        ? 'Yes'
-                                        : 'No'}
-                                </span>
-                            </p>
-                            <p className="font-semibold ">
-                                NFA ID:{' '}
-                                <span className="font-bold text-[#005500]">
-                                    {
-                                        selectedRowData['UserProfile'][
-                                            'NFAMembershipNumber'
-                                        ]
-                                    }
-                                </span>
-                            </p>
-                            <p className="font-semibold ">
-                                Email:{' '}
-                                <span className="font-bold text-[#005500]">
-                                    {selectedRowData['email']}
-                                </span>
-                            </p>
-                            <p className="font-semibold ">
-                                Role:{' '}
-                                <span className="font-bold text-[#005500]">
-                                    {selectedRowData['role']}
-                                </span>
-                            </p>
-                            <p className="font-semibold ">
-                                Membership From:{' '}
-                                <span className="font-bold text-[#005500]">
-                                    {
-                                        selectedRowData['UserProfile'][
-                                            'membershipFrom'
-                                        ]
-                                    }
-                                </span>
-                            </p>
-                            <p className="font-semibold ">
-                                Gender:
-                                <span className="font-bold text-[#005500]">
-                                    {selectedRowData['UserProfile']['gender']}
-                                </span>
-                            </p>
-                            <p className="font-semibold ">
-                                Mobile Number:{' '}
-                                <span className="font-bold text-[#005500]">
-                                    {selectedRowData['UserProfile']['mobile']}
-                                </span>
-                            </p>
-                            <p className="font-semibold ">
-                                Current Address:{' '}
-                                <span className="font-bold text-[#005500]">
-                                    {
-                                        selectedRowData['UserProfile'][
-                                            'currentAddress'
-                                        ]
-                                    }
-                                </span>
-                            </p>
-                            <p className="font-semibold ">
-                                Permanent Address:{' '}
-                                <span className="font-bold text-[#005500]">
-                                    {
-                                        selectedRowData['UserProfile'][
-                                            'permanentAddress'
-                                        ]
-                                    }
-                                </span>
-                            </p>
+                            <EditProfileForm
+                                oldProfile={
+                                    selectedRowData &&
+                                    selectedRowData['UserProfile']
+                                }
+                                isNew={true}
+                                submitHandler={onSubmit}
+                                includePicture={true}
+                                onCancel={onClose}
+                            />
                         </div>
                     )}
+                    {!isEditing && selectedRowData && (
+                        <>
+                            <div className="flex flex-col items-center p-3">
+                                {selectedRowData['UserProfile']['avatar'] !==
+                                    null && (
+                                    <>
+                                        <img
+                                            className="w-[10vw] rounded-[50px] pb-4"
+                                            src={`/api/avatars/${selectedRowData['UserProfile']['avatar']}`}
+                                            alt=""
+                                        />
+                                    </>
+                                )}
+                                {selectedRowData['UserProfile']['avatar'] ===
+                                    null && (
+                                    <>
+                                        <img
+                                            className="w-[10vw] pb-4"
+                                            src="https://static.vecteezy.com/system/resources/previews/002/318/271/non_2x/user-profile-icon-free-vector.jpg"
+                                            alt=""
+                                        />
+                                    </>
+                                )}
+                                <div className="w-[50vw]"></div>
+                                <p className="font-semibold ">
+                                    Name:{' '}
+                                    <span className="font-bold text-[#005500]">
+                                        {selectedRowData['UserProfile']['name']}
+                                    </span>
+                                </p>
+                                <p className="font-semibold ">
+                                    Life Member:{' '}
+                                    <span className="font-bold text-[#005500]">
+                                        {selectedRowData['UserProfile'][
+                                            'isLifeMember'
+                                        ]
+                                            ? 'Yes'
+                                            : 'No'}
+                                    </span>
+                                </p>
+                                <p className="font-semibold ">
+                                    NFA ID:{' '}
+                                    <span className="font-bold text-[#005500]">
+                                        {
+                                            selectedRowData['UserProfile'][
+                                                'NFAMembershipNumber'
+                                            ]
+                                        }
+                                    </span>
+                                </p>
+                                <p className="font-semibold ">
+                                    Email:{' '}
+                                    <span className="font-bold text-[#005500]">
+                                        {selectedRowData['email']}
+                                    </span>
+                                </p>
+                                <p className="font-semibold ">
+                                    Role:{' '}
+                                    <span className="font-bold text-[#005500]">
+                                        {selectedRowData['role']}
+                                    </span>
+                                </p>
+                                <p className="font-semibold ">
+                                    Membership From:{' '}
+                                    <span className="font-bold text-[#005500]">
+                                        {
+                                            selectedRowData['UserProfile'][
+                                                'membershipFrom'
+                                            ]
+                                        }
+                                    </span>
+                                </p>
+                                <p className="font-semibold ">
+                                    Gender:
+                                    <span className="font-bold text-[#005500]">
+                                        {
+                                            selectedRowData['UserProfile'][
+                                                'gender'
+                                            ]
+                                        }
+                                    </span>
+                                </p>
+                                <p className="font-semibold ">
+                                    Mobile Number:{' '}
+                                    <span className="font-bold text-[#005500]">
+                                        {
+                                            selectedRowData['UserProfile'][
+                                                'mobile'
+                                            ]
+                                        }
+                                    </span>
+                                </p>
+                                <p className="font-semibold ">
+                                    Current Address:{' '}
+                                    <span className="font-bold text-[#005500]">
+                                        {
+                                            selectedRowData['UserProfile'][
+                                                'currentAddress'
+                                            ]
+                                        }
+                                    </span>
+                                </p>
+                                <p className="font-semibold ">
+                                    Permanent Address:{' '}
+                                    <span className="font-bold text-[#005500]">
+                                        {
+                                            selectedRowData['UserProfile'][
+                                                'permanentAddress'
+                                            ]
+                                        }
+                                    </span>
+                                </p>
+                            </div>
+                            <hr />
+                            <label className="font-semibold mt-4 pt-4">
+                                <span className="mt-2">Message:</span>
+                                <input
+                                    className="w-full h-10 p-2 mb-4 border-2 border-[#005500] rounded-md"
+                                    type="text"
+                                    value={message}
+                                    placeholder="Enter rejection message"
+                                    onChange={(e) => setMessage(e.target.value)}
+                                />
+                            </label>
+                            <div className="flex justify-center gap-[3vw] mx-auto my-5">
+                                <button
+                                    className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#2A4A29] text-white font-medium md:mr-4 hover:bg-white hover:text-[#2A4A29] hover:font-bold hover:outline"
+                                    onClick={async () => {
+                                        setIsEditing(true);
+                                    }}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#2A4A29] text-white font-medium md:mr-4 hover:bg-white hover:text-[#2A4A29] hover:font-bold hover:outline"
+                                    onClick={async () => {
+                                        await handleStatusChange(
+                                            selectedRowData?.email,
+                                            'verify',
+                                            undefined,
+                                        );
+                                        onClose();
+                                    }}
+                                >
+                                    Verify
+                                </button>
+                                <button
+                                    className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#a22] text-white font-medium md:mr-4 hover:bg-white hover:text-[#a22] hover:font-bold hover:outline"
+                                    onClick={async () => {
+                                        if (!message.trim()) {
+                                            toast.error(
+                                                'Please enter a message',
+                                            );
+                                            return;
+                                        }
+                                        await handleStatusChange(
+                                            selectedRowData?.email,
+                                            'reject',
+                                            message,
+                                        );
+                                        onClose();
+                                    }}
+                                >
+                                    Reject
+                                </button>
+                            </div>
+                        </>
+                    )}
                 </>
-                <hr />
-                <label className="font-semibold mt-4 pt-4">
-                    <span className="mt-2">Message:</span>
-                    <input
-                        className="w-full h-10 p-2 mb-4 border-2 border-[#005500] rounded-md"
-                        type="text"
-                        value={message}
-                        placeholder="Enter rejection message"
-                        onChange={(e) => setMessage(e.target.value)}
-                    />
-                </label>
-                <div className="flex justify-center gap-[3vw] mx-auto my-5">
-                    <button
-                        className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#2A4A29] text-white font-medium md:mr-4 hover:bg-white hover:text-[#2A4A29] hover:font-bold hover:outline"
-                        onClick={async () => {
-                            await handleStatusChange(
-                                selectedRowData?.email,
-                                'verify',
-                                undefined,
-                            );
-                            closeModal();
-                        }}
-                    >
-                        Verify
-                    </button>
-                    <button
-                        className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#a22] text-white font-medium md:mr-4 hover:bg-white hover:text-[#a22] hover:font-bold hover:outline"
-                        onClick={async () => {
-                            if (!message.trim()) {
-                                toast.error('Please enter a message');
-                                return;
-                            }
-                            await handleStatusChange(
-                                selectedRowData?.email,
-                                'reject',
-                                message,
-                            );
-                            closeModal();
-                            setMessage('');
-                        }}
-                    >
-                        Reject
-                    </button>
-                </div>
             </DialogContent>
         </Dialog>
     );
