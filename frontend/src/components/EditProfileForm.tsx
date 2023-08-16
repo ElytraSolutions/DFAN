@@ -17,15 +17,23 @@ import { Link } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
 
 interface EditProfileProps {
+    isNew: boolean;
     submitHandler: Parameters<
         UseFormHandleSubmit<EditableUserData, undefined>
     >[0];
+    oldProfile: any;
+    includePicture: boolean;
+    onCancel: () => void;
 }
-const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
-    const { userData } = useContext(UserContext);
+const EditProfileForm = ({
+    submitHandler,
+    isNew,
+    oldProfile,
+    includePicture,
+    onCancel,
+}: EditProfileProps) => {
     const states = useStates();
     const countries = useCountries();
-    const oldProfile = useMemo(() => userData.UserProfile ?? {}, [userData]);
 
     const {
         register,
@@ -35,20 +43,28 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
         reset,
         formState: { errors },
     } = useForm<EditableUserData>({
-        criteriaMode: 'all',
         resolver: joiResolver(UserProfileSchema(states, countries)),
     });
 
     useEffect(() => {
+        let isNFA;
+        if (
+            oldProfile?.NFAMembershipNumber == undefined ||
+            oldProfile?.NFAMembershipNumber === null
+        ) {
+            isNFA = undefined;
+        } else {
+            isNFA = oldProfile.NFAMembershipNumber ? 'Yes' : 'No';
+        }
         const oldProfileData = {
             name: oldProfile?.name || '',
-            gender: oldProfile?.gender || undefined,
+            gender: oldProfile?.gender || '',
             mobile: oldProfile?.mobile || '',
-            permanentAddress: oldProfile?.permanentAddress || states[0],
-            currentAddress: oldProfile?.currentAddress || countries[0],
+            permanentAddress: oldProfile?.permanentAddress || undefined,
+            currentAddress: oldProfile?.currentAddress || undefined,
             employmentStatus: oldProfile?.employmentStatus || undefined,
             employmentType: oldProfile?.employmentType || undefined,
-            isNFA: oldProfile?.NFAMembershipNumber ? 'Yes' : 'No',
+            isNFA: isNFA,
             membershipFrom: oldProfile?.membershipFrom || undefined,
             NFAMembershipNumber: oldProfile?.NFAMembershipNumber || undefined,
             isLifeMember: oldProfile?.isLifeMember ? 'Yes' : 'No',
@@ -85,20 +101,49 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
     if (isNFA === 'Yes' && isLifeMember === 'Yes' && hasRenewed) {
         setValue('hasRenewed', null);
     }
-    const isRejected =
-        userData.UserProfile?.VerificationList?.status === 'rejected';
+    const isRejected = oldProfile?.VerificationList?.status === 'rejected';
     return (
-        <div className="flex-row text-white justify-center items-center h-fit min-h-screen pb-2 green-bg">
-            <Navbar links={{ Home: '/' }} />
-            <form
-                onSubmit={handleSubmit(submitHandler)}
-                className="w-[90%] sm:w-[80%] md:w-[90%] lg:w-[90%] xl:w-[75%] 2xl:w-[65%] p-8 rounded-[30px] bg-black-rgba mx-auto my-8 text-white"
-            >
-                <div className="flex flex-col justify-center p-8">
-                    <Link to="/profile">
-                        <BiArrowBack className="text-white text-3xl ml-2" />
-                    </Link>
-                    <div className="flex flex-col md:flex-row-reverse justify-between border-b border-b-white mb-2 p-2">
+        <form onSubmit={handleSubmit(submitHandler)} className="w-full">
+            <div className="flex flex-col justify-center">
+                <button onClick={onCancel}>
+                    <BiArrowBack className="text-3xl ml-2" />
+                </button>
+                <div className="flex flex-col md:flex-row justify-between border-b border-b-white mb-2 p-2">
+                    <div className="flex flex-col justify-center md:w-7/12 font-medium  text-md py-5">
+                        {isRejected && (
+                            <p className="text-red-500">
+                                Your profile has been rejected with message:{' '}
+                                {oldProfile.VerificationList.message}
+                            </p>
+                        )}
+                        <TextInput
+                            legend="Name:"
+                            name="name"
+                            type="text"
+                            register={register}
+                            disabled={false}
+                            required={true}
+                            errors={errors}
+                        />
+                        <RadioOptions
+                            legend="Gender"
+                            values={['Male', 'Female', 'Other']}
+                            name="gender"
+                            register={register}
+                            disabled={false}
+                            errors={errors}
+                        />
+                        <TextInput
+                            legend="Mobile Number:"
+                            name="mobile"
+                            type="number"
+                            register={register}
+                            disabled={false}
+                            required={false}
+                            errors={errors}
+                        />
+                    </div>
+                    {includePicture && (
                         <div className="flex flex-col justify-center items-center grow">
                             <ImageInput
                                 avatar={avatarURL}
@@ -106,156 +151,136 @@ const EditProfileForm = ({ submitHandler }: EditProfileProps) => {
                                 errors={errors}
                             />
                         </div>
-                        <div className="flex flex-col justify-center md:w-7/12 font-medium  text-md py-5">
-                            {isRejected && (
-                                <p className="text-red-500">
-                                    Your profile has been rejected with message:{' '}
-                                    {
-                                        userData.UserProfile.VerificationList
-                                            .message
-                                    }
-                                </p>
-                            )}
-                            <TextInput
-                                legend="Name:"
-                                name="name"
-                                type="text"
-                                register={register}
-                                disabled={false}
-                                errors={errors}
-                            />
-                            <RadioOptions
-                                legend="Gender"
-                                values={['Male', 'Female', 'Other']}
-                                name="gender"
-                                register={register}
-                                errors={errors}
-                            />
-                            <TextInput
-                                legend="Mobile Number:"
-                                name="mobile"
-                                type="number"
-                                register={register}
-                                disabled={false}
-                                errors={errors}
-                            />
-                        </div>
-                        {/* end of column */}
-                    </div>
-                    {/* end of section */}
-
-                    <div className="flex flex-col justify-between border-b border-b-white mb-2 p-2 pb-8">
-                        <SelectOptions
-                            legend="Permanent Address:"
-                            name="permanentAddress"
-                            values={states}
-                            register={register}
-                            errors={errors}
-                        />
-
-                        <SelectOptions
-                            legend="Current Address:"
-                            name="currentAddress"
-                            values={countries}
-                            register={register}
-                            errors={errors}
-                        />
-                    </div>
-                    {/* end of section */}
-
-                    <div className="flex flex-col justify-between border-b border-b-white mb-2 p-2 pt-4 pb-8">
-                        <RadioOptions
-                            legend="Employment Status"
-                            values={['Employed', 'Unemployed']}
-                            name="employmentStatus"
-                            register={register}
-                            errors={errors}
-                        />
-
-                        {employmentStatus === 'Employed' && (
-                            <RadioOptions
-                                legend="Employment Type"
-                                values={[
-                                    'Government Job',
-                                    'Non-Government Job',
-                                ]}
-                                name="employmentType"
-                                register={register}
-                                errors={errors}
-                            />
-                        )}
-                    </div>
-                    {/* end of section */}
-
-                    <div className="flex flex-col justify-between border-b border-b-white mb-2 p-2">
-                        <RadioOptions
-                            legend="Are you a member of Nepal Forest Association?"
-                            values={['Yes', 'No']}
-                            name="isNFA"
-                            register={register}
-                            errors={errors}
-                        />
-                        {isNFA === 'Yes' && (
-                            <>
-                                <SelectOptions
-                                    legend="DFAN Membership From:"
-                                    name={'membershipFrom'}
-                                    values={states}
-                                    register={register}
-                                    errors={errors}
-                                />
-
-                                <TextInput
-                                    legend="NFA Membership Number:"
-                                    name="NFAMembershipNumber"
-                                    type="number"
-                                    register={register}
-                                    disabled={false}
-                                    errors={errors}
-                                />
-
-                                <RadioOptions
-                                    legend="Are you a life member of NFA?"
-                                    values={['Yes', 'No']}
-                                    name="isLifeMember"
-                                    register={register}
-                                    errors={errors}
-                                />
-
-                                {isLifeMember === 'No' && (
-                                    <RadioOptions
-                                        legend="Have you renewed your membership this year?"
-                                        values={['Yes', 'No']}
-                                        name="hasRenewed"
-                                        register={register}
-                                        errors={errors}
-                                    />
-                                )}
-                            </>
-                        )}
-                    </div>
+                    )}
+                    {/* end of column */}
                 </div>
                 {/* end of section */}
-                <div className="flex flex-row justify-center items-center gap-8">
-                    <button
-                        type="submit"
-                        className="p-2 px-5 text-lg rounded-[25px] bg-[#C8DADF] mb-4 text-black hover:bg-[#2A4A29] hover:text-gray-300 hover:outline"
-                    >
-                        Submit
-                    </button>
-                    <Link
-                        className="p-2 px-5 text-lg rounded-[25px] bg-[#C8DADF] mb-4 text-black hover:bg-[#2A4A29] hover:text-gray-300 hover:outline"
-                        to="/profile"
-                    >
-                        Cancel
-                    </Link>
+
+                <div className="flex flex-col justify-between border-b border-b-white mb-2 p-2 pb-8">
+                    <SelectOptions
+                        legend="Permanent Address:"
+                        name="permanentAddress"
+                        values={states}
+                        register={register}
+                        disabled={false}
+                        errors={errors}
+                    />
+
+                    <SelectOptions
+                        legend="Current Address:"
+                        name="currentAddress"
+                        values={countries}
+                        register={register}
+                        disabled={false}
+                        errors={errors}
+                    />
                 </div>
-            </form>
-        </div>
+                {/* end of section */}
+
+                <div className="flex flex-col justify-between border-b border-b-white mb-2 p-2 pt-4 pb-8">
+                    <RadioOptions
+                        legend="Employment Status"
+                        values={['Employed', 'Unemployed']}
+                        name="employmentStatus"
+                        register={register}
+                        disabled={false}
+                        errors={errors}
+                    />
+
+                    {employmentStatus === 'Employed' && (
+                        <RadioOptions
+                            legend="Employment Type"
+                            values={['Government Job', 'Non-Government Job']}
+                            name="employmentType"
+                            register={register}
+                            disabled={false}
+                            errors={errors}
+                        />
+                    )}
+                </div>
+                {/* end of section */}
+
+                <div className="flex flex-col justify-between border-b border-b-white mb-2 p-2">
+                    <RadioOptions
+                        legend="Are you a member of Nepal Forest Association?"
+                        values={['Yes', 'No']}
+                        name="isNFA"
+                        register={register}
+                        disabled={!isNew}
+                        errors={errors}
+                    />
+                    {isNFA === 'Yes' && (
+                        <>
+                            <SelectOptions
+                                legend="DFAN Membership From:"
+                                name={'membershipFrom'}
+                                values={states}
+                                register={register}
+                                disabled={!isNew}
+                                errors={errors}
+                            />
+
+                            <TextInput
+                                legend="NFA Membership Number:"
+                                name="NFAMembershipNumber"
+                                type="number"
+                                register={register}
+                                disabled={!isNew}
+                                required={false}
+                                errors={errors}
+                            />
+
+                            <RadioOptions
+                                legend="Are you a life member of NFA?"
+                                values={['Yes', 'No']}
+                                name="isLifeMember"
+                                register={register}
+                                disabled={!isNew}
+                                errors={errors}
+                            />
+
+                            {isLifeMember === 'No' && (
+                                <RadioOptions
+                                    legend="Have you renewed your membership this year?"
+                                    values={['Yes', 'No']}
+                                    name="hasRenewed"
+                                    register={register}
+                                    disabled={!isNew}
+                                    errors={errors}
+                                />
+                            )}
+                        </>
+                    )}
+                </div>
+            </div>
+            {/* end of section */}
+            <div className="flex flex-row justify-center items-center gap-8">
+                <button
+                    type="submit"
+                    className="p-2 px-5 text-lg rounded-[25px] bg-[#C8DADF] mb-4 text-black hover:bg-[#2A4A29] hover:text-gray-300 hover:outline"
+                >
+                    Submit
+                </button>
+                <button
+                    className="p-2 px-5 text-lg rounded-[25px] bg-[#C8DADF] mb-4 text-black hover:bg-[#2A4A29] hover:text-gray-300 hover:outline"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        onCancel();
+                    }}
+                >
+                    Cancel
+                </button>
+            </div>
+        </form>
     );
 };
 
-export function ImageInput({ avatar, register, errors }) {
+interface IImageInputProps {
+    avatar: any;
+    register: UseFormRegister<EditableUserData>;
+    errors: FieldErrors<EditableUserData>;
+}
+export function ImageInput({ avatar, register, errors }: IImageInputProps) {
     return (
         <div className="flex items-center justify-center">
             <label className="relative cursor-pointer">
@@ -284,7 +309,7 @@ export function ImageInput({ avatar, register, errors }) {
                 </div>
                 {errors.avatar && (
                     <span className="text-red-400 text-sm">
-                        {errors.avatar?.message}
+                        {errors.avatar?.message as string}
                     </span>
                 )}
             </label>
@@ -298,6 +323,7 @@ export function TextInput({
     type,
     register,
     disabled,
+    required,
     errors,
 }: {
     legend: string;
@@ -305,22 +331,23 @@ export function TextInput({
     type: React.HTMLInputTypeAttribute;
     register: UseFormRegister<EditableUserData>;
     disabled: boolean;
+    required: boolean;
     errors: FieldErrors<EditableUserData>;
 }) {
     return (
         <>
-            <label className="mt-2 text-white text-xl mb-1">{legend}</label>
+            <label className="mt-2text-xl mb-1">{legend}</label>
             <input
                 type={type}
                 className="border rounded-md bg-[#030c0370] outline-none text-white p-1 mb-2"
                 {...register(name, {
-                    required: `This field is required.`,
+                    required: required ? `This field is required.` : false,
                     disabled: !!disabled,
                 })}
             />
             {errors[name] && (
                 <span className="text-red-400 text-sm">
-                    {errors[name]?.message}
+                    {errors[name]?.message as string}
                 </span>
             )}
         </>
@@ -331,6 +358,7 @@ type RadioOptionsProps = {
     legend: string;
     name: keyof EditableUserData;
     values: string[];
+    disabled: boolean;
     register: UseFormRegister<EditableUserData>;
     errors: FieldErrors<EditableUserData>;
 };
@@ -338,12 +366,13 @@ export function RadioOptions({
     legend,
     name,
     values,
+    disabled,
     register,
     errors,
 }: RadioOptionsProps) {
     return (
         <fieldset>
-            <legend className="text-white flex flex-col mt-2 mb-1 text-xl">
+            <legend className="flex flex-col mt-2 mb-1 text-xl">
                 {legend}
             </legend>
             {values.map((v) => {
@@ -354,8 +383,10 @@ export function RadioOptions({
                             className="ml-5 mb-2 "
                             value={v}
                             {...register(name, {
-                                required: `This field is required.`,
+                                required: false,
+                                disabled: !!disabled,
                             })}
+                            defaultValue={undefined}
                         />
                         <span className="ml-1 ">{v}</span>
                         <br />
@@ -364,7 +395,7 @@ export function RadioOptions({
             })}
             {errors[name] && (
                 <span className="text-red-400 text-sm">
-                    {errors[name]?.message}
+                    {errors[name]?.message as string}
                 </span>
             )}
         </fieldset>
@@ -375,6 +406,7 @@ type SelectOptionsProps = {
     legend: string;
     name: keyof EditableUserData;
     values: string[];
+    disabled: boolean;
     register: UseFormRegister<EditableUserData>;
     errors: FieldErrors<EditableUserData>;
 };
@@ -382,21 +414,22 @@ export function SelectOptions({
     legend,
     name,
     values,
+    disabled,
     register,
     errors,
 }: SelectOptionsProps) {
     return (
         <div className="flex flex-col mb-2">
-            <label className="mt-2 text-white text-xl font-semibold mb-1">
-                {legend}
-            </label>
+            <label className="mt-2  text-xl font-semibold mb-1">{legend}</label>
             <select
                 className="border  bg-[#030c0370] outline-none text-white p-1 w-full md:w-[40%]"
                 {...register(name, {
-                    required: `This field is required.`,
+                    disabled: !!disabled,
+                    required: false,
                 })}
             >
-                {values.map((v, i) => {
+                <option key={name} value={undefined}></option>
+                {values.map((v) => {
                     return (
                         <option key={v} value={v}>
                             {v}
@@ -406,7 +439,7 @@ export function SelectOptions({
             </select>
             {errors[name] && (
                 <span className="text-red-400 text-sm">
-                    {errors[name]?.message}
+                    {errors[name]?.message as string}
                 </span>
             )}
         </div>

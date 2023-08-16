@@ -26,18 +26,13 @@ export default async function getUser(req: Request, res: Response) {
                 where: {
                     id: req.session?.user?.id,
                 },
-                include: UserProfile,
             });
             if (!regionalUserData) {
                 return res.status(401).json({ message: 'Unauthorized' });
             }
-            if (!regionalUserData.UserProfile) {
-                return res
-                    .status(400)
-                    .json({ message: 'User profile is not initialized' });
-            }
+
             if (
-                regionalUserData.UserProfile.membershipFrom !==
+                regionalUserData.region !==
                 userData?.UserProfile?.membershipFrom
             ) {
                 return res.status(401).json({ message: 'Unauthorized' });

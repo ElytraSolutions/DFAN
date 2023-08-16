@@ -57,15 +57,9 @@ export default async function getUsers(req: Request, res: Response) {
                 where: {
                     id: req.session?.user?.id,
                 },
-                include: UserProfile,
             });
             if (!regionalUserData) {
                 return res.status(401).json({ message: 'Unauthorized' });
-            }
-            if (!regionalUserData.UserProfile) {
-                return res
-                    .status(400)
-                    .json({ message: 'User profile is not initialized' });
             }
             filters.membershipFrom = regionalUserData.region;
             usersFilter.region = [regionalUserData.region, null];

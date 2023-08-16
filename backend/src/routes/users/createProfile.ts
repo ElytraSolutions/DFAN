@@ -2,10 +2,7 @@ import { Request, Response } from 'express';
 import sequelize from '../../models/config';
 import RegistrationList from '../../models/RegistrationList';
 import Users from '../../models/Users';
-import {
-    sanitizer,
-    UserProfileSchema,
-} from '../../validations/ValidateUserProfile';
+import { sanitizer, UserProfileSchema } from '../../validations/UserProfile';
 import UserProfile from '../../models/UserProfile';
 
 export default async function createProfile(req: Request, res: Response) {

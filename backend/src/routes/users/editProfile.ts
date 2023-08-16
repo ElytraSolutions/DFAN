@@ -1,9 +1,6 @@
 import { Request, Response } from 'express';
 import Users from '../../models/Users';
-import {
-    UserProfileSchema,
-    sanitizer,
-} from '../../validations/ValidateUserProfile';
+import { UserProfileSchema, sanitizer } from '../../validations/UserProfile';
 import UserProfile from '../../models/UserProfile';
 import VerificationList from '../../models/VerificationList';
 
