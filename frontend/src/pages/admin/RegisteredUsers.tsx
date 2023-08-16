@@ -11,6 +11,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import UserContext from '~/context/User';
 import CustomSidebar from '~/components/CustomSidebar';
 import { AiOutlineClose } from 'react-icons/ai';
+import EditProfileForm from '~/components/EditProfileForm';
+import { UseFormHandleSubmit } from 'react-hook-form';
+import { EditableUserData } from '~/types/ProfileData';
 
 const RegisteredUsers = () => {
     const { userData } = useContext(UserContext);
@@ -36,11 +39,11 @@ const RegisteredUsers = () => {
 
 const RegisteredUsersTable = () => {
     const [rows, setRows] = useState([]);
-    const [openModal, setOpenModal] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedRowData, setSelectedRowData] = useState(null);
 
     const closeModal = () => {
-        setOpenModal(false);
+        setIsModalOpen(false);
         setSelectedRowData(null);
     };
     const columns: GridColDef[] = [
@@ -75,28 +78,29 @@ const RegisteredUsersTable = () => {
             valueGetter: (params) => params.row.UserProfile.mobile || 'N/A',
         },
     ];
+    const refresh = async () => {
+        const queryParams = new URLSearchParams({
+            verified: 'approved',
+        });
+        const resp = await fetch(
+            `/api/admins/getUsers?${queryParams.toString()}`,
+        );
+        if (!resp.ok) {
+            toast.error('Error fetching invitation data');
+            return;
+        }
+        const data = await resp.json();
+        setRows(data.data);
+    };
     useEffect(() => {
         (async () => {
-            const queryParams = new URLSearchParams({
-                offset: '0',
-                limit: '100',
-                verified: 'approved',
-            });
-            const resp = await fetch(
-                `/api/admins/getUsers?${queryParams.toString()}`,
-            );
-            if (!resp.ok) {
-                toast.error('Error fetching invitation data');
-                return;
-            }
-            const data = await resp.json();
-            setRows(data.data);
+            await refresh();
         })();
     }, []);
     const rowClickHandler: GridEventListener<'rowClick'> = (params) => {
         const AselectedRow = params.row;
         setSelectedRowData(AselectedRow);
-        setOpenModal(true);
+        setIsModalOpen(true);
     };
     return (
         <Box sx={{ height: '90%', width: '100%' }}>
@@ -114,15 +118,94 @@ const RegisteredUsersTable = () => {
                 onRowClick={rowClickHandler}
                 disableRowSelectionOnClick
             />
-            <Dialog open={openModal} onClose={closeModal}>
-                <DialogTitle className="flex justify-center p-[50px] bg-[#555] font-bold text-white">
-                    Details
-                    <AiOutlineClose
-                        className="absolute right-3 top-5 cursor-pointer text-2xl"
-                        onClick={closeModal}
-                    />
-                </DialogTitle>
-                <DialogContent>
+            <UserDataDialog
+                selectedRowData={selectedRowData}
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                refresh={refresh}
+            />
+        </Box>
+    );
+};
+
+function UserDataDialog({ selectedRowData, isOpen, onClose, refresh }) {
+    const [isEditing, setIsEditing] = useState(false);
+    console.log('srd', selectedRowData);
+    const onSubmit: Parameters<
+        UseFormHandleSubmit<EditableUserData, undefined>
+    >[0] = async (data) => {
+        try {
+            const { avatar, ...rest } = data;
+            if (avatar) {
+                const formData = new FormData();
+                formData.append('picture', avatar[0]);
+                const response = await fetch('/api/users/updatePicture', {
+                    method: 'POST',
+                    body: formData,
+                });
+                const responseData = await response.json();
+                if (!response.ok) {
+                    toast.error(responseData.message);
+                    return;
+                }
+            }
+            const resp = await fetch(
+                '/api/admins/editUser/' + selectedRowData.id,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(rest),
+                },
+            );
+            const respData = await resp.json();
+            if (!resp.ok) {
+                toast.error(respData.message);
+                return;
+            }
+            toast.success('Profile updated successfully');
+            await refresh();
+            setIsEditing(false);
+            onClose();
+        } catch (err) {
+            console.error(err);
+            toast.error('Something went wrong');
+        }
+    };
+    return (
+        <Dialog
+            open={isOpen}
+            onClose={onClose}
+            className={`${isEditing && 'w-[95vw] md:w-[80vw]} mx-auto my-8'}`}
+            fullScreen={isEditing}
+        >
+            <DialogTitle className="flex justify-center p-[50px] bg-[#555] font-bold text-white">
+                Details
+                <AiOutlineClose
+                    className="absolute right-3 top-5 cursor-pointer text-2xl"
+                    onClick={onClose}
+                />
+            </DialogTitle>
+            <DialogContent className="">
+                {isEditing && (
+                    <div className="flex flex-col items-center p-3">
+                        <EditProfileForm
+                            oldProfile={
+                                selectedRowData &&
+                                selectedRowData['UserProfile']
+                            }
+                            isNew={true}
+                            submitHandler={onSubmit}
+                            includePicture={true}
+                            onCancel={() => {
+                                setIsEditing(false);
+                                onClose();
+                            }}
+                        />
+                    </div>
+                )}
+                {!isEditing && (
                     <>
                         {selectedRowData && (
                             <div className="flex flex-col items-center p-3">
@@ -147,7 +230,7 @@ const RegisteredUsersTable = () => {
                                     </>
                                 )}
                                 <div className="w-[50vw]"></div>
-                                <p className="font-semibold ">
+                                <p className="font-semibold">
                                     Name:{' '}
                                     <span className="font-bold text-[#005500]">
                                         {selectedRowData['UserProfile']['name']}
@@ -237,17 +320,24 @@ const RegisteredUsersTable = () => {
                                 </p>
                             </div>
                         )}
+
+                        <hr />
+                        <div className="flex justify-center gap-[3vw] mx-auto my-5">
+                            <button
+                                className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#2A4A29] text-white font-medium md:mr-4 hover:bg-white hover:text-[#2A4A29] hover:font-bold hover:outline"
+                                onClick={() => setIsEditing(true)}
+                            >
+                                Edit
+                            </button>
+                            <button className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#2A4A29] text-white font-medium md:mr-4 hover:bg-white hover:text-[#2A4A29] hover:font-bold hover:outline">
+                                Payment History
+                            </button>
+                        </div>
                     </>
-                    <hr />
-                    <div className="flex justify-center gap-[3vw] mx-auto my-5">
-                        <button className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-[#2A4A29] text-white font-medium md:mr-4 hover:bg-white hover:text-[#2A4A29] hover:font-bold hover:outline ">
-                            payment History
-                        </button>
-                    </div>
-                </DialogContent>
-            </Dialog>
-        </Box>
+                )}
+            </DialogContent>
+        </Dialog>
     );
-};
+}
 
 export default RegisteredUsers;
