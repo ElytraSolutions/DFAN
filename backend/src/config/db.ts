@@ -1,4 +1,5 @@
 import RegistrationList from '../models/RegistrationList';
+import UpdateRequest from '../models/UpdateRequest';
 import UserProfile from '../models/UserProfile';
 import Users from '../models/Users';
 import VerificationList from '../models/VerificationList';
@@ -10,10 +11,14 @@ export default async function config() {
     UserProfile.hasOne(VerificationList);
     VerificationList.belongsTo(UserProfile);
 
+    UserProfile.hasMany(UpdateRequest);
+    UpdateRequest.belongsTo(UserProfile);
+
     const alter = false;
     const force = false;
 
     await RegistrationList.sync({ alter, force });
+    await UpdateRequest.sync({ alter, force });
     await UserProfile.sync({ alter, force });
     await Users.sync({ alter, force });
     await VerificationList.sync({ alter, force });
@@ -32,14 +37,15 @@ export default async function config() {
                 name: 'Central Admin 1',
                 gender: 'Male',
                 mobile: '1111111111',
-                currentAddress: 'Bagmati Pradesh',
-                permanentAddress: 'Nepal',
+                currentAddress: 'Nepal',
+                permanentAddress: 'Bagmati Pradesh',
                 membershipFrom: 'Bagmati Pradesh',
                 employmentStatus: 'Unemployed',
                 employmentType: undefined,
                 NFAMembershipNumber: '111',
                 isLifeMember: false,
                 hasRenewed: false,
+                avatar: 'default.svg',
             });
             await profile.createVerificationList({ status: 'approved' });
         }
@@ -48,6 +54,7 @@ export default async function config() {
                 email: 'rAdmin1@gmail.com',
                 password: 'password',
                 role: 'Regional Admin',
+                region: 'Bagmati Pradesh',
             },
         });
         if (rcreated1) {
@@ -55,14 +62,15 @@ export default async function config() {
                 name: 'Regional Admin 1',
                 gender: 'Male',
                 mobile: '11111',
-                currentAddress: 'Bagmati Pradesh',
-                permanentAddress: 'Nepal',
+                currentAddress: 'Nepal',
+                permanentAddress: 'Bagmati Pradesh',
                 membershipFrom: 'Bagmati Pradesh',
                 employmentStatus: 'Unemployed',
                 employmentType: undefined,
                 NFAMembershipNumber: '111',
                 isLifeMember: false,
                 hasRenewed: false,
+                avatar: 'default.svg',
             });
             await profile.createVerificationList({});
         }
@@ -71,6 +79,7 @@ export default async function config() {
                 email: 'rAdmin2@gmail.com',
                 password: 'password',
                 role: 'Regional Admin',
+                region: 'Koshi Pradesh',
             },
         });
         if (rcreated2) {
@@ -78,14 +87,15 @@ export default async function config() {
                 name: 'Regional Admin 2',
                 gender: 'Male',
                 mobile: '11111',
-                currentAddress: 'Koshi Pradesh',
-                permanentAddress: 'Nepal',
+                currentAddress: 'Nepal',
+                permanentAddress: 'Koshi Pradesh',
                 membershipFrom: 'Koshi Pradesh',
                 employmentStatus: 'Unemployed',
                 employmentType: undefined,
                 NFAMembershipNumber: '111',
                 isLifeMember: false,
                 hasRenewed: false,
+                avatar: 'default.svg',
             });
             await profile.createVerificationList({});
         }
@@ -112,20 +122,21 @@ async function bulkCreate(num: number) {
     }
     const usersCreated = await Users.bulkCreate(users);
     const profiles = [];
-    const genders = ['Male', 'Female', 'Others'];
+    const genders = ['Male', 'Female', 'Other'];
     const states = ['Bagmati Pradesh', 'Koshi Pradesh'];
     for (let i = 0; i < num; i++) {
         profiles.push({
             name: `User ${i}`,
             gender: genders[i % 3],
             mobile: '1111111111',
-            currentAddress: states[i % 2],
-            permanentAddress: 'Nepal',
+            permanentAddress: states[i % 2],
+            currentAddress: 'Nepal',
             membershipFrom: states[(i + 1) % 2],
             employmentStatus: 'Employed',
             employmentType: 'Government Job',
             NFAMembershipNumber: (i + 1).toString(),
             isLifeMember: true,
+            avatar: 'default.svg',
             UserId: usersCreated[i].id,
         });
     }
