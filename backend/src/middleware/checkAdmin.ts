@@ -5,7 +5,8 @@ export const checkAdmin: RequestHandler = (req, res, next) => {
     if (!currentUser) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
-    const isAdmin = ['Central Admin', 'Regional Admin'].indexOf(currentUser.role) !== -1;
+    const isAdmin =
+        ['Central Admin', 'Regional Admin'].indexOf(currentUser.role) !== -1;
     if (!isAdmin) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
