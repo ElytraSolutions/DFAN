@@ -22,6 +22,7 @@ import GenderChart from './pages/admin/charts/GenderChart';
 import MembershipRegionChart from './pages/admin/charts/MembershipRegionChart';
 import Dashboard from './pages/admin/Dashboard';
 import RejectedUsers from './pages/admin/RejectedUsers';
+import Admins from './pages/admin/Admins';
 import UpdateRequest from './pages/admin/UpdateRequest';
 
 const router = createBrowserRouter([
@@ -74,6 +75,14 @@ const router = createBrowserRouter([
         element: (
             <CheckUser>
                 <Dashboard />
+            </CheckUser>
+        ),
+    },
+    {
+        path: '/admin/admins',
+        element: (
+            <CheckUser>
+                <Admins />
             </CheckUser>
         ),
     },

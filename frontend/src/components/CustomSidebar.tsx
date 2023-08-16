@@ -112,6 +112,13 @@ function CustomSidebar() {
                                 </MenuItem>
                                 <SubMenu label="Data" defaultOpen>
                                     <MenuItem
+                                        component={<Link to="/admin/admins" />}
+                                        active={activeTab === 'admins'}
+                                    >
+                                        <AiFillMail className="inline text-2xl mr-2" />
+                                        <span>Admins Data</span>
+                                    </MenuItem>
+                                    <MenuItem
                                         component={
                                             <Link to="/admin/invitations" />
                                         }
