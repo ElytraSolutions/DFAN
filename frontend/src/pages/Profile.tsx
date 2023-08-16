@@ -1,7 +1,7 @@
 import React from 'react';
 import UserContext from '~/context/User';
 import { LiaUserEditSolid } from 'react-icons/lia';
-import { MdPayment, MdAdminPanelSettings } from 'react-icons/md';
+import { MdPayment, MdAdminPanelSettings, MdPassword } from 'react-icons/md';
 import { BiSolidCloudDownload } from 'react-icons/bi';
 import { Link, Navigate } from 'react-router-dom';
 import Logo from '../assets/logo.png';
@@ -39,6 +39,13 @@ const Profile = () => {
                     >
                         <LiaUserEditSolid className="inline-block mr-2 text-2xl" />
                         Edit Profile
+                    </Link>
+                    <Link
+                        to="/changePassword"
+                        className={`inline-flex justify-center items-center w-52 h-10 rounded-2xl bg-gray-300 text-[#2A4A29] font-medium md:mr-4 hover:bg-[#2A4A29] hover:text-gray-300 hover:outline`}
+                    >
+                        <MdPassword className="inline-block mr-2 text-2xl" />
+                        Change Password
                     </Link>
                     {isAdmin && (
                         <Link

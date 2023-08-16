@@ -24,6 +24,7 @@ import Dashboard from './pages/admin/Dashboard';
 import RejectedUsers from './pages/admin/RejectedUsers';
 import Admins from './pages/admin/Admins';
 import UpdateRequest from './pages/admin/UpdateRequest';
+import ChangePassword from './pages/ChangePassword';
 
 const router = createBrowserRouter([
     {
@@ -41,6 +42,14 @@ const router = createBrowserRouter([
     {
         path: '/register',
         element: <RegisterNew />,
+    },
+    {
+        path: '/changePassword',
+        element: (
+            <CheckUser>
+                <ChangePassword />
+            </CheckUser>
+        ),
     },
     {
         path: '/profile',
