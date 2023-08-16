@@ -30,7 +30,7 @@ class Users extends Model<
     declare createUserProfile: HasOneCreateAssociationMixin<UserProfile>;
 
     declare static associations: {
-        userProfile: Association<Users, UserProfile>;
+        UserProfile: Association<Users, UserProfile>;
     };
 }
 

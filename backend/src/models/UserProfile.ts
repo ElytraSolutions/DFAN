@@ -20,17 +20,17 @@ class UserProfile extends Model<
 > {
     declare id: CreationOptional<string>;
     declare name: string;
-    declare gender: string;
-    declare mobile: string;
-    declare currentAddress: string;
-    declare permanentAddress: string;
-    declare employmentStatus: string;
-    declare employmentType: CreationOptional<string>;
+    declare gender: CreationOptional<string | null>;
+    declare mobile: CreationOptional<string | null>;
+    declare currentAddress: CreationOptional<string | null>;
+    declare permanentAddress: CreationOptional<string | null>;
+    declare employmentStatus: CreationOptional<string | null>;
+    declare employmentType: CreationOptional<string | null>;
     declare NFAMembershipNumber: CreationOptional<string>;
-    declare membershipFrom: CreationOptional<string>;
-    declare isLifeMember: CreationOptional<boolean>;
-    declare hasRenewed: CreationOptional<boolean>;
-    declare avatar: CreationOptional<string>;
+    declare membershipFrom: CreationOptional<string | null>;
+    declare isLifeMember: CreationOptional<boolean | null>;
+    declare hasRenewed: CreationOptional<boolean | null>;
+    declare avatar: string;
 
     declare UserId: ForeignKey<string>;
 
@@ -62,23 +62,28 @@ UserProfile.init(
         },
         gender: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
+            defaultValue: null,
         },
         mobile: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
+            defaultValue: null,
         },
         currentAddress: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
+            defaultValue: null,
         },
         permanentAddress: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
+            defaultValue: null,
         },
         employmentStatus: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
+            defaultValue: null,
         },
         employmentType: {
             type: DataTypes.STRING,
