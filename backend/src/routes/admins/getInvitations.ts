@@ -3,10 +3,10 @@ import RegistrationList from '../../models/RegistrationList';
 
 export default async function getInvitations(req: Request, res: Response) {
     try {
-        let limit = 10;
+        let limit = undefined;
         const limitQuery = parseInt(req.query.limit as string);
         if (!isNaN(limitQuery)) {
-            limit = Math.max(1, Math.min(100, limitQuery));
+            limit = undefined;
         }
         let offset = 0;
         const offsetQuery = parseInt(req.query.offset as string);
