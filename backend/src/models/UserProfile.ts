@@ -3,6 +3,14 @@ import {
     CreationOptional,
     DataTypes,
     ForeignKey,
+    HasManyAddAssociationMixin,
+    HasManyAddAssociationsMixin,
+    HasManyCountAssociationsMixin,
+    HasManyCreateAssociationMixin,
+    HasManyGetAssociationsMixin,
+    HasManyHasAssociationMixin,
+    HasManyHasAssociationsMixin,
+    HasManySetAssociationsMixin,
     HasOneCreateAssociationMixin,
     HasOneGetAssociationMixin,
     HasOneSetAssociationMixin,
@@ -13,6 +21,7 @@ import {
 } from 'sequelize';
 import sequelize from './config';
 import VerificationList from './VerificationList';
+import UpdateRequest from './UpdateRequest';
 
 class UserProfile extends Model<
     InferAttributes<UserProfile>,
@@ -42,8 +51,28 @@ class UserProfile extends Model<
     >;
     declare createVerificationList: HasOneCreateAssociationMixin<VerificationList>;
 
+    declare UpdateRequests?: NonAttribute<UpdateRequest>;
+    declare getUpdateRequests: HasManyGetAssociationsMixin<UpdateRequest>;
+    declare countUpdateRequests: HasManyCountAssociationsMixin;
+    declare hasUpdateRequest: HasManyHasAssociationMixin<UpdateRequest, string>;
+    declare hasUpdateRequests: HasManyHasAssociationsMixin<
+        UpdateRequest,
+        string
+    >;
+    declare setUpdateRequests: HasManySetAssociationsMixin<
+        UpdateRequest,
+        string
+    >;
+    declare addUpdateRequest: HasManyAddAssociationMixin<UpdateRequest, string>;
+    declare addUpdateRequests: HasManyAddAssociationsMixin<
+        UpdateRequest,
+        string
+    >;
+    declare createUpdateRequest: HasManyCreateAssociationMixin<UpdateRequest>;
+
     declare static associations: {
         VerificationList: Association<UserProfile, VerificationList>;
+        UpdateRequests: Association<UserProfile, UpdateRequest>;
     };
 }
 

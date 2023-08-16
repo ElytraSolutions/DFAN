@@ -132,6 +132,15 @@ function CustomSidebar() {
                                         <span>Pending Verification</span>
                                     </MenuItem>
                                     <MenuItem
+                                        component={
+                                            <Link to="/admin/updateRequest" />
+                                        }
+                                        active={activeTab === 'updateRequest'}
+                                    >
+                                        <MdPending className="inline text-2xl mr-2" />
+                                        <span>User data updates</span>
+                                    </MenuItem>
+                                    <MenuItem
                                         component={<Link to="/admin/users" />}
                                         active={activeTab === 'users'}
                                     >

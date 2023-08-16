@@ -13,12 +13,18 @@ import verifyRejectedUser from './verifyRejected';
 import { checkAdmin } from '../../middleware/checkAdmin';
 import checkCentralAdmin from '../../middleware/checkCentralAdmin';
 import editUser from './editUser';
+import getUpdates from './getUpdates';
+import approveUpdate from './approveUpdate';
+import denyUpdate from './denyUpdate';
 
 const router = Router();
 
 router.get('/add', checkCentralAdmin, addAdmin);
 router.get('/analytics', checkAdmin, analytics);
+router.post('/approveUpdate', checkAdmin, approveUpdate);
+router.post('/denyUpdate', checkAdmin, denyUpdate);
 router.get('/getInvitations', checkAdmin, getInvitations);
+router.get('/getUpdates', checkAdmin, getUpdates);
 router.post('/editUser/:id', checkAdmin, editUser);
 router.get('/getUser/:id', checkAdmin, getUser);
 router.get('/getUsers', checkAdmin, getUsers);
