@@ -69,7 +69,7 @@ function CustomSidebar() {
                                         <img
                                             src={`/api/avatars/${
                                                 userData.UserProfile.avatar ||
-                                                'default.svg'
+                                                'default.png'
                                             }`}
                                             alt="Avatar"
                                             className="rounded-full w-24 h-24"

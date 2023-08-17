@@ -2,7 +2,7 @@ import multer from 'multer';
 import { unlink } from 'fs';
 import path from 'path';
 
-const allowedExtensions = ['.png', '.jpg', '.gif', '.jpeg'];
+const allowedExtensions = ['.jpg', '.jpeg', '.png'];
 const storage = multer.diskStorage({
     destination: 'public/avatars',
     filename: (req, file, cb) => {
@@ -28,7 +28,7 @@ const upload = multer({
     fileFilter: function (req, file, callback) {
         const ext = path.extname(file.originalname);
         if (allowedExtensions.indexOf(ext) === -1) {
-            return callback(new Error('Only images are allowed'));
+            return callback(new Error('Only jpg images are allowed'));
         }
         callback(null, true);
     },

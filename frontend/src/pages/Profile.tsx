@@ -62,10 +62,13 @@ const Profile = () => {
                             Renew
                         </button>
                     )}
-                    <button className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-gray-300 text-[#2A4A29] font-medium md:mr-4 float-right hover:bg-[#2A4A29] hover:text-gray-300 hover:outline">
+                    <a
+                        href="/api/users/getCard"
+                        className="inline-flex justify-center items-center w-36 h-10 rounded-2xl bg-gray-300 text-[#2A4A29] font-medium md:mr-4 float-right hover:bg-[#2A4A29] hover:text-gray-300 hover:outline"
+                    >
                         <BiSolidCloudDownload className="inline-block mr-2 text-2xl" />
                         Digital Card
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

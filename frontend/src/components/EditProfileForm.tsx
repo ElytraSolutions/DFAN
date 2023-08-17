@@ -105,7 +105,6 @@ const EditProfileForm = ({
         setValue('hasRenewed', null);
     }
     const isRejected = oldProfile?.VerificationList?.status === 'rejected';
-    console.log(membershipType, errors);
     return (
         <form onSubmit={handleSubmit(submitHandler)} className="w-full">
             <div className="flex flex-col justify-center">

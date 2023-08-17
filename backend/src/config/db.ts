@@ -45,7 +45,7 @@ export default async function config() {
                 NFAMembershipNumber: '111',
                 isLifeMember: false,
                 hasRenewed: false,
-                avatar: 'default.svg',
+                avatar: 'default.png',
             });
             await profile.createVerificationList({ status: 'approved' });
         }
@@ -70,7 +70,7 @@ export default async function config() {
                 NFAMembershipNumber: '111',
                 isLifeMember: false,
                 hasRenewed: false,
-                avatar: 'default.svg',
+                avatar: 'default.png',
             });
             await profile.createVerificationList({});
         }
@@ -95,7 +95,7 @@ export default async function config() {
                 NFAMembershipNumber: '111',
                 isLifeMember: false,
                 hasRenewed: false,
-                avatar: 'default.svg',
+                avatar: 'default.png',
             });
             await profile.createVerificationList({});
         }
@@ -136,7 +136,7 @@ async function bulkCreate(num: number) {
             employmentType: 'Government Job',
             NFAMembershipNumber: (i + 1).toString(),
             isLifeMember: true,
-            avatar: 'default.svg',
+            avatar: 'default.png',
             UserId: usersCreated[i].id,
         });
     }

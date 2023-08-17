@@ -27,6 +27,7 @@ import RejectedUsers from './pages/admin/RejectedUsers';
 import Admins from './pages/admin/Admins';
 import UpdateRequest from './pages/admin/UpdateRequest';
 import ChangePassword from './pages/ChangePassword';
+import GetCard from './pages/GetCard';
 
 const router = createBrowserRouter([
     {
@@ -58,6 +59,14 @@ const router = createBrowserRouter([
         element: (
             <CheckUser>
                 <Profile />
+            </CheckUser>
+        ),
+    },
+    {
+        path: '/card',
+        element: (
+            <CheckUser>
+                <GetCard />
             </CheckUser>
         ),
     },

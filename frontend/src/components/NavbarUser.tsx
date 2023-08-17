@@ -21,7 +21,7 @@ function NavbarUser() {
                 <Link to="/profile">
                     <img
                         src={`/api/avatars/${
-                            userData?.UserProfile?.avatar || 'default.svg'
+                            userData?.UserProfile?.avatar || 'default.png'
                         }`}
                         alt="Avatar"
                         className={`rounded-full w-12 h-12 ${

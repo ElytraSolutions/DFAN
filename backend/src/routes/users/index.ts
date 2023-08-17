@@ -9,6 +9,7 @@ import updatePicture from './updatePicture';
 import verifyCode from './verifyCode';
 import IsVerifiedUser from '../../middleware/IsVerifiedUser';
 import changePassword from './changePassword';
+import getCard from './getCard';
 
 const userIsLoggedIn: RequestHandler = (req, res, next) => {
     if (req.session.user) {
@@ -22,6 +23,7 @@ const router = Router();
 router.post('/changePassword', userIsLoggedIn, changePassword);
 router.post('/createProfile', userIsLoggedIn, createProfile);
 router.post('/editProfile', userIsLoggedIn, editProfile);
+router.get('/getCard', userIsLoggedIn, getCard);
 router.get('/me', userIsLoggedIn, me);
 router.post('/register', register);
 router.get('/status', status);

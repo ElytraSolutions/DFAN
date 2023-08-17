@@ -37,7 +37,6 @@ const Login = () => {
     if (userData.state === 'done') {
         return <Navigate to="/profile" />;
     }
-    console.log(userData);
 
     return (
         <div className="h-screen green-bg overflow-scroll flex flex-col">

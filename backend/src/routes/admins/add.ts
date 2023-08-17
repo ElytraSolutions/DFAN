@@ -80,7 +80,7 @@ export default async function addAdmin(req: Request, res: Response) {
     });
     const newProfile = await newUser.createUserProfile({
         name: value.name,
-        avatar: 'default.svg',
+        avatar: 'default.png',
     });
     await newProfile.createVerificationList({
         status: 'approved',
