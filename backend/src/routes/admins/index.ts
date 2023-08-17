@@ -19,7 +19,7 @@ import denyUpdate from './denyUpdate';
 
 const router = Router();
 
-router.get('/add', checkCentralAdmin, addAdmin);
+router.post('/add', checkCentralAdmin, addAdmin);
 router.get('/analytics', checkAdmin, analytics);
 router.post('/approveUpdate', checkAdmin, approveUpdate);
 router.post('/denyUpdate', checkAdmin, denyUpdate);

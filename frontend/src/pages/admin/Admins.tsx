@@ -2,15 +2,19 @@ import { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Box from '@mui/material/Box';
+import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { DataGrid, GridColDef, GridEventListener } from '@mui/x-data-grid';
+import { MdExpandMore } from 'react-icons/md';
 
 import UserContext from '~/context/User';
 import CustomSidebar from '~/components/CustomSidebar';
 import { Dialog, DialogTitle, DialogContent } from '@mui/material';
 import { AiOutlineClose } from 'react-icons/ai';
+import InviteAdminForm from '~/components/InviteAdminForm';
 
 const Admins = () => {
     const { userData } = useContext(UserContext);
+    const [expanded, setExpanded] = useState(false);
 
     const [rows, setRows] = useState([]);
     const refresh = async () => {
@@ -42,12 +46,26 @@ const Admins = () => {
         toast.error('You are not authorized to view this page');
         return <Navigate to="/profile" />;
     }
+    const handleChange = (
+        __event: React.SyntheticEvent,
+        isExpanded: boolean,
+    ) => {
+        setExpanded(isExpanded);
+    };
 
     return (
         <div className="flex flex-row h-screen">
             <CustomSidebar />
             <div className="grow p-2 md:px-12 flex flex-col gap-4  overflow-scroll">
                 <h1 className="text-2xl font-bold">Admins Data</h1>
+                <Accordion expanded={expanded} onChange={handleChange}>
+                    <AccordionSummary expandIcon={<MdExpandMore />}>
+                        Invite Admin
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <InviteAdminForm callback={refresh} />
+                    </AccordionDetails>
+                </Accordion>
                 <AdminsTable rows={rows} />
             </div>
         </div>
