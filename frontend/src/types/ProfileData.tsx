@@ -14,6 +14,10 @@ export interface UserData {
     isNFA: string;
     isLifeMember?: string | null;
     hasRenewed?: string | null;
+
+    joinedOn?: Date | null;
+    expiresOn?: Date | null;
+    membershipType?: string | null;
 }
 
 export type EditableUserData = Omit<UserData, 'email'> & { avatar: any };

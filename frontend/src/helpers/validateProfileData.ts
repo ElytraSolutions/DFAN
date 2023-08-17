@@ -39,8 +39,9 @@ export const UserProfileSchema = (States: string[], Countries: string[]) =>
         isNFA: Joi.any().optional(),
         NFAMembershipNumber: Joi.any().optional(),
         membershipFrom: Joi.any().optional(),
-        isLifeMember: Joi.any().optional(),
-        hasRenewed: Joi.any().optional(),
+        membershipType: Joi.string().optional(),
+        joinedOn: Joi.any().optional(),
+        expiresOn: Joi.any().optional(),
         avatar: Joi.any().optional(),
     });
 

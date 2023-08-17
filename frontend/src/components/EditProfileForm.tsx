@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect } from 'react';
 import {
     FieldErrors,
     UseFormHandleSubmit,
@@ -8,13 +8,11 @@ import {
 import { BsCloudUploadFill } from 'react-icons/bs';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { EditableUserData } from '~/types/ProfileData';
-import UserContext from '~/context/User';
 import { UserProfileSchema } from '~/helpers/validateProfileData';
 import useStates from '~/hooks/useStates';
 import useCountries from '~/hooks/useCountries';
-import Navbar from './Navbar';
-import { Link } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
+import { DatePicker } from '@mui/x-date-pickers';
 
 interface EditProfileProps {
     isNew: boolean;
@@ -67,8 +65,11 @@ const EditProfileForm = ({
             isNFA: isNFA,
             membershipFrom: oldProfile?.membershipFrom || undefined,
             NFAMembershipNumber: oldProfile?.NFAMembershipNumber || undefined,
-            isLifeMember: oldProfile?.isLifeMember ? 'Yes' : 'No',
-            hasRenewed: oldProfile?.hasRenewed ? 'Yes' : 'No',
+            membershipType: oldProfile?.membershipType || null,
+            joinedOn: oldProfile?.joinedOn || null,
+            expiresOn: oldProfile?.expiresOn || null,
+            // isLifeMember: oldProfile?.isLifeMember ? 'Yes' : 'No',
+            // hasRenewed: oldProfile?.hasRenewed ? 'Yes' : 'No',
             avatar: null,
         };
         reset(oldProfileData);
@@ -81,6 +82,7 @@ const EditProfileForm = ({
     const isLifeMember = watch('isLifeMember');
     const hasRenewed = watch('hasRenewed');
     const avatar = watch('avatar');
+    const membershipType = watch('membershipType');
 
     let avatarURL: string = oldProfile?.avatar
         ? `/api/avatars/${oldProfile.avatar}`
@@ -96,12 +98,14 @@ const EditProfileForm = ({
         setValue('membershipFrom', null);
         if (NFAMembershipNumber) setValue('NFAMembershipNumber', null);
         if (isLifeMember) setValue('isLifeMember', null);
+        if (membershipType) setValue('membershipType', null);
         if (hasRenewed) setValue('hasRenewed', null);
     }
     if (isNFA === 'Yes' && isLifeMember === 'Yes' && hasRenewed) {
         setValue('hasRenewed', null);
     }
     const isRejected = oldProfile?.VerificationList?.status === 'rejected';
+    console.log(membershipType, errors);
     return (
         <form onSubmit={handleSubmit(submitHandler)} className="w-full">
             <div className="flex flex-col justify-center">
@@ -230,24 +234,50 @@ const EditProfileForm = ({
                                 errors={errors}
                             />
 
-                            <RadioOptions
-                                legend="Are you a life member of NFA?"
-                                values={['Yes', 'No']}
-                                name="isLifeMember"
+                            <SelectOptions
+                                legend="Type of Membership:"
+                                name="membershipType"
+                                values={[
+                                    'General Member',
+                                    'Lifetime Member',
+                                    'Member type A',
+                                    'Member type B',
+                                    'Member type C',
+                                ]}
                                 register={register}
                                 disabled={!isNew}
                                 errors={errors}
                             />
 
-                            {isLifeMember === 'No' && (
-                                <RadioOptions
-                                    legend="Have you renewed your membership this year?"
-                                    values={['Yes', 'No']}
-                                    name="hasRenewed"
-                                    register={register}
-                                    disabled={!isNew}
-                                    errors={errors}
-                                />
+                            {membershipType === 'General Member' && (
+                                <>
+                                    {/* <RadioOptions
+                                        legend="Have you renewed your membership this year?"
+                                        values={['Yes', 'No']}
+                                        name="hasRenewed"
+                                        register={register}
+                                        disabled={!isNew}
+                                        errors={errors}
+                                    /> */}
+                                    <DateInput
+                                        legend="Member Join Date:"
+                                        name="joinedOn"
+                                        register={register}
+                                        setValue={setValue}
+                                        disabled={!isNew}
+                                        required={false}
+                                        errors={errors}
+                                    />
+                                    <DateInput
+                                        legend="Membership Expiry Date:"
+                                        name="expiresOn"
+                                        register={register}
+                                        setValue={setValue}
+                                        disabled={!isNew}
+                                        required={false}
+                                        errors={errors}
+                                    />
+                                </>
                             )}
                         </>
                     )}
@@ -443,6 +473,47 @@ export function SelectOptions({
                 </span>
             )}
         </div>
+    );
+}
+
+export function DateInput({
+    legend,
+    name,
+    register,
+    setValue,
+    disabled,
+    required,
+    errors,
+}: {
+    legend: string;
+    name: keyof EditableUserData;
+    register: UseFormRegister<EditableUserData>;
+    setValue: any;
+    disabled: boolean;
+    required: boolean;
+    errors: FieldErrors<EditableUserData>;
+}) {
+    const { onChange: _onChange, ...rest } = register(name, {
+        required: required ? `This field is required.` : false,
+        disabled: !!disabled,
+    });
+    const changeHandler = (value: any) => {
+        setValue(name, value);
+    };
+    return (
+        <>
+            <label className="mt-2text-xl mb-1">{legend}</label>
+            <DatePicker
+                className="text-white"
+                onChange={changeHandler!}
+                {...rest}
+            />
+            {errors[name] && (
+                <span className="text-red-400 text-sm">
+                    {errors[name]?.message as string}
+                </span>
+            )}
+        </>
     );
 }
 

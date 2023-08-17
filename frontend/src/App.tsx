@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -201,7 +203,9 @@ function App() {
             <UserContext.Provider
                 value={{ userData, setUserData, refreshUserData }}
             >
-                <RouterProvider router={router} />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <RouterProvider router={router} />
+                </LocalizationProvider>
             </UserContext.Provider>
         </div>
     );

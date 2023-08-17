@@ -39,6 +39,9 @@ class UserProfile extends Model<
     declare membershipFrom: CreationOptional<string | null>;
     declare isLifeMember: CreationOptional<boolean | null>;
     declare hasRenewed: CreationOptional<boolean | null>;
+    declare joinedOn: CreationOptional<Date | null>;
+    declare expiresOn: CreationOptional<Date | null>;
+    declare membershipType: CreationOptional<string | null>;
     declare avatar: string;
 
     declare UserId: ForeignKey<string>;
@@ -137,6 +140,18 @@ UserProfile.init(
         avatar: {
             type: DataTypes.STRING,
             defaultValue: null,
+        },
+        joinedOn: {
+            type: DataTypes.DATEONLY,
+            defaultValue: DataTypes.NOW,
+        },
+        expiresOn: {
+            type: DataTypes.DATEONLY,
+            defaultValue: null,
+        },
+        membershipType: {
+            type: DataTypes.STRING,
+            defaultValue: 'General Member',
         },
     },
     {
