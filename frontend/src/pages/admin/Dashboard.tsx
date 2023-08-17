@@ -4,6 +4,10 @@ import { toast } from 'react-toastify';
 
 import UserContext from '~/context/User';
 import CustomSidebar from '~/components/CustomSidebar';
+import TotalUsers from '~/components/dashboard/TotalUsers';
+import NewUsers from '~/components/dashboard/NewUsers';
+import Revenue from '~/components/dashboard/Revenue';
+import RevenueGraph from '~/components/dashboard/RevenueGraph';
 
 const Dashboard = () => {
     const { userData } = useContext(UserContext);
@@ -21,6 +25,20 @@ const Dashboard = () => {
             <div className="grow p-2 md:px-12 flex flex-col gap-4 overflow-scroll">
                 <h1 className="text-2xl font-bold">Dashboard</h1>
                 <div>Dashboard</div>
+                <div className="flex flex-row gap-36">
+                    <div className="w-96 h-48">
+                        <TotalUsers totalUsers={2000} lastMonth={1800} />
+                    </div>
+                    <div className="w-96 h-48">
+                        <NewUsers newUsers={100} lastMonth={150} />
+                    </div>
+                    <div className="w-96 h-48">
+                        <Revenue currentMonth={25000} lastMonth={20000} />
+                    </div>
+                </div>
+                <div className="flex flex-col">
+                    <RevenueGraph />
+                </div>
             </div>
         </div>
     );
