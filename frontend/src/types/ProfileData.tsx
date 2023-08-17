@@ -15,8 +15,8 @@ export interface UserData {
     isLifeMember?: string | null;
     hasRenewed?: string | null;
 
-    joinedOn?: Date | null;
-    expiresOn?: Date | null;
+    joinedOn?: string | Date | null;
+    expiresOn?: string | Date | null;
     membershipType?: string | null;
 }
 

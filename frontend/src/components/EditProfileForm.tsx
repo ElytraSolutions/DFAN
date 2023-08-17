@@ -66,8 +66,12 @@ const EditProfileForm = ({
             membershipFrom: oldProfile?.membershipFrom || undefined,
             NFAMembershipNumber: oldProfile?.NFAMembershipNumber || undefined,
             membershipType: oldProfile?.membershipType || null,
-            joinedOn: oldProfile?.joinedOn || null,
-            expiresOn: oldProfile?.expiresOn || null,
+            joinedOn: oldProfile?.joinedOn
+                ? new Date(oldProfile.joinedOn).toLocaleDateString()
+                : null,
+            expiresOn: oldProfile?.expiresOn
+                ? new Date(oldProfile.expiresOn).toLocaleDateString()
+                : null,
             // isLifeMember: oldProfile?.isLifeMember ? 'Yes' : 'No',
             // hasRenewed: oldProfile?.hasRenewed ? 'Yes' : 'No',
             avatar: null,
@@ -505,6 +509,11 @@ export function DateInput({
             <DatePicker
                 className="text-white"
                 onChange={changeHandler!}
+                sx={{
+                    '& input': {
+                        color: 'white',
+                    },
+                }}
                 {...rest}
             />
             {errors[name] && (
