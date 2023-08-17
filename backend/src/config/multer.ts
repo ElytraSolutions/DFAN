@@ -1,6 +1,7 @@
 import multer from 'multer';
 import { unlink } from 'fs';
 import path from 'path';
+import UserProfile from '../models/UserProfile';
 
 const allowedExtensions = ['.jpg', '.jpeg', '.png'];
 const storage = multer.diskStorage({
@@ -11,14 +12,20 @@ const storage = multer.diskStorage({
         } else {
             const ext = path.extname(file.originalname);
             const fileName = `${req.session.user.id}${ext}`;
-            // delete current file to avoid errors
-            // filename with different extensions are deleted by the route
-            unlink(`public/avatars/${fileName}`, (error) => {
-                if (error && error.code !== 'ENOENT') {
-                    console.log('Error in deleting file: ', error);
-                    cb(new Error('Something went wrong'), '');
-                }
-                cb(null, fileName);
+            UserProfile.findOne({
+                where: {
+                    UserId: req.session.user.id,
+                },
+            }).then((data) => {
+                const currentFile = data?.avatar;
+                if (!currentFile) cb(null, fileName);
+                unlink(`public/avatars/${currentFile}`, (error) => {
+                    if (error && error.code !== 'ENOENT') {
+                        console.log('Error in deleting file: ', error);
+                        cb(new Error('Something went wrong'), '');
+                    }
+                    cb(null, fileName);
+                });
             });
         }
     },
