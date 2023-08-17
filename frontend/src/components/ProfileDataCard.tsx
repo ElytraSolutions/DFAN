@@ -2,7 +2,10 @@ import md5 from 'md5';
 
 function ProfileDataCard({ userData }) {
     const userProfile = userData.UserProfile;
-    const expireYear = new Date().getFullYear() + 1;
+    let expiryDate = 'Unknown';
+    if (userProfile.expiresOn) {
+        expiryDate = new Date(userProfile.expiresOn).toLocaleDateString();
+    }
     return (
         <div className="flex flex-col   md:flex-row-reverse justify-center items-center  m-4 ">
             <div className=" w-full md:w-[30%] mx-auto">
@@ -36,24 +39,15 @@ function ProfileDataCard({ userData }) {
                     </p>
                 </div>
                 <div className=" mb-4">
-                    {userProfile.isLifeMember && (
-                        <div className="flex justify-center ">
-                            <span className="bg-[#C8DADF] rounded-tl-[20px] rounded-br-[20px] text-center text-[#264426] font-bold text-2xl py-2 px-4 my-4 md:p-2">
-                                Lifetime Member
-                            </span>
+                    <div className="flex justify-center ">
+                        <span className="bg-[#C8DADF] rounded-tl-[20px] rounded-br-[20px] text-center text-[#264426] font-bold text-2xl py-2 px-4 my-4 md:p-2">
+                            {userProfile.membershipType}
+                        </span>
+                    </div>
+                    {userProfile.membershipType === 'General Member' && (
+                        <div className="text-center text-lg">
+                            <span> Expires on: {expiryDate}</span>
                         </div>
-                    )}
-                    {!userProfile.isLifeMember && (
-                        <>
-                            <div className="flex  text-center justify-center ">
-                                <span className="bg-[#C8DADF] rounded-tl-[20px] rounded-br-[20px] text-center text-[#264426] font-bold text-2xl py-2 px-4  md:p-2">
-                                    General Member
-                                </span>
-                            </div>
-                            <div className="text-center text-lg">
-                                <span> Expires on: 1 Jan {expireYear}</span>
-                            </div>
-                        </>
                     )}
                 </div>
             </div>
