@@ -70,6 +70,7 @@ function InviteUserForm({ callback }) {
                     name="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    required
                 />
                 <label htmlFor="email" className="">
                     Email
@@ -81,6 +82,7 @@ function InviteUserForm({ callback }) {
                     name="email"
                     value={userEmail}
                     onChange={(e) => setUserEmail(e.target.value)}
+                    required
                 />
                 <label htmlFor="role" className="">
                     Role
@@ -92,6 +94,7 @@ function InviteUserForm({ callback }) {
                     id="role"
                     className="w-96"
                     sx={{}}
+                    required
                 >
                     <MenuItem value="Central Admin">Central Admin</MenuItem>
                     <MenuItem value="Regional Admin">Regional Admin</MenuItem>
@@ -107,6 +110,7 @@ function InviteUserForm({ callback }) {
                             name="region"
                             id="role"
                             className="w-96"
+                            required
                         >
                             {states.map((state) => {
                                 return (
