@@ -25,7 +25,7 @@ const templates: { [key: string]: Template } = {
             .replace('{{name}}', name)
             .replace('{{role}}', role);
         return {
-            subject: 'Invitation to join the DFAN admin team',
+            subject: 'Inviting you to join the DFAN admin team',
             text: `You have been invited to join the DFAN admin team. Your temporary password is: ${password}`,
             html: preparedTemplate,
         };
@@ -39,7 +39,7 @@ const templates: { [key: string]: Template } = {
             .replace('{{code}}', code)
             .replace('{{redirectURL}}', redirectURL);
         return {
-            subject: 'Registration Code',
+            subject: 'Inviting you to join DFAN',
             html: preparedTemplate,
             text: `Your registration code is: ${code}. Please use this code to complete your registration or visit ${redirectURL}`,
         };
