@@ -9,7 +9,7 @@ import { sanitizer } from '~/helpers/validateProfileData';
 import Navbar from '~/components/Navbar';
 
 const EditProfile = () => {
-    const { userData, refreshUserData } = useContext(UserContext);
+    const { userData, refresh } = useContext(UserContext);
     const navigate = useNavigate();
 
     const onSubmit: Parameters<
@@ -43,7 +43,7 @@ const EditProfile = () => {
                 return;
             }
             toast.success('Profile updated successfully');
-            refreshUserData();
+            await refresh();
             navigate('/profile');
         } catch (err) {
             console.error(err);

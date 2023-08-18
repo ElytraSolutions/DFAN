@@ -16,6 +16,7 @@ import editUser from './editUser';
 import getUpdates from './getUpdates';
 import approveUpdate from './approveUpdate';
 import denyUpdate from './denyUpdate';
+import usersByRegion from './usersByRegion';
 
 const router = Router();
 
@@ -32,6 +33,7 @@ router.post('/inviteUser', checkAdmin, inviteUser);
 router.post('/register', checkAdmin, register);
 router.delete('/inviteUser/:email', checkAdmin, uninviteUser);
 router.post('/rejectUser', checkAdmin, rejectUser);
+router.get('/usersByRegion', checkAdmin, usersByRegion);
 router.post('/verifyRejectedUser', checkAdmin, verifyRejectedUser);
 router.post('/verifyUser', checkAdmin, verifyUser);
 
