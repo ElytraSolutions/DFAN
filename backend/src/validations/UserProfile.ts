@@ -45,7 +45,7 @@ export const UserProfileSchema = Joi.object({
     avatar: Joi.any().optional(),
     joinedOn: Joi.date().optional(),
     expiresOn: Joi.date().optional(),
-    membershipType: Joi.string().optional(),
+    membershipType: Joi.any().optional(),
 });
 
 export function sanitizer(obj: Record<string, any>) {
