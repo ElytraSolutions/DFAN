@@ -3,6 +3,7 @@ import { MdPending } from 'react-icons/md';
 import { PiGenderNeuterFill, PiUsersThreeDuotone } from 'react-icons/pi';
 import { RiLogoutBoxLine } from 'react-icons/ri';
 import { TiLocation } from 'react-icons/ti';
+import { GiHamburgerMenu } from 'react-icons/gi';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -27,15 +28,15 @@ function CustomSidebar() {
         <>
             {!isSidebarOpen && (
                 <>
-                    <div className="flex flex-col h-full p-8 w-4 justify-between ">
+                    <div className="flex flex-col h-full p-8 w-24 justify-between bg-slate-950 text-white">
                         <button
-                            className="mx-2 p-2 text-[24px] text-xl font-bold hover:text-[#00aa00] transition-colors"
+                            className="mx-auto text-[24px] text-xl font-bold hover:text-[#00aa00] transition-colors"
                             onClick={handleSidebarToggle}
                         >
-                            ☰
+                            <GiHamburgerMenu />
                         </button>
                         <button
-                            className="mx-2 p-2 text-[24px] text-xl font-bold hover:text-[#00aa00] transition-colors"
+                            className="mx-auto text-[24px] text-xl font-bold hover:text-[#00aa00] transition-colors"
                             onClick={logoutHandler}
                         >
                             <RiLogoutBoxLine className="inline text-2xl mr-2" />
@@ -52,7 +53,7 @@ function CustomSidebar() {
                             height: '100vh',
                         }}
                     >
-                        <div className="flex flex-col h-full">
+                        <div className="flex flex-col h-full dark:bg-black dark:text-white">
                             <button
                                 className="absolute top-5 right-2 mx-2 p-2 text-2xl font-bold hover:text-[#00aa00] transition-colors"
                                 onClick={handleSidebarToggle}
@@ -105,6 +106,7 @@ function CustomSidebar() {
                                         flexGrow: 1,
                                     },
                                 }}
+                                className="dark:bg-black dark:text-white"
                             >
                                 <MenuItem component={<Link to="/admin" />}>
                                     <AiFillHome className="inline text-2xl mr-2" />
@@ -114,6 +116,7 @@ function CustomSidebar() {
                                     <MenuItem
                                         component={<Link to="/admin/admins" />}
                                         active={activeTab === 'admins'}
+                                        className="dark:bg-black dark:text-white"
                                     >
                                         <AiFillMail className="inline text-2xl mr-2" />
                                         <span>Admins Data</span>
@@ -123,6 +126,7 @@ function CustomSidebar() {
                                             <Link to="/admin/invitations" />
                                         }
                                         active={activeTab === 'invitations'}
+                                        className="dark:bg-black dark:text-white"
                                     >
                                         <AiFillMail className="inline text-2xl mr-2" />
                                         <span>Invitations</span>
@@ -134,6 +138,7 @@ function CustomSidebar() {
                                         active={
                                             activeTab === 'pendingVerification'
                                         }
+                                        className="dark:bg-black dark:text-white"
                                     >
                                         <MdPending className="inline text-2xl mr-2" />
                                         <span>Pending Verification</span>
@@ -143,6 +148,7 @@ function CustomSidebar() {
                                             <Link to="/admin/updateRequest" />
                                         }
                                         active={activeTab === 'updateRequest'}
+                                        className="dark:bg-black dark:text-white"
                                     >
                                         <MdPending className="inline text-2xl mr-2" />
                                         <span>User data updates</span>
@@ -150,6 +156,7 @@ function CustomSidebar() {
                                     <MenuItem
                                         component={<Link to="/admin/users" />}
                                         active={activeTab === 'users'}
+                                        className="dark:bg-black dark:text-white"
                                     >
                                         <PiUsersThreeDuotone className="inline text-2xl mr-2" />
                                         <span>Users</span>
@@ -159,6 +166,7 @@ function CustomSidebar() {
                                             <Link to="/admin/rejections" />
                                         }
                                         active={activeTab === 'rejections'}
+                                        className="dark:bg-black dark:text-white"
                                     >
                                         <BiUserX className="inline text-2xl mr-2" />
                                         <span>Rejected Users</span>
@@ -171,6 +179,7 @@ function CustomSidebar() {
                                             <Link to="/admin/charts/gender" />
                                         }
                                         active={activeTab === 'gender'}
+                                        className="dark:bg-black dark:text-white"
                                     >
                                         <PiGenderNeuterFill className="inline text-2xl mr-2" />
                                         <span>Gender Chart</span>
@@ -182,6 +191,7 @@ function CustomSidebar() {
                                         active={
                                             activeTab === 'membershipRegion'
                                         }
+                                        className="dark:bg-black dark:text-white"
                                     >
                                         <TiLocation className="inline text-2xl mr-2" />
                                         <span>Membership Region Chart</span>

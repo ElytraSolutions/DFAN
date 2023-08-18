@@ -22,7 +22,7 @@ const Dashboard = () => {
     return (
         <div className="flex flex-row h-screen">
             <CustomSidebar />
-            <div className="grow p-2 md:px-12 flex flex-col gap-4 overflow-scroll">
+            <div className="grow p-2 md:px-12 flex flex-col gap-4 overflow-scroll dark:bg-black dark:text-white py-8">
                 <h1 className="text-2xl font-bold">Dashboard</h1>
                 <div>Dashboard</div>
                 <div className="flex flex-row gap-36">
@@ -36,8 +36,10 @@ const Dashboard = () => {
                         <Revenue currentMonth={25000} lastMonth={20000} />
                     </div>
                 </div>
-                <div className="flex flex-col">
-                    <RevenueGraph />
+                <div className="flex flex-row">
+                    <div className="w-fit">
+                        <RevenueGraph />
+                    </div>
                 </div>
             </div>
         </div>

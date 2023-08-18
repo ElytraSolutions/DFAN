@@ -18,7 +18,7 @@ function TotalUsers({ totalUsers, lastMonth }) {
         Math.round(((totalUsers - lastMonth) / lastMonth) * 100 * 100) / 100;
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
     return (
-        <Card>
+        <Card variant="outlined">
             <CardContent>
                 <div className="flex flex-row gap-12 py-4">
                     <div className="flex flex-col items-center grow">
