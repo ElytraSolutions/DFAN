@@ -28,6 +28,7 @@ import Admins from './pages/admin/Admins';
 import UpdateRequest from './pages/admin/UpdateRequest';
 import ChangePassword from './pages/ChangePassword';
 import GetCard from './pages/GetCard';
+import useAuth from './hooks/useAuth';
 
 const router = createBrowserRouter([
     {
@@ -173,45 +174,12 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-    const [userData, setUserData] = useState<UserData>({
-        state: 'loading',
-    });
-    const refreshUserData = useCallback(() => {
-        (async () => {
-            try {
-                const resp = await fetch('/api/users/me');
-                if (
-                    resp.headers
-                        .get('content-type')
-                        ?.startsWith('application/json')
-                ) {
-                    const data = await resp.json();
-                    const state = resp.ok ? 'done' : 'error';
-                    setUserData({ ...data.data, state });
-                } else {
-                    console.error('Received non json data', await resp.text());
-                    console.error('Headers', resp.headers);
-                    setUserData({ state: 'error' });
-                }
-            } catch (e) {
-                console.error('Error in request', e);
-                setUserData({ state: 'error' });
-            }
-        })();
-    }, [setUserData]);
-
-    useEffect(() => {
-        (async () => {
-            await refreshUserData();
-        })();
-    }, []);
+    const authValues = useAuth();
 
     return (
         <div>
             <ToastContainer />
-            <UserContext.Provider
-                value={{ userData, setUserData, refreshUserData }}
-            >
+            <UserContext.Provider value={authValues}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <RouterProvider router={router} />
                 </LocalizationProvider>
