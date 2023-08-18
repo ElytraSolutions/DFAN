@@ -55,7 +55,7 @@ const NewProfile = () => {
     return (
         <div className="flex-row text-white justify-center items-center h-fit min-h-screen pb-2 green-bg">
             <Navbar links={{ Home: '/' }} />
-            <div className="w-[90%] sm:w-[80%] md:w-[90%] lg:w-[90%] xl:w-[75%] 2xl:w-[65%] p-8 rounded-[30px] bg-black-rgba text-white">
+            <div className="w-[90%] sm:w-[80%] md:w-[90%] lg:w-[90%] xl:w-[75%] 2xl:w-[65%] p-8 mx-auto my-8 rounded-[30px] bg-black-rgba text-white">
                 <EditProfileForm
                     submitHandler={onSubmit}
                     isNew
