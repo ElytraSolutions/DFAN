@@ -44,10 +44,8 @@ export default async function inviteUser(req: Request, res: Response) {
             : 'localhost:5173';
     const redirect = `${
         req.protocol
-    }\://${host}/newProfile?${queryParams.toString()}`;
-    if (process.env.NODE_ENV === 'production') {
-        await sendEmail(email, 'codeTemplate', code, redirect);
-    }
+    }\://${host}/register?${queryParams.toString()}`;
+    await sendEmail(email, 'codeTemplate', code, redirect);
     await RegistrationList.upsert({
         email: email,
         code: code,
