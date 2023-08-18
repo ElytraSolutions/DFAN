@@ -43,8 +43,8 @@ export const UserProfileSchema = Joi.object({
     isLifeMember: Joi.any().optional(),
     hasRenewed: Joi.any().optional(),
     avatar: Joi.any().optional(),
-    joinedOn: Joi.date().optional(),
-    expiresOn: Joi.date().optional(),
+    joinedOn: Joi.date().allow(null).optional(),
+    expiresOn: Joi.date().allow(null).optional(),
     membershipType: Joi.any().optional(),
 });
 
@@ -53,5 +53,6 @@ export function sanitizer(obj: Record<string, any>) {
     if ('hasRenewed' in obj) obj.hasRenewed = toBool(obj.hasRenewed);
     if ('joinedOn' in obj) obj.joinedOn = new Date(obj.joinedOn);
     if ('expiresOn' in obj) obj.expiresOn = new Date(obj.expiresOn);
+    if (!obj.membershipType) obj.membershipType = 'General Member';
     return obj;
 }
