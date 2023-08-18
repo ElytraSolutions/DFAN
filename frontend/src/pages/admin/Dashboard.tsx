@@ -8,6 +8,7 @@ import TotalUsers from '~/components/dashboard/TotalUsers';
 import NewUsers from '~/components/dashboard/NewUsers';
 import Revenue from '~/components/dashboard/Revenue';
 import RevenueGraph from '~/components/dashboard/RevenueGraph';
+import NepalMap from '~/components/NepalMap';
 
 const Dashboard = () => {
     const { userData } = useContext(UserContext);
@@ -41,6 +42,10 @@ const Dashboard = () => {
                         <RevenueGraph />
                     </div>
                 </div>
+                <div className="w-10/12">
+                    <NepalMap />
+                </div>
+                <div>Some other text</div>
             </div>
         </div>
     );
