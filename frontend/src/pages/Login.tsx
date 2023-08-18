@@ -22,6 +22,14 @@ const Login = () => {
             const data = await loginHelper(email, password);
             if (data) {
                 setUserData({ ...data.data, state: 'done' });
+                if (
+                    ['Central Admin', 'Regional Admin'].indexOf(
+                        data.data.role,
+                    ) !== -1
+                ) {
+                    navigate('/admin');
+                    return;
+                }
                 navigate('/profile');
             }
         } catch (err) {
