@@ -11,27 +11,14 @@ export interface CardData {
     type: string;
     image: string;
 }
-const defaultData: CardData = {
-    fileName: '',
-    id: '',
-    name: '',
-    gender: '',
-    mobile: '',
-    address: '',
-    type: 'General Member',
-    image: 'default.png',
-};
 async function createCard(data: CardData) {
-    const { fileName, id, name, gender, mobile, address, type, image } = {
-        ...defaultData,
-        ...data,
-    };
+    const { fileName, id, name, gender, mobile, address, type, image } = data;
     const pdfData = await fs.readFile('./public/dfancard.pdf');
     const pdfdoc = await PDFDocument.load(pdfData);
     const firstPage = pdfdoc.getPages()[0];
 
     const color = rgb(1, 1, 1);
-    const size = 40;
+    const size = 36;
     let embedImage;
     if (image && (image.endsWith('jpg') || image.endsWith('jpeg'))) {
         embedImage = await pdfdoc.embedJpg(
@@ -51,37 +38,37 @@ async function createCard(data: CardData) {
         width: Math.max(scaled.width, 250),
         height: Math.max(scaled.height, 250),
     });
-    firstPage.drawText(type, {
+    firstPage.drawText(type || 'General Member', {
         x: 410,
         y: 475,
         size: 30,
         color: rgb(0, 0, 0),
     });
-    firstPage.drawText(id, {
+    firstPage.drawText(id || '', {
         x: 170,
         y: 375,
         size: size,
         color: color,
     });
-    firstPage.drawText(name, {
+    firstPage.drawText(name || '', {
         x: 175,
         y: 305,
         size: size,
         color: color,
     });
-    firstPage.drawText(gender, {
+    firstPage.drawText(gender || '', {
         x: 190,
         y: 245,
         size: size,
         color: color,
     });
-    firstPage.drawText(mobile, {
+    firstPage.drawText(mobile || '', {
         x: 300,
         y: 180,
         size: size,
         color: color,
     });
-    firstPage.drawText(address, {
+    firstPage.drawText(address || '', {
         x: 360,
         y: 125,
         size: size,
