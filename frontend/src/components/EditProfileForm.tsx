@@ -369,10 +369,10 @@ export function TextInput({
 }) {
     return (
         <>
-            <label className="mt-2text-xl mb-1">{legend}</label>
+            <label className="mt-2 text-xl mb-1">{legend}</label>
             <input
                 type={type}
-                className="border rounded-md bg-[#030c0370] outline-none text-white p-1 mb-2"
+                className="border outline-none bg-[#C8DADF] text-black rounded-lg p-1 mb-2"
                 {...register(name, {
                     required: required ? `This field is required.` : false,
                     disabled: !!disabled,
@@ -413,7 +413,7 @@ export function RadioOptions({
                     <label key={v}>
                         <input
                             type="radio"
-                            className="ml-5 mb-2 "
+                            className="ml-5 mb-2 bg-[#C8DADF] text-black rounded-lg"
                             value={v}
                             {...register(name, {
                                 required: false,
@@ -455,7 +455,7 @@ export function SelectOptions({
         <div className="flex flex-col mb-2">
             <label className="mt-2  text-xl font-semibold mb-1">{legend}</label>
             <select
-                className="border  bg-[#030c0370] outline-none text-white p-1 w-full md:w-[40%]"
+                className="bg-[#C8DADF] text-black rounded-lg border outline-none p-1 w-full md:w-[40%]"
                 {...register(name, {
                     disabled: !!disabled,
                     required: false,
