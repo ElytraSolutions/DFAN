@@ -139,7 +139,7 @@ UserProfile.init(
         },
         avatar: {
             type: DataTypes.STRING,
-            defaultValue: null,
+            defaultValue: 'default.png',
         },
         joinedOn: {
             type: DataTypes.DATEONLY,
