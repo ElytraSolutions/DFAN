@@ -28,7 +28,7 @@ const Dashboard = () => {
             <div className="grow p-2 md:px-12 flex flex-col gap-4 overflow-scroll dark:bg-black dark:text-white py-8">
                 <h1 className="text-2xl font-bold">Dashboard</h1>
                 <div>Dashboard</div>
-                <div className="flex flex-row gap-20 xl:gap-24 2xl:gap-32">
+                <div className="flex flex-row gap-20 xl:gap-24 2xl:gap-32 justify-around">
                     <div className="relative w-96 h-48">
                         <TotalUsers totalUsers={2000} lastMonth={1800} />
                     </div>
@@ -43,14 +43,15 @@ const Dashboard = () => {
                     <div className="w-2/3">
                         <RevenueGraph />
                     </div>
-                    <div className="w-1/3 max-h-96 ">
+                    <div className="w-1/3 max-h-96">
                         <RecentTranstractions />
                     </div>
                 </div>
 
                 <div className="h-full flex flex-row justify-center">
                     {/* barchart */}
-                    <div className="h-full w-2/5">
+                    <div className="max-h-96 w-2/5">
+                        <h1>Sales Quantity</h1>
                         <BarChart />
                     </div>
                 </div>
