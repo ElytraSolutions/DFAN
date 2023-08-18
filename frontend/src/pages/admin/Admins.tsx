@@ -58,14 +58,26 @@ const Admins = () => {
             <CustomSidebar />
             <div className="grow p-2 md:px-12 flex flex-col gap-4  overflow-scroll">
                 <h1 className="text-2xl font-bold">Admins Data</h1>
-                <Accordion expanded={expanded} onChange={handleChange}>
-                    <AccordionSummary expandIcon={<MdExpandMore />}>
-                        Invite Admin
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <InviteAdminForm callback={refresh} />
-                    </AccordionDetails>
-                </Accordion>
+                {userData.role === 'Central Admin' && (
+                    <>
+                        <Accordion
+                            expanded={expanded}
+                            onChange={handleChange}
+                            variant="outlined"
+                        >
+                            <AccordionSummary
+                                expandIcon={
+                                    <MdExpandMore className="text-2xl" />
+                                }
+                            >
+                                Invite Admin
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <InviteAdminForm callback={refresh} />
+                            </AccordionDetails>
+                        </Accordion>
+                    </>
+                )}
                 <AdminsTable rows={rows} />
             </div>
         </div>
