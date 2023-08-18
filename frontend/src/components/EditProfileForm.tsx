@@ -151,7 +151,7 @@ const EditProfileForm = ({
                         />
                     </div>
                     {includePicture && (
-                        <div className="flex flex-col justify-center items-center grow">
+                        <div className="flex flex-col justify-center items-center grow text-black">
                             <ImageInput
                                 avatar={avatarURL}
                                 register={register}
@@ -336,7 +336,7 @@ export function ImageInput({ avatar, register, errors }: IImageInputProps) {
                             <span className="text-4xl">
                                 <BsCloudUploadFill />
                             </span>
-                            <span className="text-gray-400">Upload</span>
+                            <span>Upload</span>
                         </div>
                     )}
                 </div>
