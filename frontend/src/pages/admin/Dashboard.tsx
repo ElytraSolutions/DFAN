@@ -9,6 +9,9 @@ import NewUsers from '~/components/dashboard/NewUsers';
 import Revenue from '~/components/dashboard/Revenue';
 import RevenueGraph from '~/components/dashboard/RevenueGraph';
 
+import RecentTranstractions from '~/components/dashboard/RecentTransactions';
+import BarChart from './charts/BarChart';
+
 const Dashboard = () => {
     const { userData } = useContext(UserContext);
     if (
@@ -36,9 +39,19 @@ const Dashboard = () => {
                         <Revenue currentMonth={25000} lastMonth={20000} />
                     </div>
                 </div>
-                <div className="flex flex-row">
-                    <div className="w-fit">
+                <div className="flex flex-row items-center gap-2 justify-around">
+                    <div className="w-2/3">
                         <RevenueGraph />
+                    </div>
+                    <div className="w-1/3 max-h-96 ">
+                        <RecentTranstractions />
+                    </div>
+                </div>
+
+                <div className="h-full flex flex-row justify-center">
+                    {/* barchart */}
+                    <div className="h-full w-2/5">
+                        <BarChart />
                     </div>
                 </div>
             </div>

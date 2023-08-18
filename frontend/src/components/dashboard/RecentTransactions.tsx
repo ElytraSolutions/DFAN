@@ -7,7 +7,10 @@ const RecentTranstractions = () => {
         { name: 'hari' },
         { name: 'gita' },
         { name: 'sita' },
-        { name: 'hari' },
+        { name: 'gita' },
+        { name: 'sita' },
+        { name: 'gita' },
+        { name: 'sita' },
         { name: 'gita' },
         { name: 'sita' },
     ];
