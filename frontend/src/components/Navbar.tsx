@@ -36,19 +36,18 @@ const Navbar = ({ activeLink, links, showUser }: INavbarProps) => {
             data-te-navbar-ref
         >
             <div className="flex-row md:flex w-full flex-wrap items-center justify-between px-3">
-            <div className="flex justify-center ml-2">
-                            <img
-                                src={Logo}
-                                className="h-20 mb-3 md:mr-7 md:mb-0 list-image-none"
-                                alt="DFAN"
-                            />
-                        </div>
+                <div className="flex justify-center ml-2">
+                    <img
+                        src={Logo}
+                        className="h-20 mb-3 md:mr-7 md:mb-0 list-image-none"
+                        alt="DFAN"
+                    />
+                </div>
                 <div className=" text-center ml-2">
                     <a
                         className="text-xl text-[#e5e5e5] dark:text-neutral-200 flex flex-row items-center"
                         href="/"
                     >
-                        
                         <div className="flex flex-col">
                             Democratic Foresters Association Nepal (DFAN) <br />
                             <span className="font-nirmala">

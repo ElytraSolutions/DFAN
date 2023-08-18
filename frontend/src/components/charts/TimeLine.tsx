@@ -45,7 +45,7 @@ function TimelineChart<T>({ url, xaxis, datakey, process }: ITimeLineProps<T>) {
             const serverData: T[] = (await resp.json()) || [];
             setData(process ? process(serverData) : serverData);
         })();
-    }, [url]);
+    }, [url, process]);
 
     return (
         <ResponsiveContainer width="100%" height="100%">
