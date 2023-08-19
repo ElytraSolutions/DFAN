@@ -123,15 +123,16 @@ async function bulkCreate(num: number) {
     const usersCreated = await Users.bulkCreate(users);
     const profiles = [];
     const genders = ['Male', 'Female', 'Other'];
-    const states = ['Bagmati Pradesh', 'Koshi Pradesh'];
+    const states = ['Bagmati Pradesh', 'Koshi Pradesh', 'Lumbini Pradesh'];
+    const countries = ['Nepal', 'India', 'China'];
     for (let i = 0; i < num; i++) {
         profiles.push({
             name: `User ${i}`,
             gender: genders[i % 3],
             mobile: '1111111111',
-            permanentAddress: states[i % 2],
-            currentAddress: 'Nepal',
-            membershipFrom: states[(i + 1) % 2],
+            permanentAddress: states[i % 3],
+            currentAddress: countries[i % 3],
+            membershipFrom: states[(i + 1) % 3],
             employmentStatus: 'Employed',
             employmentType: 'Government Job',
             NFAMembershipNumber: (i + 1).toString(),
