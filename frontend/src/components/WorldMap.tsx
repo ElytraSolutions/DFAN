@@ -25,15 +25,15 @@ export default function WorldMap() {
         })();
     }, []);
     const opacities: Record<string, number> = {};
-    let total = 0;
+    let max = 0;
     Object.entries(countries).forEach(([country, count]) => {
         if (country) {
-            total += count;
+            max = Math.max(max, count);
         }
     });
     Object.entries(countries).forEach(([country, count]) => {
         if (country) {
-            opacities[country] = Math.max(0.3, count / total);
+            opacities[country] = Math.max(0.3, count / max);
         }
     });
     const MapWithRef = forwardRef(
