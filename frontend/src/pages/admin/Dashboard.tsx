@@ -9,6 +9,7 @@ import NewUsers from '~/components/dashboard/NewUsers';
 import Revenue from '~/components/dashboard/Revenue';
 import RevenueGraph from '~/components/dashboard/RevenueGraph';
 import NepalMap from '~/components/NepalMap';
+import WorldMap from '~/components/WorldMap';
 
 const Dashboard = () => {
     const { userData } = useContext(UserContext);
@@ -42,10 +43,23 @@ const Dashboard = () => {
                         <RevenueGraph />
                     </div>
                 </div>
-                <div className="w-10/12">
-                    <NepalMap />
+                <div className="flex flex-col gap-12 items-center">
+                    <h1 className="text-2xl font-medium text-center">
+                        Geographic Distribution
+                    </h1>
+                    <div className="w-[70vw] h-fit">
+                        <h2 className="text-lg font-medium text-center mb-4">
+                            Permanent Address Distribution
+                        </h2>
+                        <NepalMap />
+                    </div>
+                    <div className="w-auto h-[80vh]">
+                        <h2 className="text-lg font-medium text-center mb-8">
+                            Current Address Distribution
+                        </h2>
+                        <WorldMap />
+                    </div>
                 </div>
-                <div>Some other text</div>
             </div>
         </div>
     );
