@@ -73,7 +73,7 @@ const BarChart = () => {
                 data={data}
                 keys={['male', 'women', 'others']}
                 indexBy="region"
-                margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+                margin={{ top: 20, right: 100, bottom: 50, left: 40 }}
                 padding={0.3}
                 valueScale={{ type: 'linear' }}
                 indexScale={{ type: 'band', round: true }}

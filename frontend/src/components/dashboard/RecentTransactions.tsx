@@ -10,7 +10,7 @@ const RecentTranstractions = () => {
         { name: 'gita' },
     ];
     return (
-        <div className="bg-slate-500 flex flex-col gap-1 overflow-y-scroll max-h-96">
+        <div className="bg-slate-500 flex flex-col gap-1 overflow-y-scroll max-h-full">
             <div className="bg-slate-800 text-white p-2">
                 <h1>Recent Transactions</h1>
             </div>
