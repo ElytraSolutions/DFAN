@@ -29,26 +29,25 @@ const Navbar = ({ activeLink, links, showUser }: INavbarProps) => {
             );
             setActive(currentLink || '');
         }
-    }, [location.pathname, location.hash, links]);
+    }, [location.pathname, location.hash, links, activeLink]);
     return (
         <nav
             className="sticky top-0 z-50 flex w-full flex-nowrap items-center justify-between bg-[#233F23] py-2 text-neutral-500 shadow-lg hover:text-neutral-700 focus:text-neutral-700  lg:flex-wrap lg:justify-start lg:py-4"
             data-te-navbar-ref
         >
             <div className="flex-row md:flex w-full flex-wrap items-center justify-between px-3">
-            <div className="flex justify-center ml-2">
-                            <img
-                                src={Logo}
-                                className="h-20 mb-3 md:mr-7 md:mb-0 list-image-none"
-                                alt="DFAN"
-                            />
-                        </div>
+                <div className="flex justify-center ml-2">
+                    <img
+                        src={Logo}
+                        className="h-20 mb-3 md:mr-7 md:mb-0 list-image-none"
+                        alt="DFAN"
+                    />
+                </div>
                 <div className=" text-center ml-2">
                     <a
                         className="text-xl text-[#e5e5e5] dark:text-neutral-200 flex flex-row items-center"
                         href="/"
                     >
-                        
                         <div className="flex flex-col">
                             Democratic Foresters Association Nepal (DFAN) <br />
                             <span className="font-nirmala">

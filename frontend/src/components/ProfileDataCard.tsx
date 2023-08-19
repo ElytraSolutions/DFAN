@@ -1,6 +1,6 @@
 import md5 from 'md5';
 
-function ProfileDataCard({ userData }) {
+function ProfileDataCard({ userData }: { userData: Record<string, any> }) {
     const userProfile = userData.UserProfile;
     let expiryDate = 'Unknown';
     if (userProfile.expiresOn) {

@@ -12,7 +12,7 @@ export interface CardData {
     image: string;
 }
 async function createCard(data: CardData) {
-    const { fileName, id, name, gender, mobile, address, type, image } = data;
+    const { id, name, gender, mobile, address, type, image } = data;
     const pdfData = await fs.readFile('./public/dfancard.pdf');
     const pdfdoc = await PDFDocument.load(pdfData);
     const firstPage = pdfdoc.getPages()[0];

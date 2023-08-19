@@ -41,7 +41,7 @@ const EditProfileForm = ({
         reset,
         formState: { errors },
     } = useForm<EditableUserData>({
-        resolver: joiResolver(UserProfileSchema(states, countries)),
+        resolver: joiResolver(UserProfileSchema()),
     });
 
     useEffect(() => {

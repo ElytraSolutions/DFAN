@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
-import { AxisOptions, Chart } from 'react-charts';
+import { useEffect, useState } from 'react';
 import {
     ResponsiveContainer,
     LineChart,
@@ -10,26 +9,6 @@ import {
     Legend,
     Line,
 } from 'recharts';
-
-function formatCreatedAt(createdAt: string): string {
-    const [year, month] = createdAt.split(' ');
-    const months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-    ];
-    const formatted = `${months[parseInt(month, 10) - 1]} ${year}`;
-    return formatted;
-}
 
 interface ITimeLineProps<T> {
     url: string;
@@ -45,7 +24,7 @@ function TimelineChart<T>({ url, xaxis, datakey, process }: ITimeLineProps<T>) {
             const serverData: T[] = (await resp.json()) || [];
             setData(process ? process(serverData) : serverData);
         })();
-    }, [url]);
+    }, [url, process]);
 
     return (
         <ResponsiveContainer width="100%" height="100%">

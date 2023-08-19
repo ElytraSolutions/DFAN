@@ -1,6 +1,4 @@
-import Joi, { StringSchema } from 'joi';
-import Countries from '../../public/data/Countries.json';
-import States from '../../public/data/States.json';
+import Joi from 'joi';
 
 export function toBool(val: any) {
     if (val instanceof Boolean) {

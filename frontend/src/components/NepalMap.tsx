@@ -19,7 +19,7 @@ function NepalMap() {
                 for (const row of json) {
                     total += row.count;
                 }
-                const newColors = {};
+                const newColors: Record<string, string> = {};
                 for (const data of json) {
                     if (data) {
                         const opacity = data.count / total;

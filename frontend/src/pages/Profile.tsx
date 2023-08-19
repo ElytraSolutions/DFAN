@@ -4,15 +4,12 @@ import { LiaUserEditSolid } from 'react-icons/lia';
 import { MdPayment, MdAdminPanelSettings, MdPassword } from 'react-icons/md';
 import { BiSolidCloudDownload } from 'react-icons/bi';
 import { Link, Navigate } from 'react-router-dom';
-import Logo from '../assets/logo.png';
-import md5 from 'md5';
 import ProfileDataCard from '~/components/ProfileDataCard';
 import Navbar from '~/components/Navbar';
 
 const Profile = () => {
     const { userData } = React.useContext(UserContext);
     const userProfile = userData.UserProfile;
-    const expireYear = new Date().getFullYear() + 1;
     if (userData.state !== 'done') {
         return <Navigate to="/lobby" />;
     }

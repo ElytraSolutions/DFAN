@@ -17,14 +17,13 @@ interface ICustomBarChartProps<T> {
 }
 function CustomBarChart<T>({ url, datakey, process }: ICustomBarChartProps<T>) {
     const [data, setData] = useState<T[]>([]);
-    if (!process) process = (data: T[]) => Array.from(data);
     useEffect(() => {
         (async () => {
             const resp = await fetch(url);
             const serverData: T[] = (await resp.json()) || [];
-            setData(process(serverData));
+            setData(process ? process(serverData) : Array.from(serverData));
         })();
-    }, [url]);
+    }, [url, process]);
 
     return (
         <ResponsiveContainer width="100%" height="100%">

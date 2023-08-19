@@ -1,9 +1,12 @@
 import { Card, CardContent } from '@mui/material';
-import React from 'react';
 import { PiUsersThreeFill } from 'react-icons/pi';
-import { Cell, Pie, PieChart, Tooltip } from 'recharts';
+import { Cell, Pie, PieChart } from 'recharts';
 
-function TotalUsers({ totalUsers, lastMonth }) {
+interface ITotalUsersProps {
+    totalUsers: number;
+    lastMonth: number;
+}
+function TotalUsers({ totalUsers, lastMonth }: ITotalUsersProps) {
     const data = [
         {
             name: 'Last Month',

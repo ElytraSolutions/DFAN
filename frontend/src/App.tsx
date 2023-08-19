@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -6,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import './App.css';
-import UserContext, { UserData } from '~/context/User';
+import UserContext from '~/context/User';
 import EditProfile from './pages/EditProfile';
 import Home from './pages/Home';
 import Lobby from '~/pages/Lobby';

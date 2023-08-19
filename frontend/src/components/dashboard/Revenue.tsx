@@ -2,7 +2,11 @@ import { Card, CardContent } from '@mui/material';
 import { MdAttachMoney } from 'react-icons/md';
 import { PieChart, Pie, Cell } from 'recharts';
 
-function Revenue({ currentMonth, lastMonth }) {
+interface IRevenueProps {
+    currentMonth: number;
+    lastMonth: number;
+}
+function Revenue({ currentMonth, lastMonth }: IRevenueProps) {
     const data = [
         {
             name: 'Last Month',

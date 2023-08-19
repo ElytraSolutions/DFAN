@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridEventListener } from '@mui/x-data-grid';
@@ -37,7 +37,7 @@ const RejectedUsers = () => {
 const RegisteredUsersTable = () => {
     const [rows, setRows] = useState([]);
     const [openModal, setOpenModal] = useState(false);
-    const [selectedRowData, setSelectedRowData] = useState(null);
+    const [selectedRowData, setSelectedRowData] = useState<any>(null);
 
     const closeModal = () => {
         setOpenModal(false);
