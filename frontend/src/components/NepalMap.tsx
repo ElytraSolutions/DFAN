@@ -4,13 +4,13 @@ import { ForwardedRef, forwardRef, useEffect, useState } from 'react';
 function NepalMap() {
     const [state, setState] = useState('');
     const [colors, setColors] = useState({
-        'Koshi Pradesh': '#FFFFFF',
-        'Madhesh Pradesh': '#FFFFFF',
-        'Bagmati Pradesh': '#FFFFFF',
-        'Gandaki Pradesh': '#FFFFFF',
-        'Lumbini Pradesh': '#FFFFFF',
-        'Karnali Pradesh': '#FFFFFF',
-        'Sudurpashchim Pradesh': '#FFFFFF',
+        'Koshi Pradesh': 'rgba(200, 200, 200, 1.0)',
+        'Madhesh Pradesh': 'rgba(200, 200, 200, 1.0)',
+        'Bagmati Pradesh': 'rgba(200, 200, 200, 1.0)',
+        'Gandaki Pradesh': 'rgba(200, 200, 200, 1.0)',
+        'Lumbini Pradesh': 'rgba(200, 200, 200, 1.0)',
+        'Karnali Pradesh': 'rgba(200, 200, 200, 1.0)',
+        'Sudurpashchim Pradesh': 'rgba(200, 200, 200, 1.0)',
     });
     const [memberCounts, setMemberCounts] = useState<Record<string, number>>(
         {},
@@ -20,16 +20,16 @@ function NepalMap() {
             try {
                 const resp = await fetch('/api/admins/usersByRegion');
                 const json = await resp.json();
-                let total = 0;
+                let max = 0;
                 for (const row of json) {
-                    total += row.count;
+                    max = Math.max(max, row.count);
                 }
                 const newColors: Record<string, string> = {};
                 const newMemberCounts: Record<string, number> = {};
                 for (const data of json) {
                     if (data) {
                         newMemberCounts[data.region] = data.count;
-                        const opacity = data.count / total;
+                        const opacity = Math.max(0.3, data.count / max);
                         const color = `rgba(0, 255, 0, ${opacity})`;
                         newColors[data.region] = color;
                     }
