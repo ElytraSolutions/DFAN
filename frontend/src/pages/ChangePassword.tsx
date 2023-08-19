@@ -35,7 +35,7 @@ function ChangePassword() {
             navigate('/profile');
         } else {
             toast.error(data.message);
-            data?.errors.forEach((e) => {
+            data?.errors.forEach((e: { message: string }) => {
                 toast.error(e.message);
             });
         }

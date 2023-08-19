@@ -56,9 +56,18 @@ const Home = () => {
             rootMargin: '-80px 0px 0px 0px',
             threshold: 0.25,
         });
-        observer.observe(document.querySelector('#hero'));
-        observer.observe(document.querySelector('#about'));
-        observer.observe(document.querySelector('#contact'));
+        const heroElement = document.querySelector('#hero');
+        const aboutElement = document.querySelector('#about');
+        const contactElement = document.querySelector('#contact');
+        if (heroElement) {
+            observer.observe(heroElement);
+        }
+        if (aboutElement) {
+            observer.observe(aboutElement);
+        }
+        if (contactElement) {
+            observer.observe(contactElement);
+        }
     }, [links]);
     useEffect(() => {
         let max = 0;
@@ -70,7 +79,7 @@ const Home = () => {
             }
         });
         const newActive = Array.from(Object.keys(links)).find(
-            (link) => links[link] === maxId,
+            (link) => links[link as keyof typeof links] === maxId,
         );
         setActive(newActive || '');
     }, [intersections, links]);

@@ -9,7 +9,7 @@ import { sanitizer } from '~/helpers/validateProfileData';
 import Navbar from '~/components/Navbar';
 
 const NewProfile = () => {
-    const { userData, refreshUserData } = useContext(UserContext);
+    const { userData, refresh } = useContext(UserContext);
     const navigate = useNavigate();
 
     if (userData.UserProfile) {
@@ -45,7 +45,7 @@ const NewProfile = () => {
                 }
             }
             toast.success('Profile created successfully');
-            refreshUserData();
+            await refresh();
             navigate('/profile');
         } catch (err) {
             console.error(err);

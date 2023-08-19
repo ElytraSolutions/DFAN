@@ -29,7 +29,7 @@ const Navbar = ({ activeLink, links, showUser }: INavbarProps) => {
             );
             setActive(currentLink || '');
         }
-    }, [location.pathname, location.hash, links]);
+    }, [location.pathname, location.hash, links, activeLink]);
     return (
         <nav
             className="sticky top-0 z-50 flex w-full flex-nowrap items-center justify-between bg-[#233F23] py-2 text-neutral-500 shadow-lg hover:text-neutral-700 focus:text-neutral-700  lg:flex-wrap lg:justify-start lg:py-4"

@@ -13,22 +13,19 @@ function toBool(val: any) {
     }
 }
 
-const requiredStringMessages = {
+const errorMessages = {
     'string.empty': 'This field is required',
     'string.base': 'This field is required',
-};
-const selectMessages = {
-    ...requiredStringMessages,
     'boolean.base': 'This field is required',
     'any.required': 'This field is required',
     'any.only': 'Select an option from the list',
 };
-export const UserProfileSchema = (States: string[], Countries: string[]) =>
+export const UserProfileSchema = () =>
     Joi.object({
         name: Joi.string()
             .required()
             .messages({
-                ...requiredStringMessages,
+                ...errorMessages,
             }),
         gender: Joi.any().optional(),
         mobile: Joi.any().optional(),

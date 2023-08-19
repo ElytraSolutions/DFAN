@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-function InviteUserForm({ callback }) {
+function InviteUserForm({
+    callback,
+}: {
+    callback: (data: any) => Promise<any>;
+}) {
     const [userEmail, setUserEmail] = useState('');
     const submitHandler: React.FormEventHandler<HTMLFormElement> = async (
         e,

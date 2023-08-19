@@ -7,7 +7,7 @@ import UserContext from '~/context/User';
 import Navbar from '~/components/Navbar';
 
 const RegisterNew = () => {
-    const { refreshUserData } = React.useContext(UserContext);
+    const { refresh } = React.useContext(UserContext);
     const [searchParams] = useSearchParams();
     const oldEmail = searchParams.get('email');
     const oldCode = searchParams.get('code');
@@ -34,7 +34,7 @@ const RegisterNew = () => {
             }
             sessionStorage.setItem('email', email);
             sessionStorage.setItem('code', code);
-            await refreshUserData();
+            await refresh();
             navigate('/newProfile');
         } catch (error) {
             toast.error('Something went wrong');

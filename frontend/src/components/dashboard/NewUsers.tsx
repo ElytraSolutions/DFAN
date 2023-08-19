@@ -2,7 +2,11 @@ import { Card, CardContent } from '@mui/material';
 import { FaUserPlus } from 'react-icons/fa';
 import { PieChart, Pie, Cell } from 'recharts';
 
-function NewUsers({ newUsers, lastMonth }) {
+interface INewUsersProps {
+    newUsers: number;
+    lastMonth: number;
+}
+function NewUsers({ newUsers, lastMonth }: INewUsersProps) {
     const data = [
         {
             name: 'Last Month',

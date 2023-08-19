@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridEventListener } from '@mui/x-data-grid';
@@ -128,7 +128,18 @@ const RegisteredUsersTable = () => {
     );
 };
 
-function UserDataDialog({ selectedRowData, isOpen, closeModal, refresh }) {
+interface IUserDataDialogProps {
+    selectedRowData: any;
+    isOpen: boolean;
+    closeModal: () => void;
+    refresh: () => void;
+}
+function UserDataDialog({
+    selectedRowData,
+    isOpen,
+    closeModal,
+    refresh,
+}: IUserDataDialogProps) {
     const [isEditing, setIsEditing] = useState(false);
     const onClose = () => {
         setIsEditing(false);

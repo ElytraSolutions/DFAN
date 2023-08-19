@@ -1,17 +1,13 @@
-import {
-    MenuItem,
-    Select,
-    TextField,
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
-} from '@mui/material';
+import { MenuItem, Select, TextField } from '@mui/material';
 import { useState } from 'react';
-import { MdExpandMore } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import useStates from '~/hooks/useStates';
 
-function InviteUserForm({ callback }) {
+function InviteAdminForm({
+    callback,
+}: {
+    callback: (data: any) => Promise<any>;
+}) {
     const [name, setName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [role, setRole] = useState('');
@@ -29,7 +25,7 @@ function InviteUserForm({ callback }) {
         e,
     ) => {
         e.preventDefault();
-        const body = {
+        const body: Record<string, any> = {
             email: userEmail,
             name,
             role,
@@ -132,4 +128,4 @@ function InviteUserForm({ callback }) {
     );
 }
 
-export default InviteUserForm;
+export default InviteAdminForm;
