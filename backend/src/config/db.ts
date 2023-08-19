@@ -100,7 +100,7 @@ export default async function config() {
             await profile.createVerificationList({});
         }
 
-        await bulkCreate(16);
+        await bulkCreate(0);
     }
 }
 

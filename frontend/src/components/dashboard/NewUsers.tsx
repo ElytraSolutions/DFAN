@@ -23,11 +23,11 @@ function NewUsers({ newUsers, lastMonth }: INewUsersProps) {
     return (
         <Card variant="outlined">
             <CardContent>
-                <div className="flex flex-row gap-12 py-4">
+                <div className="flex flex-row gap-auto py-4">
                     <div className="flex flex-col items-center grow">
                         <FaUserPlus className="text-3xl" />
                         <span className="text-2xl font-bold">{newUsers}</span>
-                        <span>New Users</span>
+                        <span className="lg:min-w-max">New Users</span>
                     </div>
                     <div className="w-[120px] h-[86px] flex flex-col justify-center items-center">
                         <PieChart width={50} height={16 * 3}>

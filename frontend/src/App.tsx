@@ -174,7 +174,6 @@ const router = createBrowserRouter([
 
 function App() {
     const authValues = useAuth();
-
     return (
         <div>
             <ToastContainer />
