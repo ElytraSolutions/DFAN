@@ -5,7 +5,7 @@ import sequelize from '../../models/config';
 export default async function usersByRegion(req: Request, res: Response) {
     const users = await UserProfile.findAll({
         attributes: [
-            ['membershipFrom', 'region'],
+            ['permanentAddress', 'region'],
             [sequelize.fn('COUNT', sequelize.col('membershipFrom')), 'count'],
         ],
         group: 'membershipFrom',
